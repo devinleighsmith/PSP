@@ -418,11 +418,11 @@ export const PointClusterer: React.FC<PointClustererProps> = ({
             <SelectedPropertyMarker
               {...selected.parcelDetail}
               icon={getMarkerIcon({ properties: selected } as any, true)}
-              className={clsx(
-                'active-selected',
-                Number(parcelId ?? buildingId) === selected?.parcelDetail?.id,
-                getMarkerIcon({ properties: selected } as any, true).options.className,
-              )}
+              className={
+                Number(parcelId ?? buildingId) === selected?.parcelDetail?.id
+                  ? 'active-selected'
+                  : ''
+              }
               position={[
                 selected.parcelDetail!.latitude as number,
                 selected.parcelDetail!.longitude as number,
