@@ -135,6 +135,94 @@ namespace Pims.Api.Test.Controllers
         }
 
         [Fact]
+        public void GetPurposes()
+        {
+            // Arrange
+            var helper = new TestHelper();
+            var controller = helper.CreateController<LookupController>(Permissions.PropertyView);
+
+            var mapper = helper.GetService<IMapper>();
+            var service = helper.GetService<Mock<IPimsService>>();
+            var purposes = EntityHelper.CreateDefaultPurpose().ToArray();
+            service.Setup(m => m.Lookup.GetPurposes()).Returns(purposes);
+
+            // Act
+            var result = controller.GetPurposes();
+
+            // Assert
+            var actionResult = Assert.IsType<JsonResult>(result);
+            var actualResult = Assert.IsType<Models.LookupModel<int>[]>(actionResult.Value);
+            Assert.Equal(purposes.Select(t => mapper.Map<Models.LookupModel<int>>(t)).ToArray(), actualResult, new DeepPropertyCompare());
+            service.Verify(m => m.Lookup.GetPurposes(), Times.Once());
+        }
+
+        [Fact]
+        public void GetMotiClassifications()
+        {
+            // Arrange
+            var helper = new TestHelper();
+            var controller = helper.CreateController<LookupController>(Permissions.PropertyView);
+
+            var mapper = helper.GetService<IMapper>();
+            var service = helper.GetService<Mock<IPimsService>>();
+            var motiClassifications = EntityHelper.CreateDefaultMotiClassification().ToArray();
+            service.Setup(m => m.Lookup.GetMotiClassifications()).Returns(motiClassifications);
+
+            // Act
+            var result = controller.GetMotiClassifications();
+
+            // Assert
+            var actionResult = Assert.IsType<JsonResult>(result);
+            var actualResult = Assert.IsType<Models.LookupModel<int>[]>(actionResult.Value);
+            Assert.Equal(motiClassifications.Select(t => mapper.Map<Models.LookupModel<int>>(t)).ToArray(), actualResult, new DeepPropertyCompare());
+            service.Verify(m => m.Lookup.GetMotiClassifications(), Times.Once());
+        }
+
+        [Fact]
+        public void GetMotiRegions()
+        {
+            // Arrange
+            var helper = new TestHelper();
+            var controller = helper.CreateController<LookupController>(Permissions.PropertyView);
+
+            var mapper = helper.GetService<IMapper>();
+            var service = helper.GetService<Mock<IPimsService>>();
+            var motiRegions = EntityHelper.CreateDefaultMotiRegion().ToArray();
+            service.Setup(m => m.Lookup.GetMotiRegions()).Returns(motiRegions);
+
+            // Act
+            var result = controller.GetMotiRegions();
+
+            // Assert
+            var actionResult = Assert.IsType<JsonResult>(result);
+            var actualResult = Assert.IsType<Models.LookupModel<int>[]>(actionResult.Value);
+            Assert.Equal(motiRegions.Select(t => mapper.Map<Models.LookupModel<int>>(t)).ToArray(), actualResult, new DeepPropertyCompare());
+            service.Verify(m => m.Lookup.GetMotiRegions(), Times.Once());
+        }
+
+        [Fact]
+        public void GetRuralAreas()
+        {
+            // Arrange
+            var helper = new TestHelper();
+            var controller = helper.CreateController<LookupController>(Permissions.PropertyView);
+
+            var mapper = helper.GetService<IMapper>();
+            var service = helper.GetService<Mock<IPimsService>>();
+            var ruralAreas = EntityHelper.CreateDefaultRuralArea().ToArray();
+            service.Setup(m => m.Lookup.GetRuralAreas()).Returns(ruralAreas);
+
+            // Act
+            var result = controller.GetRuralAreas();
+
+            // Assert
+            var actionResult = Assert.IsType<JsonResult>(result);
+            var actualResult = Assert.IsType<Models.LookupModel<int>[]>(actionResult.Value);
+            Assert.Equal(ruralAreas.Select(t => mapper.Map<Models.LookupModel<int>>(t)).ToArray(), actualResult, new DeepPropertyCompare());
+            service.Verify(m => m.Lookup.GetRuralAreas(), Times.Once());
+        }
+
+        [Fact]
         public void GetAll()
         {
             // Arrange
@@ -170,6 +258,18 @@ namespace Pims.Api.Test.Controllers
             var tierLevel = EntityHelper.CreateTierLevel("tierlevel");
             service.Setup(m => m.Lookup.GetTierLevels()).Returns(new[] { tierLevel });
 
+            var purpose = EntityHelper.CreatePurpose("purpose");
+            service.Setup(m => m.Lookup.GetPurposes()).Returns(new[] { purpose });
+
+            var motiClassification = EntityHelper.CreateMotiClassification("motiClassification");
+            service.Setup(m => m.Lookup.GetMotiClassifications()).Returns(new[] { motiClassification });
+
+            var motiRegion = EntityHelper.CreateMotiRegion("motiRegion");
+            service.Setup(m => m.Lookup.GetMotiRegions()).Returns(new[] { motiRegion });
+
+            var ruralArea = EntityHelper.CreateRuralArea("ruralArea");
+            service.Setup(m => m.Lookup.GetRuralAreas()).Returns(new[] { ruralArea });
+
             // Act
             var result = controller.GetAll();
 
@@ -185,6 +285,10 @@ namespace Pims.Api.Test.Controllers
             Assert.Equal(mapper.Map<Models.LookupModel<int>>(buildingPredominateUse), actualResult.Next(6), new ShallowPropertyCompare());
             Assert.Equal(mapper.Map<Models.LookupModel<int>>(buildingOccupantType), actualResult.Next(7), new ShallowPropertyCompare());
             Assert.Equal(mapper.Map<Models.LookupModel<int>>(tierLevel), actualResult.Next(8), new ShallowPropertyCompare());
+            Assert.Equal(mapper.Map<Models.LookupModel<int>>(purpose), actualResult.Next(9), new ShallowPropertyCompare());
+            Assert.Equal(mapper.Map<Models.LookupModel<int>>(motiClassification), actualResult.Next(10), new ShallowPropertyCompare());
+            Assert.Equal(mapper.Map<Models.LookupModel<int>>(motiRegion), actualResult.Next(11), new ShallowPropertyCompare());
+            Assert.Equal(mapper.Map<Models.LookupModel<int>>(ruralArea), actualResult.Next(12), new ShallowPropertyCompare());
         }
         #endregion
     }

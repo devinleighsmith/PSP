@@ -46,6 +46,10 @@ namespace Pims.Dal
         public DbSet<Province> Provinces { get; set; }
         public DbSet<AdministrativeArea> AdministrativeAreas { get; set; }
         public DbSet<ParcelBuilding> ParcelBuildings { get; set; }
+        public DbSet<MotiClassification> MotiClassifications { get; set; }
+        public DbSet<MotiRegion> MotiRegions { get; set; }
+        public DbSet<Purpose> Purposes { get; set; }
+        public DbSet<RuralArea> RuralAreas { get; set; }
         #endregion
 
         #region Projects

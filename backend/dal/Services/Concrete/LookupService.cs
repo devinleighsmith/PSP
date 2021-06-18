@@ -113,6 +113,42 @@ namespace Pims.Dal.Services
         {
             return this.Context.ProjectRisks.AsNoTracking().OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToArray();
         }
+
+        /// <summary>
+        /// Get all the moti classifications sorted by SortOrder and Name.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MotiClassification> GetMotiClassifications()
+        {
+            return this.Context.MotiClassifications.AsNoTracking().OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Get all the moti regions sorted by SortOrder and Name.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MotiRegion> GetMotiRegions()
+        {
+            return this.Context.MotiRegions.AsNoTracking().OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Get all the purposes sorted by SortOrder and Name.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Purpose> GetPurposes()
+        {
+            return this.Context.Purposes.AsNoTracking().OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToArray();
+        }
+
+        /// <summary>
+        /// Get all the rural areas sorted by SortOrder and Name.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<RuralArea> GetRuralAreas()
+        {
+            return this.Context.RuralAreas.AsNoTracking().OrderBy(t => t.SortOrder).ThenBy(t => t.Name).ToArray();
+        }
         #endregion
     }
 }

@@ -19,5 +19,9 @@ namespace Pims.Dal.Services
         IEnumerable<Role> GetRoles();
         IEnumerable<TierLevel> GetTierLevels();
         IEnumerable<ProjectRisk> GetProjectRisks();
+        IEnumerable<Purpose> GetPurposes();
+        IEnumerable<MotiClassification> GetMotiClassifications();
+        IEnumerable<MotiRegion> GetMotiRegions();
+        IEnumerable<RuralArea> GetRuralAreas();
     }
 }

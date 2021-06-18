@@ -109,6 +109,62 @@ namespace Pims.Api.Controllers
         }
 
         /// <summary>
+        /// Get all of the purposes.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("project/purposes")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Models.LookupModel<int>>), 200)]
+        [SwaggerOperation(Tags = new[] { "lookup" })]
+        public IActionResult GetPurposes()
+        {
+            var purposes = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetPurposes());
+            return new JsonResult(purposes.ToArray());
+        }
+
+        /// <summary>
+        /// Get all of the moti classifications.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("project/moti/classifications")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Models.LookupModel<int>>), 200)]
+        [SwaggerOperation(Tags = new[] { "lookup" })]
+        public IActionResult GetMotiClassifications()
+        {
+            var motiClassifications = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetMotiClassifications());
+            return new JsonResult(motiClassifications.ToArray());
+        }
+
+        /// <summary>
+        /// Get all of the moti regions.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("project/moti/regions")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Models.LookupModel<int>>), 200)]
+        [SwaggerOperation(Tags = new[] { "lookup" })]
+        public IActionResult GetMotiRegions()
+        {
+            var motiRegions = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetMotiRegions());
+            return new JsonResult(motiRegions.ToArray());
+        }
+
+        /// <summary>
+        /// Get all of the rural areas.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("project/rural/areas")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(IEnumerable<Models.LookupModel<int>>), 200)]
+        [SwaggerOperation(Tags = new[] { "lookup" })]
+        public IActionResult GetRuralAreas()
+        {
+            var ruralAreas = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetRuralAreas());
+            return new JsonResult(ruralAreas.ToArray());
+        }
+
+        /// <summary>
         /// Get all of the code values
         /// </summary>
         /// <returns></returns>
@@ -128,6 +184,10 @@ namespace Pims.Api.Controllers
             var occupantTypeCodes = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetBuildingOccupantTypes());
             var tierLevelCodes = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetTierLevels());
             var riskCodes = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetProjectRisks());
+            var purposes = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetPurposes());
+            var motiClassifications = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetMotiClassifications());
+            var motiRegions = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetMotiRegions());
+            var ruralAreas = _mapper.Map<Models.LookupModel<int>[]>(_pimsService.Lookup.GetRuralAreas());
 
             var codes = new List<object>();
             codes.AddRange(roleCodes);
@@ -140,6 +200,10 @@ namespace Pims.Api.Controllers
             codes.AddRange(occupantTypeCodes);
             codes.AddRange(tierLevelCodes);
             codes.AddRange(riskCodes);
+            codes.AddRange(purposes);
+            codes.AddRange(motiClassifications);
+            codes.AddRange(motiRegions);
+            codes.AddRange(ruralAreas);
             return new JsonResult(codes);
         }
         #endregion

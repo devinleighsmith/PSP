@@ -1,5 +1,6 @@
 import './PointClusterer.scss';
 
+import clsx from 'classnames';
 import { PropertyTypes } from 'constants/propertyTypes';
 import { MAX_ZOOM } from 'constants/strings';
 import { BBox } from 'geojson';
@@ -417,11 +418,11 @@ export const PointClusterer: React.FC<PointClustererProps> = ({
             <SelectedPropertyMarker
               {...selected.parcelDetail}
               icon={getMarkerIcon({ properties: selected } as any, true)}
-              className={
-                Number(parcelId ?? buildingId) === selected?.parcelDetail?.id
-                  ? 'active-selected'
-                  : ''
-              }
+              className={clsx(
+                'active-selected',
+                Number(parcelId ?? buildingId) === selected?.parcelDetail?.id,
+                getMarkerIcon({ properties: selected } as any, true).options.className,
+              )}
               position={[
                 selected.parcelDetail!.latitude as number,
                 selected.parcelDetail!.longitude as number,

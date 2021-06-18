@@ -97,11 +97,15 @@ export const LOOKUP_CODE_SET = (codeSetName: string) => `/lookup/${codeSetName}`
 export const AGENCY_CODE_SET_NAME = 'Agency';
 export const ROLE_CODE_SET_NAME = 'Role';
 export const PROVINCE_CODE_SET_NAME = 'Province';
-export const AMINISTRATIVE_AREA_CODE_SET_NAME = 'AdministrativeArea';
+export const ADMINISTRATIVE_AREA_CODE_SET_NAME = 'AdministrativeArea';
 export const PROPERTY_CLASSIFICATION_CODE_SET_NAME = 'PropertyClassification';
 export const CONSTRUCTION_CODE_SET_NAME = 'BuildingConstructionType';
 export const PREDOMINATE_USE_CODE_SET_NAME = 'BuildingPredominateUse';
 export const OCCUPANT_TYPE_CODE_SET_NAME = 'BuildingOccupantType';
+export const PURPOSE_CODE_SET_NAME = 'Purpose';
+export const MOTI_CLASSIFICATION_CODE_SET_NAME = 'MotiClassification';
+export const MOTI_REGION_CODE_SET_NAME = 'MotiRegion';
+export const RURAL_AREA_CODE_SET_NAME = 'RuralArea';
 
 // Agencies
 export const POST_AGENCIES = () => `/admin/agencies/filter`; // get paged list of agencies
