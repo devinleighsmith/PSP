@@ -1,6 +1,5 @@
 import './PointClusterer.scss';
 
-import clsx from 'classnames';
 import { PropertyTypes } from 'constants/propertyTypes';
 import { MAX_ZOOM } from 'constants/strings';
 import { BBox } from 'geojson';
