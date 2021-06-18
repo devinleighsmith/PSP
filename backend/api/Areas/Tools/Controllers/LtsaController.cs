@@ -47,7 +47,6 @@ namespace Pims.Api.Areas.Tools.Controllers
         /// Make a request to Ltsa for title summaries that match the specified `search`.
         /// </summary>
         /// <param name="pid">the parcel identifier to search for</param>
-        /// <param name="status">an optional filter for the status of returned titles</param>
         /// <returns>An array of title summary matches.</returns>
         [HttpGet("summaries")]
         [Produces("application/json")]
