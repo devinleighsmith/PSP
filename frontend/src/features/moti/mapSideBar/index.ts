@@ -16,6 +16,7 @@ export { PropertySearchForm } from './forms/PropertySearchForm';
 export { MotiInventoryContainer } from './containers/MotiInventoryContainer';
 
 // hooks
+export { useDuplicatePidModal } from './hooks/useDuplicatePidModal';
 export { useMarkerSearch } from './hooks/useMarkerSearch';
 
 // interfaces

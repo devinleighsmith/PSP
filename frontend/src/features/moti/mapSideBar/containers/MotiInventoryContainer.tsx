@@ -14,7 +14,7 @@ import { pidFormatter } from 'features/properties/components/forms/subforms/PidP
 import { FormikProps, FormikValues, getIn } from 'formik';
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { useApiLtsa } from 'hooks/pims-api/useApiLtsa';
-import { IGeocoderResponse } from 'hooks/useApi';
+import { IGeocoderResponse, useApi } from 'hooks/useApi';
 import useLookupCodeHelpers from 'hooks/useLookupCodeHelpers';
 import { ParcelInfoOrder, TitleSummary } from 'interfaces/ltsaModels';
 import { geoJSON, LatLngLiteral } from 'leaflet';
@@ -32,6 +32,7 @@ import {
   MapSideBarLayout,
   PropertyForm,
   PropertySearchForm,
+  useDuplicatePidModal,
   useMarkerSearch,
 } from '..';
 import InventoryTabs from '../InventoryTabs';
@@ -49,6 +50,7 @@ export const MotiInventoryContainer: React.FunctionComponent = () => {
   const [currentProperty, setCurrentProperty] = useState<IProperty | undefined>();
   const dispatch = useDispatch();
   const adminAreas = useLookupCodeHelpers().getByType(ADMINISTRATIVE_AREA_CODE_SET_NAME);
+  const api = useApi();
 
   /**
    * synchronize the state of the property tracked by this container (which should be the currently displayed form) and the map.
@@ -95,6 +97,10 @@ export const MotiInventoryContainer: React.FunctionComponent = () => {
         toast.warning(
           'Unable to find parcel identifier (PID) for the searched location. A property must have a PID to be added to PSP, ensure this property has a PID.',
         );
+        return;
+      }
+      if (properties?.PID && !(await api.isPidAvailable(undefined, properties?.PID)).available) {
+        setDuplicatePid(properties?.PID);
         return;
       }
       const calculatedLatLng =
@@ -214,6 +220,7 @@ export const MotiInventoryContainer: React.FunctionComponent = () => {
   const parcelLayerService = useLayerQuery(PARCELS_LAYER_URL);
   const electoralLayerService = useLayerQuery(ELECTORAL_LAYER_URL);
   const { setMovingPinNameSpace } = useMarkerSearch(formikRef, showSideBar, populateForm);
+  const { ErrorModal, setDuplicatePid } = useDuplicatePidModal();
 
   return (
     <MapSideBarLayout
@@ -251,6 +258,7 @@ export const MotiInventoryContainer: React.FunctionComponent = () => {
             onCancel={() => setCurrentProperty(undefined)}
             onSubmit={() => formikRef?.current?.submitForm()}
           />
+          {ErrorModal}
         </>
       )}
     </MapSideBarLayout>
