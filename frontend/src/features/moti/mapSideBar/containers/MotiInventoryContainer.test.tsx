@@ -129,9 +129,11 @@ const geocoderResponse = {
   score: 100,
 };
 const searchAddress = jest.fn();
+const isPidAvailable = jest.fn();
 jest.mock('hooks/useApi');
 ((useApi as unknown) as jest.Mock<Partial<PimsAPI>>).mockReturnValue({
   searchAddress,
+  isPidAvailable,
 });
 
 describe('MotiInventoryContainer functionality', () => {
@@ -476,6 +478,69 @@ describe('MotiInventoryContainer functionality', () => {
       const propertyTab = await findByText('Property');
 
       expect(propertyTab).not.toHaveClass('disabled');
+    });
+  });
+  describe('duplicate pid functionality', () => {
+    const { open } = window;
+    beforeAll(() => {
+      delete (window as any).open;
+      window.open = jest.fn();
+    });
+
+    afterAll(() => {
+      window.open = open;
+    });
+
+    beforeEach(() => {
+      history.push('/mapview?sidebar=true&sidebarContext=addBareLand');
+      isPidAvailable.mockResolvedValue({ available: false });
+      findByPid.mockResolvedValueOnce(mockParcelLayerResponse);
+    });
+
+    it('displays the duplicate pid modal if a duplicate pid is detected.', async () => {
+      const { container, getByTestId } = renderContainer({});
+      await fillInput(container, 'searchPid', '123-456-789');
+      act(() => {
+        fireEvent.click(getByTestId('pid-search-button'));
+      });
+      const modal = await screen.findByText(/The parcel identifier \(PID\) 123-456-789/g);
+      expect(modal).toBeInTheDocument();
+    });
+    it('does not display the modal text if there is no duplicate pid', async () => {
+      isPidAvailable.mockResolvedValue({ available: true });
+      const { container, getByTestId } = renderContainer({});
+      await fillInput(container, 'searchPid', '123-456-789');
+      act(() => {
+        fireEvent.click(getByTestId('pid-search-button'));
+      });
+      const modal = await screen.queryByText(/The parcel identifier \(PID\) 123-456-789/g);
+      expect(modal).not.toBeInTheDocument();
+    });
+    it('opens the expected url in a new window when Yes clicked', async () => {
+      const { container, getByTestId } = renderContainer({});
+      await fillInput(container, 'searchPid', '123-456-789');
+      act(() => {
+        fireEvent.click(getByTestId('pid-search-button'));
+      });
+      await screen.findByText(/The parcel identifier \(PID\) 123-456-789/g);
+      const yesButton = screen.getByText('Yes');
+      act(() => {
+        yesButton.click();
+      });
+      expect(window.open).toHaveBeenCalled();
+    });
+    it('closes the modal when no is clicked', async () => {
+      const { container, getByTestId } = renderContainer({});
+      await fillInput(container, 'searchPid', '123-456-789');
+      act(() => {
+        fireEvent.click(getByTestId('pid-search-button'));
+      });
+      await screen.findByText(/The parcel identifier \(PID\) 123-456-789/g);
+      const noButton = screen.getByText('No');
+      act(() => {
+        noButton.click();
+      });
+      expect(window.open).not.toHaveBeenCalled();
     });
   });
 });
