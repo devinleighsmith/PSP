@@ -31,6 +31,9 @@ const SearchForm = styled(Row)`
   .form-group {
     margin: 0 0.5rem;
   }
+  .form-row {
+    flex-wrap: nowrap;
+  }
   .btn {
     min-height: 20px;
   }
