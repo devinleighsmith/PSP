@@ -1,4 +1,4 @@
-FROM openshift/ose-jenkins-agent-base:v4.7.0.20210625.215400
+FROM registry.redhat.io/openshift4/ose-jenkins-agent-base
 
 # Labels consumed by Red Hat build service
 
@@ -7,8 +7,6 @@ ENV NODEJS_VERSION=14 \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
-
-COPY contrib/bin/configure-agent /usr/local/bin/configure-agent
 
 # Install NodeJS
 RUN INSTALL_PKGS="nodejs nodejs-nodemon make gcc-c++" && \
