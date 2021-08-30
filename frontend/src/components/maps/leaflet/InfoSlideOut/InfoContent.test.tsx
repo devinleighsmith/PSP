@@ -158,31 +158,4 @@ describe('InfoContent View functionality', () => {
     const { getByText } = render(ContentComponent(mockParcel, PropertyTypes.Land, true));
     expect(getByText('$10,000')).toBeVisible();
   });
-
-  it('Correct label if no sub organization', () => {
-    const { getByText } = render(ContentComponent(mockParcel, PropertyTypes.Land, true));
-    expect(getByText('Owning ministry')).toBeVisible();
-  });
-
-  it('Shows all building information when can view', () => {
-    const { getByText } = render(ContentComponent(mockBuilding, PropertyTypes.Building, true));
-    expect(getByText('Building Identification')).toBeVisible();
-    //Identification information
-    expect(getByText('test name')).toBeVisible();
-    expect(getByText('Ministry of Advanced Education')).toBeVisible();
-    expect(getByText('Kwantlen Polytechnic University')).toBeVisible();
-    expect(getByText('Core Operational')).toBeVisible();
-    //Location data
-    expect(getByText('1234 mock Street')).toBeVisible();
-    expect(getByText('Victoria')).toBeVisible();
-    expect(getByText('48')).toBeVisible();
-    //Building Attributes
-    expect(getByText('University/College')).toBeVisible();
-    expect(getByText('100%')).toBeVisible();
-  });
-
-  it('Building area formated correctly', () => {
-    const { getByText } = render(ContentComponent(mockBuilding, PropertyTypes.Building, true));
-    expect(getByText('100 sq. metres')).toBeVisible();
-  });
 });

@@ -34,6 +34,7 @@ const mockParcels = [
 ] as IProperty[];
 
 jest.mock('hooks/useApi');
+jest.mock('hooks/pims-api');
 
 // This will spoof the active parcel (the one that will populate the popup details)
 const mockDetails: IPropertyDetail = {
@@ -47,7 +48,7 @@ const mockDetails: IPropertyDetail = {
 
 const storeState = {
   [lookupCodesSlice.name]: { lookupCodes: [] },
-  [propertiesSlice.name]: { propertyDetail: mockDetails, draftParcels: [] },
+  [propertiesSlice.name]: { propertyDetail: mockDetails, draftProperties: [] },
   [leafletMouseSlice.name]: { propertyDetail: mockDetails },
 };
 

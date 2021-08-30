@@ -41,6 +41,7 @@ jest.mock('hooks/useApi');
 jest.mock('components/maps/leaflet/LayerPopup');
 jest.mock('features/properties/common/slices/usePropertyNames');
 jest.mock('store/slices/properties/useProperties');
+jest.mock('hooks/pims-api');
 
 const fetchPropertyNames = jest.fn(() => () => Promise.resolve(['test']));
 (usePropertyNames as any).mockImplementation(() => ({
@@ -160,6 +161,7 @@ describe('MapView', () => {
       },
     });
     ((useApiProperties as unknown) as jest.Mock<Partial<typeof useApiProperties>>).mockReturnValue({
+      getPropertiesWfs: jest.fn(),
       loadProperties: jest.fn(async () => {
         return createPoints(mockParcels);
       }),
@@ -269,6 +271,7 @@ describe('MapView', () => {
       loadProperties: jest.fn(async () => {
         return createPoints(smallMockParcels);
       }),
+      getPropertiesWfs: jest.fn(),
       getParcel: async () => {
         return {} as IProperty;
       },
@@ -331,8 +334,8 @@ describe('MapView', () => {
       fireEvent.click(map!);
     });
     expect(findOneWhereContains).toHaveBeenLastCalledWith({
-      lat: 52.81604319154934,
-      lng: -124.67285156250001,
+      lat: 48.004625021133904,
+      lng: 123.00292968750001,
     });
   });
 
@@ -355,8 +358,8 @@ describe('MapView', () => {
       fireEvent.click(map!);
     });
     expect(findOneWhereContains).toHaveBeenLastCalledWith({
-      lat: 52.81604319154934,
-      lng: -124.67285156250001,
+      lat: 48.004625021133904,
+      lng: 123.00292968750001,
     });
     const closeButton = container.querySelector('.leaflet-popup-close-button');
     fireEvent.click(closeButton!);
@@ -369,6 +372,7 @@ describe('MapView', () => {
       loadProperties: jest.fn(async () => {
         return createPoints(largeMockParcels);
       }),
+      getPropertiesWfs: jest.fn(),
       getProperty: async () => {
         return {} as IProperty;
       },

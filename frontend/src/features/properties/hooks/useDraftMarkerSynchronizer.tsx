@@ -50,6 +50,7 @@ const getDraftMarkers = (values: any, initialValues: any, nameSpace: string) => 
  */
 const useDraftMarkerSynchronizer = (nameSpace: string) => {
   const { values, initialValues } = useFormikContext();
+  console.log(useAppSelector(state => state));
   const properties = useAppSelector(state => [...state.properties.draftProperties]);
   const dispatch = useDispatch();
   const nonDraftProperties = React.useMemo(

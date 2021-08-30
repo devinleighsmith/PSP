@@ -50,6 +50,7 @@ const SmallInput = styled(Input)`
  * @param param0 formikRef used by the parent to interact with this form.
  */
 export const PropertyForm: React.FunctionComponent<IPropertyFormProps> = ({ formikRef }) => {
+  console.log(formikRef.current);
   return (
     <>
       <FormHeader>Property Information</FormHeader>

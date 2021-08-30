@@ -19,8 +19,6 @@ import styled from 'styled-components';
 
 import Control from '../Control/Control';
 import FilterBackdrop from '../FilterBackdrop';
-import { AssociatedBuildingsList } from './AssociatedBuildingsList';
-import AssociatedParcelsList from './AssociatedParcelsList';
 import HeaderActions from './HeaderActions';
 import { InfoContent } from './InfoContent';
 
@@ -187,12 +185,6 @@ const InfoControl: React.FC<InfoControlProps> = ({ open, setOpen, onHeaderAction
             />
           </>
         );
-      } else if (canViewProperty) {
-        if (isBuilding) {
-          return <AssociatedParcelsList parcels={[] as IProperty[]} />;
-        } else {
-          return <AssociatedBuildingsList buildings={[popUpContext.propertyInfo as IProperty]} />;
-        }
       }
     } else {
       return <p id="emptySlideOut">Click a pin to view the property details</p>;
