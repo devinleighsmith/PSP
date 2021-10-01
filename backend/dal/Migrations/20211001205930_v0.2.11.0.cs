@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Pims.Dal.Migrations
 {
-    public partial class v02101 : SeedMigration
+    public partial class v02110 : SeedMigration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
