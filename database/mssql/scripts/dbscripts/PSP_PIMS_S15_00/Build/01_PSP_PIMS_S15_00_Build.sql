@@ -940,6 +940,9 @@ CREATE SEQUENCE "dbo"."PIMS_WORKFLOW_MODEL_ID_SEQ"
 	NO CYCLE
 	CACHE 50
 GO
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_CONTACT_METHOD_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_CONTACT_METHOD_LOG"  ( 
 	"PERSON_ID"               	bigint NULL,
 	"SURNAME"                 	nvarchar(50) NULL,
@@ -959,7 +962,12 @@ CREATE TABLE "etl"."ETL_CONTACT_METHOD_LOG"  (
 	"ErrorCode"               	int NULL,
 	"ErrorColumn"             	int NULL 
 	)
+END
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_ERROR_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_ERROR_LOG"  ( 
 	"ERROR_TIME"          	datetime NULL,
 	"ERROR_OPERATION_NAME"	nvarchar(100) NULL,
@@ -969,7 +977,12 @@ CREATE TABLE "etl"."ETL_ERROR_LOG"  (
 	"ErrorCode"           	int NULL,
 	"ErrorColumn"         	int NULL 
 	)
+END
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_ERROR_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_INTEREST_HOLDER_ORG_LOG"  ( 
 	"SURNAME"                          	nvarchar(50) NULL,
 	"FIRST_NAME"                       	nvarchar(50) NULL,
@@ -995,7 +1008,12 @@ CREATE TABLE "etl"."ETL_INTEREST_HOLDER_ORG_LOG"  (
 	"ErrorCode"                        	int NULL,
 	"ErrorColumn"                      	int NULL 
 	)
+END
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_ERROR_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_INTEREST_HOLDER_PERSON_LOG"  ( 
 	"SURNAME"                          	nvarchar(50) NULL,
 	"FIRST_NAME"                       	nvarchar(50) NULL,
@@ -1021,7 +1039,12 @@ CREATE TABLE "etl"."ETL_INTEREST_HOLDER_PERSON_LOG"  (
 	"ErrorCode"                        	int NULL,
 	"ErrorColumn"                      	int NULL 
 	)
+END
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_ERROR_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_OPERATIONAL_SS_LOAD"  ( 
 	"SS_TAB_NAME"                 	nvarchar(500) NULL,
 	"LIS_FILE_NO"                 	nvarchar(500) NULL,
@@ -1062,7 +1085,12 @@ CREATE TABLE "etl"."ETL_OPERATIONAL_SS_LOAD"  (
 	"ErrorCode"                   	int NULL,
 	"ErrorColumn"                 	int NULL 
 	)
+END
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[etl].[ETL_ERROR_LOG]') AND type in (N'U'))
+BEGIN
 CREATE TABLE "etl"."ETL_PROPERTY_ERROR_LOG"  ( 
 	"CIVIC_ADDRESS"                    	nvarchar(100) NULL,
 	"MUNICIPALITY_NAME"                	nvarchar(40) NULL,
@@ -1078,7 +1106,9 @@ CREATE TABLE "etl"."ETL_PROPERTY_ERROR_LOG"  (
 	"ErrorCode"                        	int NULL,
 	"ErrorColumn"                      	int NULL 
 	)
+END
 GO
+
 CREATE TABLE "dbo"."PIMSX_TableDefinitions"  ( 
 	"TABLE_NAME"   	nvarchar(255) NULL,
 	"TABLE_ALIAS"  	nvarchar(255) NULL,
@@ -4416,6 +4446,12 @@ CREATE TABLE "dbo"."PIMS_WORKFLOW_MODEL_TYPE"  (
 	CONSTRAINT "WFLMDT_PK" PRIMARY KEY CLUSTERED("WORKFLOW_MODEL_TYPE_CODE")
  ON [PRIMARY])
 GO
+
+IF  NOT EXISTS (SELECT * FROM sys.objects 
+WHERE object_id = OBJECT_ID(N'[pmbc].[PMBC_PARCEL_POLYGON_FABRIC]') AND type in (N'U'))
+BEGIN
+CREATE NONCLUSTERED INDEX "PRCPLY_PID_NUMBER_IDX"
+	ON "pmbc"."PMBC_PARCEL_POLYGON_FABRIC"("PID_NUMBER")
 CREATE TABLE "pmbc"."PMBC_PARCEL_POLYGON_FABRIC"  ( 
 	"PARCEL_FABRIC_POLY_ID"	int NOT NULL,
 	"GLOBAL_UID"           	nvarchar(254) NULL,
@@ -4452,209 +4488,176 @@ CREATE TABLE "pmbc"."PMBC_PARCEL_POLYGON_FABRIC"  (
 	"SE_ANNO_CAD_DATA"     	varbinary(max) NULL,
 	CONSTRAINT "PRCPLY_PK" PRIMARY KEY CLUSTERED("PARCEL_FABRIC_POLY_ID")
  ON [PRIMARY])
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PARCEL_FABRIC_POLY_ID is a system generated unique identification number.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PARCEL_FABRIC_POLY_ID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'GLOBAL_UID is a unique global identifier (GUID) for the parcel.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'GLOBAL_UID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PARCEL_NAME is the same as the PID, if there is one. If there is a PIN but no PID, then PARCEL_NAME is the PIN. If there is no PID nor PIN, then PARCEL_NAME is the parcel class value, e.g., COMMON OWNERSHIP, BUILDING STRATA, AIR SPACE, ROAD, PARK.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PARCEL_NAME'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PLAN_ID is the unique identifier of the land survey plan that corresponds to this parcel.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PLAN_ID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PLAN_NUMBER is the Land Act, Land Title Act, or Strata Property Act Plan Number for the land survey plan that corresponds to this parcel, e.g., VIP1632, NO_PLAN.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PLAN_NUMBER'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PIN is the Crown Land Registry Parcel Identifier, if applicable.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PIN'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PID is the Land Title Register parcel identifier, a left-zero-padded nine-digit number that uniquely identifies a parcel in the land title register of in British Columbia. The registrar assigns PID numbers to parcels for which a title is being entered as' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PID_NUMBER is the PID, without leading zeroes. PID is the Land Title Register parcel identifier, a nine-digit number that uniquely identifies a parcel in the land title register of in British Columbia. The registrar assigns PID numbers to parcels for whic' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PID_NUMBER'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SOURCE_PARCEL_ID is the unique parcel identifier supplied by the source data provider. The value is intended to assist local governments by providing traceability back to the source data provider''s parcel ID. It will not be populated during on-going opera' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SOURCE_PARCEL_ID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PARCEL_STATUS is the status of the parcel, according to the Land Title Register or Crown Land Registry, as appropriate, i.e., ACTIVE, CANCELLED, INACTIVE, PENDING.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PARCEL_STATUS'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PARCEL_CLASS is the Parcel classification for maintenance, mapping, publishing and analysis, i.e., PRIMARY, SUBDIVISION, PART OF PRIMARY, BUILDING STRATA, BARE LAND STRATA, AIR SPACE, ROAD, HIGHWAY, PARK, INTEREST, COMMON OWNERSHIP, ABSOLUTE FEE BOOK, CRO' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PARCEL_CLASS'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'OWNER_TYPE is the general ownership category, e.g., PRIVATE, CROWN PROVINCIAL, MUNICIPAL.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'OWNER_TYPE'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'PARCEL_START_DATE is the date of the legal event that created the parcel, i.e., the date the plan was filed.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'PARCEL_START_DATE'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SURVEY_DESIGNATION_1 is, typically, the smallest division of lands in a survey. If available, this is generally the Parcel from a Subdivided short legal description or the Quadrant or Block from an Unsubdivided short legal description, e.g., PARCEL A, SW4' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SURVEY_DESIGNATION_1'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SURVEY_DESIGNATION_2 is, typically, the second smallest division of lands in a survey. If available, this is generally the Lot from a Subdivided short legal description or the District Lot, Lot or Section from an Unsubdivided short legal description, e.g.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SURVEY_DESIGNATION_2'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SURVEY_DESIGNATION_3 is, typically, the third smallest division of lands in a survey. If available, this is generally the Block from a Subdivided short legal description or the Range from an Unsubdivided short legal description, e.g., BLOCK H.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SURVEY_DESIGNATION_3'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'LEGAL_DESCRIPTION is the full legal description of the parcel and is primarily recorded from the Land Title Register. Where recorded only in the Crown Land Registry, this attribute is to be populated from Tantalis for the fabric compilation, but maintaine' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'LEGAL_DESCRIPTION'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'MUNICIPALITY is the municipal area within which the parcel is located. The value is either RURAL (for parcels in unincorporated regions) or the name of a BC municipality.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'MUNICIPALITY'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'REGIONAL_DISTRICT is the name of the regional district in which the parcel is located, e.g., CAPITAL REGIONAL DISTRICT.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'REGIONAL_DISTRICT'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'IS_REMAINDER_IND indicates if the parcel is a remainder of the original, i.e., YES, NO.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'IS_REMAINDER_IND'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'GEOMETRY_SOURCE is the source of the parcel geometry data, e.g., ICIS CADASTRE, ICF, PMBC OPERATIONS.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'GEOMETRY_SOURCE'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'POSITIONAL_ERROR is the semi-major axis at the 95% confidence level of the least accurate point of the parcel.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'POSITIONAL_ERROR'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'ERROR_REPORTED_BY is the organization or process reporting the error, i.e., LSA, DATA COMPILATION.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'ERROR_REPORTED_BY'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'CAPTURE_METHOD is an indicator of relative accuracy, i.e., UNKNOWN, COGO, SURVEY PLAN DATASET.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'CAPTURE_METHOD'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'COMPILED_IND indicates if the parcel polygon was generated from inverted dimensions, i.e., True, False. "True" means that the parcel geometry was from a previous source cadastre and not precision input based on plan dimensions.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'COMPILED_IND'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'STATED_AREA is the area of the parcel, in square metres. It is automatically calculated if misclose is small; it can be edited to reflect the recorded plan value.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'STATED_AREA'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'WHEN_CREATED is the date and time the source record was created (not the time when it was loaded into the BC Geographic Warehouse).' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'WHEN_CREATED'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'WHEN_UPDATED is the date and time the source record was last modified (not the time when it was loaded into, or modified in, the BC Geographic Warehouse).' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'WHEN_UPDATED'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'FEATURE_AREA_SQM is the system calculated area of a two-dimensional polygon in square meters.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'FEATURE_AREA_SQM'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'FEATURE_LENGTH_M is the system calculated length or perimeter of a geometry in meters.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'FEATURE_LENGTH_M'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SHAPE is the column used to reference the spatial coordinates defining the feature.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SHAPE'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'OBJECTID is a column required by spatial layers that interact with ESRI ArcSDE. It is populated with unique values automatically by SDE.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'OBJECTID'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'SE_ANNO_CAD_DATA is a binary column used by spatial tools to store annotation, curve features and CAD data when using the SDO_GEOMETRY storage data type.' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC', 
 	@level2type = N'Column', @level2name = N'SE_ANNO_CAD_DATA'
-GO
 EXEC sp_addextendedproperty 
 	@name = N'MS_Description', @value = N'The ParcelMap BC (PMBC) parcel fabric contains all active titled parcels and surveyed provincial Crown land parcels in BC. For building strata parcels, there is a record, with PID value, for each parcel within the strata parcel; the geometry for those rec' , 
 	@level0type = N'Schema', @level0name = N'pmbc', 
 	@level1type = N'Table', @level1name = N'PMBC_PARCEL_POLYGON_FABRIC'
+END
 GO
 CREATE TABLE "dbo"."__EFMigrationsHistory"  ( 
 	"MigrationId"   	nvarchar(150) NOT NULL,
@@ -5178,9 +5181,6 @@ CREATE NONCLUSTERED INDEX "USRORG_USER_ID_IDX"
 GO
 CREATE NONCLUSTERED INDEX "WFLMDL_WORKFLOW_MODEL_TYPE_CODE_IDX"
 	ON "dbo"."PIMS_WORKFLOW_MODEL"("WORKFLOW_MODEL_TYPE_CODE")
-GO
-CREATE NONCLUSTERED INDEX "PRCPLY_PID_NUMBER_IDX"
-	ON "pmbc"."PMBC_PARCEL_POLYGON_FABRIC"("PID_NUMBER")
 GO
 CREATE TRIGGER "dbo"."PIMS_PRPEVL_I_S_I_TR" ON PIMS_PROPERTY_EVALUATION INSTEAD OF INSERT AS
 SET NOCOUNT ON
