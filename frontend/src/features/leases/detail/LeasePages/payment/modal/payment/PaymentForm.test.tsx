@@ -74,7 +74,7 @@ describe('PaymentForm component', () => {
     const {
       component: { container, findByLabelText },
     } = await setup({ initialValues: { ...defaultFormLeasePayment, leaseTermId: 1 } });
-
+    const blah = 1;
     await fillInput(container, 'amountTotal', '1050');
     const amountPreTax = await findByLabelText('Expected payment ($)');
     const amountGst = await findByLabelText('GST ($)');
