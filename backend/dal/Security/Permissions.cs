@@ -70,6 +70,9 @@ namespace Pims.Dal.Security
         LeaseEdit = 21,
 
         [Display(GroupName = "lease", Name = "lease-delete", Description = "Can delete existing leases.")]
-        LeaseDelete = 22
+        LeaseDelete = 22,
+
+        [Display(GroupName = "assessment", Name = "assessment-view", Description = "Can view BC Assessment Data.")]
+        AssessmentView = 23
     }
 }

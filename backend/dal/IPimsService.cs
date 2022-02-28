@@ -1,4 +1,3 @@
-
 namespace Pims.Dal.Services
 {
     public interface IPimsService
@@ -12,6 +11,10 @@ namespace Pims.Dal.Services
         IPersonService PersonService { get; }
         IOrganizationService OrganizationService { get; }
         ILeaseReportsService LeaseReportsService { get; }
+        #endregion
+
+        #region Assessment
+        IAssessmentService AssessmentService { get; }
         #endregion
     }
 }
