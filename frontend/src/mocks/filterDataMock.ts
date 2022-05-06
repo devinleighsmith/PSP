@@ -12,6 +12,8 @@ import { IAccessRequest, IAddress, IOrganization, IPerson, IProperty, IUser } fr
 import { Api_Person } from 'models/api/Person';
 import { ILookupCode } from 'store/slices/lookupCodes';
 
+import { Api_Organization } from './../models/api/Organization';
+
 // TODO: This needs to be removed as Administrative Areas no longer exist.
 export const mockAdministrativeAreaLookups = [
   {
@@ -110,6 +112,14 @@ export const mockUser: IUser = {
 export const mockPerson: IPerson = {
   landline: '222-333-4444',
   mobile: '555-666-7777',
+};
+
+export const mockApiOrganization: Api_Organization = {
+  id: 2,
+  contactMethods: [
+    { contactMethodType: { id: ContactMethodTypes.WorkPhone }, value: '222-333-4444' },
+    { contactMethodType: { id: ContactMethodTypes.WorkMobile }, value: '555-666-7777' },
+  ],
 };
 
 export const mockApiPerson: Api_Person = {

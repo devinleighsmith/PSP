@@ -138,11 +138,12 @@ export const GenericModal = (props: BsModalProps & ModalProps) => {
             variant={cancelButtonVariant ?? 'secondary'}
             onClick={close}
             style={{ width: 'unset' }}
+            title="cancel-modal"
           >
             {cancelButtonText}
           </Button>
         )}
-        <Button variant={okButtonVariant ?? 'primary'} onClick={ok}>
+        <Button title="ok-modal" variant={okButtonVariant ?? 'primary'} onClick={ok}>
           {okButtonText ?? 'Ok'}
         </Button>
       </Modal.Footer>
@@ -150,11 +151,29 @@ export const GenericModal = (props: BsModalProps & ModalProps) => {
   );
 };
 
-const ModalContainer = (props: BsModalProps & ModalProps) =>
-  !props.asPopup ? (
+const ModalContainer = (props: BsModalProps & ModalProps) => {
+  const {
+    handleCancel,
+    handleOk,
+    cancelButtonText,
+    cancelButtonVariant,
+    okButtonText,
+    okButtonVariant,
+    title,
+    message,
+    display,
+    setDisplay,
+    closeButton,
+    modalSize,
+    className,
+    asPopup,
+    show,
+    ...bsProps
+  } = props;
+  return !props.asPopup ? (
     <Container>
       <StyledModal
-        {...props}
+        {...bsProps}
         show={props.show}
         onHide={props.close}
         dialogClassName={classNames(props.modalSize, props.className)}
@@ -167,6 +186,7 @@ const ModalContainer = (props: BsModalProps & ModalProps) =>
       {props.children}
     </PopupContainer>
   ) : null;
+};
 
 const StyledModal = styled(Modal)`
   .modal-header {

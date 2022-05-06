@@ -8,7 +8,140 @@ exports[`MapProperties View renders correctly 1`] = `
   <div
     class="Toastify"
   />
-  .c8 {
+  .c2.btn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding: 0.4rem 1.2rem;
+  min-height: 3rem;
+  border: 0.2rem solid transparent;
+  border-radius: 0.4rem;
+  text-align: center;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  font-size: 1.8rem;
+  font-family: 'BCSans','Noto Sans',Verdana,Arial,sans-serif;
+  font-weight: 700;
+  -webkit-letter-spacing: 0.1rem;
+  -moz-letter-spacing: 0.1rem;
+  -ms-letter-spacing: 0.1rem;
+  letter-spacing: 0.1rem;
+  cursor: pointer;
+}
+
+.c2.btn:hover {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.c2.btn:focus {
+  outline-width: 0.4rem;
+  outline-style: solid;
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.c2.btn.btn-primary {
+  border: none;
+}
+
+.c2.btn.btn-secondary {
+  background: none;
+}
+
+.c2.btn.btn-info {
+  border: none;
+  background: none;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+.c2.btn.btn-info:hover,
+.c2.btn.btn-info:active,
+.c2.btn.btn-info:focus {
+  background: none;
+}
+
+.c2.btn.btn-light {
+  border: none;
+}
+
+.c2.btn.btn-dark {
+  border: none;
+}
+
+.c2.btn.btn-link {
+  font-size: 1.6rem;
+  font-weight: 400;
+  background: none;
+  border: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  min-height: 2.5rem;
+  line-height: 3rem;
+  -webkit-box-pack: left;
+  -webkit-justify-content: left;
+  -ms-flex-pack: left;
+  justify-content: left;
+  -webkit-letter-spacing: unset;
+  -moz-letter-spacing: unset;
+  -ms-letter-spacing: unset;
+  letter-spacing: unset;
+  padding: 0;
+}
+
+.c2.btn.btn-link:hover,
+.c2.btn.btn-link:active,
+.c2.btn.btn-link:focus {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.c2.btn.btn-link:disabled,
+.c2.btn.btn-link.disabled {
+  background: none;
+  pointer-events: none;
+}
+
+.c2.btn:disabled,
+.c2.btn:disabled:hover {
+  box-shadow: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.c2.Button .Button__icon {
+  margin-right: 1.6rem;
+}
+
+.c2.Button--icon-only:focus {
+  outline: none;
+}
+
+.c2.Button--icon-only .Button__icon {
+  margin-right: 0;
+}
+
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -23,22 +156,22 @@ exports[`MapProperties View renders correctly 1`] = `
   padding-bottom: 0.5rem;
 }
 
-.c8 .form-group .form-check label {
+.c9 .form-group .form-check label {
   font-weight: bold;
   color: textColor;
   font-size: 1.3rem;
 }
 
-.c9 {
+.c10 {
   margin-right: 1rem;
   font-size: 1.5rem;
 }
 
-.c10 {
+.c11 {
   margin-bottom: 0rem;
 }
 
-.c10 .form-check {
+.c11 .form-check {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -49,11 +182,11 @@ exports[`MapProperties View renders correctly 1`] = `
   align-items: center;
 }
 
-.c10 .form-check input {
+.c11 .form-check input {
   margin-top: 0rem;
 }
 
-.c10 .form-check label {
+.c11 .form-check label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -64,7 +197,7 @@ exports[`MapProperties View renders correctly 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c5 {
   margin-right: -1rem;
   width: 34.1rem;
   min-height: 5.2rem;
@@ -77,49 +210,45 @@ exports[`MapProperties View renders correctly 1`] = `
   z-index: 1000;
 }
 
-.c4.closed {
+.c5.closed {
   width: 0rem;
   height: 0rem;
 }
 
-.c7 {
+.c8 {
   width: 100%;
   height: calc(100% - 8rem);
   padding: 1.6rem;
 }
 
-.c7.open {
+.c8.open {
   overflow-y: scroll;
 }
 
-.c6 {
+.c7 {
   font-size: 3rem;
 }
 
-.c5 {
+.c6.btn {
   width: 5.2rem;
   height: 5.2rem;
   position: absolute;
   top: 0;
   left: -5.1rem;
   background-color: #fff;
-  color: slideOutBlue;
-  border-color: slideOutBlue;
   box-shadow: -0.2rem 0.1rem 0.4rem rgba(0,0,0,0.2);
 }
 
-.c5.open {
+.c6.btn.open {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   top: 2.6rem;
 }
 
-.c2 {
-  background-color: #ffffff !important;
-  color: darkVariantColor !important;
+.c3.c3.btn {
+  background-color: #ffffff;
   width: 4rem;
   height: 4rem;
-  font-size: 2.5rem;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -132,6 +261,18 @@ exports[`MapProperties View renders correctly 1`] = `
 
 .c1 {
   grid-area: map;
+}
+
+.c1 .leaflet-div-icon {
+  background: none;
+  border: none;
+}
+
+.c1 .leaflet-div-icon img {
+  width: inherit;
+  height: inherit;
+  -webkit-filter: drop-shadow(3px 1px 10px rgb(0 0 0 / 0.6));
+  filter: drop-shadow(3px 1px 10px rgb(0 0 0 / 0.6));
 }
 
 .c1 .leaflet-container {
@@ -180,6 +321,9 @@ exports[`MapProperties View renders correctly 1`] = `
   grid-template-rows: 1fr;
   grid-template-columns: min-content 1fr;
   grid-template-areas: 'filter filter' 'map map';
+  -webkit-transition: margin 1s,width 1s;
+  transition: margin 1s,width 1s;
+  position: relative;
 }
 
 .c0.sidebar {
@@ -188,9 +332,8 @@ exports[`MapProperties View renders correctly 1`] = `
   transition: 1s;
 }
 
-.c3 {
-  background-color: #ffffff !important;
-  color: darkVariantColor !important;
+.c4.c4.btn {
+  background-color: #ffffff;
   width: 4rem;
   height: 4rem;
 }
@@ -330,29 +473,33 @@ exports[`MapProperties View renders correctly 1`] = `
             >
               <div>
                 <button
-                  class="c2 btn btn-primary"
+                  class="c2 Button c3 btn btn-primary"
                   type="button"
                 >
-                  <svg
-                    fill="none"
-                    height="1em"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="Button__value"
                   >
-                    <path
-                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                    />
-                    <circle
-                      cx="12"
-                      cy="10"
-                      r="3"
-                    />
-                  </svg>
+                    <svg
+                      fill="none"
+                      height="1em"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                      />
+                      <circle
+                        cx="12"
+                        cy="10"
+                        r="3"
+                      />
+                    </svg>
+                  </div>
                 </button>
               </div>
             </div>
@@ -360,22 +507,26 @@ exports[`MapProperties View renders correctly 1`] = `
               class="leaflet-control"
             >
               <button
-                class="c3 btn btn-primary"
+                class="c2 Button c4 btn btn-primary"
                 type="button"
               >
-                <svg
-                  fill="currentColor"
-                  height="1em"
-                  stroke="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 448 512"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div
+                  class="Button__value"
                 >
-                  <path
-                    d="M448 344v112a23.94 23.94 0 0 1-24 24H312c-21.39 0-32.09-25.9-17-41l36.2-36.2L224 295.6 116.77 402.9 153 439c15.09 15.1 4.39 41-17 41H24a23.94 23.94 0 0 1-24-24V344c0-21.4 25.89-32.1 41-17l36.19 36.2L184.46 256 77.18 148.7 41 185c-15.1 15.1-41 4.4-41-17V56a23.94 23.94 0 0 1 24-24h112c21.39 0 32.09 25.9 17 41l-36.2 36.2L224 216.4l107.23-107.3L295 73c-15.09-15.1-4.39-41 17-41h112a23.94 23.94 0 0 1 24 24v112c0 21.4-25.89 32.1-41 17l-36.19-36.2L263.54 256l107.28 107.3L407 327.1c15.1-15.2 41-4.5 41 16.9z"
-                  />
-                </svg>
+                  <svg
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 448 512"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M448 344v112a23.94 23.94 0 0 1-24 24H312c-21.39 0-32.09-25.9-17-41l36.2-36.2L224 295.6 116.77 402.9 153 439c15.09 15.1 4.39 41-17 41H24a23.94 23.94 0 0 1-24-24V344c0-21.4 25.89-32.1 41-17l36.19 36.2L184.46 256 77.18 148.7 41 185c-15.1 15.1-41 4.4-41-17V56a23.94 23.94 0 0 1 24-24h112c21.39 0 32.09 25.9 17 41l-36.2 36.2L224 216.4l107.23-107.3L295 73c-15.09-15.1-4.39-41 17-41h112a23.94 23.94 0 0 1 24 24v112c0 21.4-25.89 32.1-41 17l-36.19-36.2L263.54 256l107.28 107.3L407 327.1c15.1-15.2 41-4.5 41 16.9z"
+                    />
+                  </svg>
+                </div>
               </button>
             </div>
           </div>
@@ -386,31 +537,35 @@ exports[`MapProperties View renders correctly 1`] = `
               class="leaflet-control"
             >
               <div
-                class="c4 closed"
+                class="c5 closed"
                 id="layersContainer"
               >
                 <button
-                  class="c5 btn btn-outline-secondary"
+                  class="c2 Button c6 btn btn-outline-secondary"
                   id="layersControlButton"
                   type="button"
                 >
-                  <svg
-                    class="c6"
-                    fill="currentColor"
-                    height="1em"
-                    stroke="currentColor"
-                    stroke-width="0"
-                    viewBox="0 0 512 512"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="Button__value"
                   >
-                    <path
-                      d="M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z"
-                    />
-                  </svg>
+                    <svg
+                      class="c7"
+                      fill="currentColor"
+                      height="1em"
+                      stroke="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z"
+                      />
+                    </svg>
+                  </div>
                 </button>
                 <div
-                  class="c7"
+                  class="c8"
                 >
                   <form
                     action="#"
@@ -422,11 +577,11 @@ exports[`MapProperties View renders correctly 1`] = `
                         class="list-group"
                       >
                         <div
-                          class="c8 list-group-item"
+                          class="c9 list-group-item"
                           id="Administrative Boundaries"
                         >
                           <svg
-                            class="c9"
+                            class="c10"
                             fill="currentColor"
                             height="1em"
                             stroke="currentColor"
@@ -440,7 +595,7 @@ exports[`MapProperties View renders correctly 1`] = `
                             />
                           </svg>
                           <div
-                            class="c10 form-group"
+                            class="c11 form-group"
                           >
                             <div
                               class="form-check"
@@ -459,11 +614,11 @@ exports[`MapProperties View renders correctly 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c8 list-group-item"
+                          class="c9 list-group-item"
                           id="firstNations"
                         >
                           <svg
-                            class="c9"
+                            class="c10"
                             fill="currentColor"
                             height="1em"
                             stroke="currentColor"
@@ -477,7 +632,7 @@ exports[`MapProperties View renders correctly 1`] = `
                             />
                           </svg>
                           <div
-                            class="c10 form-group"
+                            class="c11 form-group"
                           >
                             <div
                               class="form-check"
@@ -496,11 +651,11 @@ exports[`MapProperties View renders correctly 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c8 list-group-item"
+                          class="c9 list-group-item"
                           id="landOwnership"
                         >
                           <svg
-                            class="c9"
+                            class="c10"
                             fill="currentColor"
                             height="1em"
                             stroke="currentColor"
@@ -514,7 +669,7 @@ exports[`MapProperties View renders correctly 1`] = `
                             />
                           </svg>
                           <div
-                            class="c10 form-group"
+                            class="c11 form-group"
                           >
                             <div
                               class="form-check"
@@ -533,11 +688,11 @@ exports[`MapProperties View renders correctly 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c8 list-group-item"
+                          class="c9 list-group-item"
                           id="zoning"
                         >
                           <svg
-                            class="c9"
+                            class="c10"
                             fill="currentColor"
                             height="1em"
                             stroke="currentColor"
@@ -551,7 +706,7 @@ exports[`MapProperties View renders correctly 1`] = `
                             />
                           </svg>
                           <div
-                            class="c10 form-group"
+                            class="c11 form-group"
                           >
                             <div
                               class="form-check"
@@ -570,11 +725,11 @@ exports[`MapProperties View renders correctly 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c8 list-group-item"
+                          class="c9 list-group-item"
                           id="electoral"
                         >
                           <svg
-                            class="c9"
+                            class="c10"
                             fill="currentColor"
                             height="1em"
                             stroke="currentColor"
@@ -588,7 +743,7 @@ exports[`MapProperties View renders correctly 1`] = `
                             />
                           </svg>
                           <div
-                            class="c10 form-group"
+                            class="c11 form-group"
                           >
                             <div
                               class="form-check"

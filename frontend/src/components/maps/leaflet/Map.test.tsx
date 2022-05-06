@@ -132,7 +132,7 @@ function setup(props: Omit<TestProps, 'done'>) {
   };
 }
 
-xdescribe('MapProperties View', () => {
+describe('MapProperties View', () => {
   let mockLoadProperties: jest.Mock<Promise<FeatureCollection>>;
   let mockGetParcel: jest.Mock<Promise<IProperty>>;
 

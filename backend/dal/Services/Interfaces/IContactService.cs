@@ -1,7 +1,7 @@
 using Pims.Dal.Entities;
 using Pims.Dal.Entities.Models;
 
-namespace Pims.Dal.Services.Interfaces
+namespace Pims.Dal.Services
 {
     public interface IContactService
     {

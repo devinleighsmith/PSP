@@ -1,10 +1,10 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Pims.Api.Helpers.Extensions;
 using Pims.Core.Http;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
 using KModel = Pims.Keycloak.Models;
 
 namespace Pims.Api.Controllers

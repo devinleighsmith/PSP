@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AddLeaseTenantForm component renders as expected 1`] = `
+exports[`AddLeaseTenantContainer component renders as expected 1`] = `
 <DocumentFragment>
   <div
     class="Toastify"
@@ -1005,12 +1005,9 @@ exports[`AddLeaseTenantForm component renders as expected 1`] = `
                 </div>
               </div>
               <div
-                class="table-loading"
+                class="no-rows-message"
               >
-                <div
-                  class="spinner-border"
-                  role="status"
-                />
+                No Contacts match the search criteria
               </div>
             </div>
             <div

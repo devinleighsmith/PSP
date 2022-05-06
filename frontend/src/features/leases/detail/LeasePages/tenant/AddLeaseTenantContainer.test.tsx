@@ -1,3 +1,4 @@
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
@@ -6,6 +7,7 @@ import { LeaseContextProvider } from 'features/leases/context/LeaseContext';
 import { createMemoryHistory } from 'history';
 import { defaultLease, ILease } from 'interfaces';
 import {
+  fillInput,
   getAllByRole as getAllByRoleBase,
   mockKeycloak,
   renderAsync,
@@ -22,7 +24,7 @@ jest.mock('@react-keycloak/web');
 const history = createMemoryHistory();
 const mockAxios = new MockAdapter(axios);
 
-xdescribe('AddLeaseTenantForm component', () => {
+describe('AddLeaseTenantContainer component', () => {
   const setup = async (renderOptions: RenderOptions & { lease?: ILease } = {}) => {
     // render component under test
     const component = await renderAsync(
@@ -59,6 +61,8 @@ xdescribe('AddLeaseTenantForm component', () => {
   it('renders as expected', async () => {
     mockAxios.onGet().reply(200, []);
     const { component } = await setup({});
+    const { findByTitle } = component;
+    await findByTitle('loading');
 
     expect(component.asFragment()).toMatchSnapshot();
   });
@@ -84,8 +88,7 @@ xdescribe('AddLeaseTenantForm component', () => {
     const dataRow = findFirstRowTableTwo() as HTMLElement;
     expect(dataRow).not.toBeNull();
     expect(findCell(dataRow, 3)?.textContent).toBe('Bob Billy Smith');
-    expect(findCell(dataRow, 4)?.textContent).toBe('Smith');
-    expect(findCell(dataRow, 5)?.textContent).toBe('Bob');
+    expect(findCell(dataRow, 4)?.textContent).toBe('Not applicable');
 
     const saveButton = getByText('Save');
     expect(saveButton).not.toBeDisabled();
@@ -94,10 +97,80 @@ xdescribe('AddLeaseTenantForm component', () => {
       expect(mockAxios.history.put[0].data).toEqual(expectedTenantRequestData);
     });
   });
+
+  describe('displays modal warning when a tenant organization with persons has no primary contact', () => {
+    it('shows the modal with expected text', async () => {
+      mockAxios.onPut().reply(200);
+      mockAxios.onGet().reply(200, {
+        items: [],
+      });
+
+      const {
+        component: { container, getByText },
+      } = await setup({ lease: mockLeaseWithTenants });
+      // Remove the primary contact
+      await fillInput(container, 'tenants.0.primaryContactId', '', 'select');
+
+      const saveButton = getByText('Save');
+      userEvent.click(saveButton);
+
+      const modalText = await screen.findByText('Confirm save');
+      expect(modalText).toBeVisible();
+    });
+
+    it('does not save when modal is cancelled', async () => {
+      mockAxios.onPut().reply(200);
+      mockAxios.onGet().reply(200, {
+        items: [],
+      });
+
+      const {
+        component: { container, getByText },
+      } = await setup({ lease: mockLeaseWithTenants });
+      // Remove the primary contact
+      await fillInput(container, 'tenants.0.primaryContactId', '', 'select');
+
+      const saveButton = getByText('Save');
+      userEvent.click(saveButton);
+
+      const cancelButton = await screen.findByTitle('cancel-modal');
+      userEvent.click(cancelButton);
+
+      await waitFor(() => {
+        expect(mockAxios.history.put).toHaveLength(0);
+      });
+    });
+
+    it('saves the form when modal confirmed', async () => {
+      mockAxios.onPut().reply(200);
+      mockAxios.onGet().reply(200, {
+        items: [],
+      });
+
+      const {
+        component: { container, getByText },
+      } = await setup({ lease: mockLeaseWithTenants });
+      // Remove the primary contact
+      await fillInput(container, 'tenants.0.primaryContactId', '', 'select');
+
+      const saveButton = getByText('Save');
+      userEvent.click(saveButton);
+
+      const modalSaveButton = await screen.findByTitle('ok-modal');
+      userEvent.click(modalSaveButton);
+
+      await waitFor(() => {
+        expect(mockAxios.history.put[0].data).toEqual(expectedTenantWithPrimaryContactRequestData);
+      });
+    });
+  });
 });
 
 const expectedTenantRequestData =
-  '{"organizations":[],"persons":[],"properties":[],"improvements":[],"securityDeposits":[],"securityDepositReturns":[],"startDate":"2020-01-01","lFileNo":"","tfaFileNo":0,"psFileNo":"","programName":"","motiName":"Moti, Name, Name","amount":0,"renewalCount":0,"tenantNotes":[],"insurances":[],"isResidential":false,"isCommercialBuilding":false,"isOtherImprovement":false,"returnNotes":"","terms":[],"tenants":[{"id":"P2","personId":2,"rowVersion":0,"summary":"Bob Billy Smith","surname":"Smith","firstName":"Bob","isDisabled":false,"leaseId":1}],"statusType":{"id":"ACTIVE","description":"Active","isDisabled":false},"region":{"regionCode":1,"regionName":"South Coast Region"},"programType":{"id":"OTHER","description":"Other","isDisabled":false},"paymentReceivableType":{"id":"RCVBL","description":"Receivable","isDisabled":false},"categoryType":{"id":"COMM","description":"Commercial","isDisabled":false},"purposeType":{"id":"BCFERRIES","description":"BC Ferries","isDisabled":false},"responsibilityType":{"id":"HQ","description":"Headquarters","isDisabled":false},"initiatorType":{"id":"PROJECT","description":"Project","isDisabled":false},"type":{"id":"LSREG","description":"Lease - Registered","isDisabled":false},"id":1}';
+  '{"organizations":[],"persons":[],"properties":[],"improvements":[],"securityDeposits":[],"securityDepositReturns":[],"startDate":"2020-01-01","lFileNo":"","tfaFileNo":0,"psFileNo":"","programName":"","motiName":"Moti, Name, Name","amount":0,"renewalCount":0,"tenantNotes":[],"insurances":[],"isResidential":false,"isCommercialBuilding":false,"isOtherImprovement":false,"returnNotes":"","terms":[],"tenants":[{"leaseId":1,"personId":2}],"statusType":{"id":"ACTIVE","description":"Active","isDisabled":false},"region":{"regionCode":1,"regionName":"South Coast Region"},"programType":{"id":"OTHER","description":"Other","isDisabled":false},"paymentReceivableType":{"id":"RCVBL","description":"Receivable","isDisabled":false},"categoryType":{"id":"COMM","description":"Commercial","isDisabled":false},"purposeType":{"id":"BCFERRIES","description":"BC Ferries","isDisabled":false},"responsibilityType":{"id":"HQ","description":"Headquarters","isDisabled":false},"initiatorType":{"id":"PROJECT","description":"Project","isDisabled":false},"type":{"id":"LSREG","description":"Lease - Registered","isDisabled":false},"id":1}';
+
+const expectedTenantWithPrimaryContactRequestData =
+  '{"organizations":[],"persons":[],"properties":[],"improvements":[],"securityDeposits":[],"securityDepositReturns":[],"startDate":"","lFileNo":"","tfaFileNo":0,"psFileNo":"","programName":"","motiName":"","amount":0,"renewalCount":0,"tenantNotes":["a note","",""],"insurances":[],"isResidential":false,"isCommercialBuilding":false,"isOtherImprovement":false,"returnNotes":"","terms":[],"tenants":[{"leaseId":1,"organizationId":2,"note":"a note"},{"leaseId":1,"organizationId":3,"note":""},{"leaseId":1,"organizationId":4,"note":""}],"id":1,"rowVersion":2}';
 
 const sampleContactResponse = [
   {
@@ -119,3 +192,231 @@ const sampleContactResponse = [
     isDisabled: false,
   },
 ];
+
+export const mockLeaseWithTenants: ILease = {
+  id: 1,
+  rowVersion: 2,
+  terms: [],
+  tenantNotes: ['a note', '', ''],
+  persons: [],
+  organizations: [],
+  tenants: [
+    {
+      leaseTenantId: 82,
+      leaseId: 1,
+      organizationId: 2,
+      organization: {
+        id: 2,
+        isDisabled: false,
+        name: 'French Mouse Property Management',
+        alias: '',
+        incorporationNumber: '',
+        organizationPersons: [
+          {
+            person: {
+              id: 1,
+              isDisabled: false,
+              surname: 'Smith',
+              firstName: 'Bob',
+              middleNames: 'Billy',
+              preferredName: 'Tester McTest',
+              personOrganizations: [
+                {
+                  personId: 1,
+                  isDisabled: false,
+                  rowVersion: 3,
+                },
+              ],
+              personAddresses: [],
+              contactMethods: [],
+              comment: 'This is a test comment.',
+              rowVersion: 4,
+            },
+            personId: 1,
+            organizationId: 2,
+            isDisabled: false,
+            rowVersion: 3,
+          },
+          {
+            person: {
+              id: 4,
+              isDisabled: false,
+              surname: 'Mouse',
+              firstName: 'Minnie',
+              middleNames: 'Nacho Cheese',
+              personOrganizations: [
+                {
+                  personId: 4,
+                  isDisabled: false,
+                  rowVersion: 1,
+                },
+              ],
+              personAddresses: [],
+              contactMethods: [],
+              rowVersion: 1,
+            },
+            personId: 4,
+            organizationId: 2,
+            isDisabled: false,
+            rowVersion: 1,
+          },
+        ],
+        organizationAddresses: [],
+        contactMethods: [],
+        comment: '',
+        rowVersion: 2,
+      },
+      note: 'a note',
+      primaryContact: {
+        id: 1,
+        isDisabled: false,
+        surname: 'Smith',
+        firstName: 'Bob',
+        middleNames: 'Billy',
+        preferredName: 'Tester McTest',
+        personOrganizations: [
+          {
+            personId: 1,
+            organization: {
+              id: 2,
+              isDisabled: false,
+              name: 'French Mouse Property Management',
+              alias: '',
+              incorporationNumber: '',
+              organizationPersons: [
+                {
+                  personId: 1,
+                  organizationId: 2,
+                  isDisabled: false,
+                  rowVersion: 3,
+                },
+                {
+                  person: {
+                    id: 4,
+                    isDisabled: false,
+                    surname: 'Mouse',
+                    firstName: 'Minnie',
+                    middleNames: 'Nacho Cheese',
+                    personOrganizations: [
+                      {
+                        personId: 4,
+                        isDisabled: false,
+                        rowVersion: 1,
+                      },
+                    ],
+                    personAddresses: [],
+                    contactMethods: [],
+                    rowVersion: 1,
+                  },
+                  personId: 4,
+                  organizationId: 2,
+                  isDisabled: false,
+                  rowVersion: 1,
+                },
+              ],
+              organizationAddresses: [],
+              contactMethods: [],
+              comment: '',
+              rowVersion: 2,
+            },
+            isDisabled: false,
+            rowVersion: 3,
+          },
+        ],
+        personAddresses: [],
+        contactMethods: [],
+        comment: 'This is a test comment.',
+        rowVersion: 4,
+      },
+      primaryContactId: 1,
+      lessorType: {
+        id: 'ORG',
+        description: 'Organization',
+        isDisabled: false,
+      },
+      appCreateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateUserid: 'admin',
+      appCreateUserid: 'admin',
+      rowVersion: 1,
+    },
+    {
+      leaseTenantId: 83,
+      leaseId: 1,
+      organizationId: 3,
+      organization: {
+        id: 3,
+        isDisabled: false,
+        name: 'Dairy Queen Forever! Property Management',
+        organizationPersons: [
+          {
+            person: {
+              id: 3,
+              isDisabled: false,
+              surname: 'Cheese',
+              firstName: 'Stinky',
+              middleNames: '',
+              personOrganizations: [
+                {
+                  personId: 3,
+                  isDisabled: false,
+                  rowVersion: 1,
+                },
+              ],
+              personAddresses: [],
+              contactMethods: [],
+              rowVersion: 1,
+            },
+            personId: 3,
+            organizationId: 3,
+            isDisabled: false,
+            rowVersion: 1,
+          },
+        ],
+        organizationAddresses: [],
+        contactMethods: [],
+        rowVersion: 1,
+      },
+      note: '',
+      lessorType: {
+        id: 'ORG',
+        description: 'Organization',
+        isDisabled: false,
+      },
+      appCreateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateUserid: 'admin',
+      appCreateUserid: 'admin',
+      rowVersion: 1,
+    },
+    {
+      leaseTenantId: 84,
+      leaseId: 1,
+      organizationId: 4,
+      organization: {
+        id: 4,
+        isDisabled: false,
+        name: 'Pussycat Property Management',
+        organizationPersons: [],
+        organizationAddresses: [],
+        contactMethods: [],
+        rowVersion: 1,
+      },
+      note: '',
+      lessorType: {
+        id: 'ORG',
+        description: 'Organization',
+        isDisabled: false,
+      },
+      appCreateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateTimestamp: '2022-05-05T00:56:06.693',
+      appLastUpdateUserid: 'admin',
+      appCreateUserid: 'admin',
+      rowVersion: 1,
+    },
+  ],
+  properties: [],
+  insurances: [],
+  improvements: [],
+  securityDeposits: [],
+} as any;

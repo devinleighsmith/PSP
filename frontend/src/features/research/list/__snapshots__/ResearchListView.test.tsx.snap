@@ -1047,6 +1047,7 @@ exports[`Research List View matches snapshot 1`] = `
         </div>
         <div
           class="table-loading"
+          title="loading"
         >
           <div
             class="spinner-border"

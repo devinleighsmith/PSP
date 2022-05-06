@@ -501,7 +501,7 @@ const Table = <T extends IIdentifiedObject, TFilter extends object = {}>(
 
   const renderLoading = () => {
     return (
-      <div className="table-loading">
+      <div className="table-loading" title="loading">
         <Spinner animation="border" role="status"></Spinner>
       </div>
     );
