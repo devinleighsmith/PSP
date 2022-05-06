@@ -37,7 +37,7 @@ export const TenantOrganizationContactInfo: React.FunctionComponent<ITenantOrgan
       <Styled.FormGrid>
         <Form.Label>Tenant organization:</Form.Label>
         <StyledLargeTextInput disabled={disabled} field={withNameSpace(nameSpace, 'summary')} />
-        <Form.Label>Primary Contact:</Form.Label>
+        <Form.Label>Primary contact:</Form.Label>
         {primaryContact?.id ? (
           <Form.Group className="input">
             <StyledLink to={`/contact/P${primaryContact?.id}`}>{primaryContactName}</StyledLink>
