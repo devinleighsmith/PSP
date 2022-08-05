@@ -67,8 +67,8 @@ jobs:
       - name: call scripts to deploy api and frontend
         run: |
           [[ -z $OVERRIDE_VERSION ]] && RELEASE_VERSION=$steps.previoustag.outputs.tag || RELEASE_VERSION=$OVERRIDE_VERSION
-          RELEASE_TAG=RELEASE_VERSION ./openshift/4.0/player.sh deploy api $DESTINATION -apply
-          RELEASE_TAG=RELEASE_VERSION ./openshift/4.0/player.sh deploy app $DESTINATION -apply
+          RELEASE_TAG=$RELEASE_VERSION ./openshift/4.0/player.sh deploy api $DESTINATION -apply
+          RELEASE_TAG=$RELEASE_VERSION ./openshift/4.0/player.sh deploy app $DESTINATION -apply
 
   ci-cd-end-notification:
     name: CI-CD End Notification to Teams Channel
