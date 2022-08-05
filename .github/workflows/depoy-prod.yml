@@ -3,7 +3,7 @@ env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   # service account: gitaction
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-  OPENSHIFT_PROD_NAMESPACE: "3cd915-dev"
+  OPENSHIFT_TOOLS_NAMESPACE: "3cd915-tools"
   MS_TEAMS_WEBHOOK_BUILD_CHANNEL: ${{ secrets.MS_TEAMS_WEBHOOK_URI_BUILD_CHANNEL }}
 
   APP_PORT: 8080
@@ -20,7 +20,7 @@ env:
   TAG_DEV: "dev"
   TAG_TEST: "test"
   TAG_PROD: "prod"
-  INSTANCE: "-dev"
+  INSTANCE: ""
   NAMESPACE_OVERRIDE: "3cd915-dev"
 
 on:
@@ -63,7 +63,7 @@ jobs:
           openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
           openshift_token: ${{ env.OPENSHIFT_TOKEN }}
           insecure_skip_tls_verify: true
-          namespace: ${{ env.OPENSHIFT_PROD_NAMESPACE }}
+          namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: call scripts to deploy api and frontend
         run: |
           [[ -z ${{github.event.inputs.OVERRIDE_VERSION}} ]] && RELEASE_VERSION=${{steps.previoustag.outputs.tag}} || RELEASE_VERSION=${{github.event.inputs.OVERRIDE_VERSION}}
