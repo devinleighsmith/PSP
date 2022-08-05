@@ -43,7 +43,6 @@ jobs:
           notification-summary: PIMS Deployment to PRODUCTION started.
           notification-color: 17a2b8
           timezone: America/Los_Angeles
-          fetch-depth: 0
 
   deploy:
     name: Deploy frontend and api to OpenShift
@@ -54,6 +53,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master
+          fetch-depth: 0
       - name: "Get Previous tag"
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
