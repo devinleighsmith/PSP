@@ -30,7 +30,7 @@ on:
 
 jobs:
   ci-cd-start-notification:
-    name: CI-CD Start Notification to Teams Channel
+    name: CI-CD Start Notification to Teams Channel1
     runs-on: ubuntu-latest
     steps:
       - name: Start notification to Teams Channel
