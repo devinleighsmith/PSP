@@ -2,6 +2,7 @@ import * as React from 'react';
 import { toast } from 'react-toastify';
 
 interface ITestPageProps {}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TestPage: React.FunctionComponent<ITestPageProps> = () => {
   return <TestContainer view={TestView}></TestContainer>;
 };
