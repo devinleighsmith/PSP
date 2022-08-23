@@ -1,7 +1,6 @@
 import { IResearchFilter } from 'features/research/interfaces';
 import { IPagedItems } from 'interfaces';
 import { IResearchSearchResult } from 'interfaces/IResearchSearchResult';
-import { Api_Activity } from 'models/api/Activity';
 import { Api_PropertyResearchFile } from 'models/api/PropertyResearchFile';
 import { Api_ResearchFile } from 'models/api/ResearchFile';
 import queryString from 'query-string';
