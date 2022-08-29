@@ -106,6 +106,7 @@ export const ActivityListView: React.FunctionComponent<IActivityListViewProps> =
         activityTemplateId: activityTypeId,
         description: '',
         activityTemplate: {},
+        activityDataJson: '',
       },
     };
     addFileActivity(fileType, fileActivity).then(async () => {

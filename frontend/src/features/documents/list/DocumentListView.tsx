@@ -1,4 +1,6 @@
 import GenericModal from 'components/common/GenericModal';
+import { SectionListHeader } from 'components/common/SectionListHeader';
+import { StyledAddButton } from 'components/common/styles';
 import { TableSort } from 'components/Table/TableSort';
 import Claims from 'constants/claims';
 import { DocumentRelationshipType } from 'constants/documentRelationshipType';
@@ -36,8 +38,6 @@ export const DocumentListView: React.FunctionComponent<IDocumentListViewProps> =
   const { documentResults, isLoading, defaultFilters, hideFilters } = props;
 
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
-
-  const { hasClaim } = useKeycloakWrapper();
 
   const [sort, setSort] = React.useState<TableSort<Api_Document>>({});
 
@@ -129,22 +129,16 @@ export const DocumentListView: React.FunctionComponent<IDocumentListViewProps> =
     <div>
       <Section
         header={
-          <Row>
-            <Col xs="auto">Documents</Col>
-            {hasClaim(Claims.DOCUMENT_ADD) && (
-              <Col>
-                <StyledAddButton
-                  data-testid="document-add-button"
-                  onClick={() => setIsUploadVisible(true)}
-                >
-                  <FaUpload />
-                  &nbsp;Add a Document
-                </StyledAddButton>
-              </Col>
-            )}
-          </Row>
+          <SectionListHeader
+            claims={[Claims.DOCUMENT_ADD]}
+            title="Documents"
+            addButtonText="Add a Document"
+            onAdd={() => setIsUploadVisible(true)}
+          />
         }
+        title="documents"
         isCollapsable
+        initiallyExpanded
       >
         {!hideFilters && <DocumentFilterForm onSetFilter={setFilters} documentFilter={filters} />}
         <DocumentResults
@@ -198,10 +192,3 @@ export const DocumentListView: React.FunctionComponent<IDocumentListViewProps> =
 };
 
 export default DocumentListView;
-
-const StyledAddButton = styled(Button)`
-  font-weight: bold;
-  font-size: 1.3rem;
-  background-color: ${props => props.theme.css.completedColor};
-  margin-bottom: 0.2rem;
-`;

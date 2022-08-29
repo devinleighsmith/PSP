@@ -1,0 +1,91 @@
+export const getMockResearchFile = () => ({
+  roadName: 'Bubba Loo Lane',
+  roadAlias: 'Bubba Loo Expressway',
+  researchProperties: [
+    {
+      id: 1,
+      propertyName: 'Bubba 1',
+      isDisabled: false,
+      property: {
+        id: 1,
+        anomalies: [],
+        tenures: [],
+        roadTypes: [],
+        adjacentLands: [],
+        region: {
+          id: 1,
+          description: 'South Coast Region',
+          isDisabled: false,
+        },
+        district: {
+          id: 1,
+          description: 'Lower Mainland District',
+          isDisabled: false,
+        },
+        dataSourceEffectiveDate: '2021-08-31T00:00:00',
+        latitude: 54.794202998379006,
+        longitude: -127.18413347053901,
+        isSensitive: false,
+        isRwyBeltDomPatent: false,
+        pid: 7723385,
+        pin: 90069930,
+        landArea: 1,
+        isVolumetricParcel: false,
+        location: {
+          coordinate: {
+            x: -127.18413347053901,
+            y: 54.794202998379006,
+          },
+        },
+        rowVersion: 3,
+      },
+      purposeTypes: [
+        {
+          id: 1,
+          propertyPurposeType: {
+            id: 'ACQUIRE',
+            description: 'Acquisition',
+            isDisabled: false,
+          },
+          propertyResearchFileId: 1,
+          rowVersion: 1,
+        },
+      ],
+      rowVersion: 1,
+    },
+  ],
+  requestDate: '2022-08-02T00:00:00',
+  requestSourceType: {
+    id: 'HQ',
+    description: 'Headquarters (HQ)',
+    isDisabled: false,
+  },
+  researchFilePurposes: [
+    {
+      id: '1',
+      researchPurposeTypeCode: {
+        id: 'ACQUIRE',
+        description: 'Acquisition',
+        isDisabled: false,
+      },
+      appCreateTimestamp: '2022-08-25T16:23:17.943',
+      appLastUpdateTimestamp: '2022-08-25T16:23:17.943',
+      appLastUpdateUserid: 'dbo',
+      appCreateUserid: 'dbo',
+      rowVersion: 1,
+    },
+  ],
+  id: 1,
+  fileName: 'Bubba BBQ Whirled',
+  fileNumber: 'R-Bubba1',
+  fileStatusTypeCode: {
+    id: 'ACTIVE',
+    description: 'Active',
+    isDisabled: false,
+  },
+  appCreateTimestamp: '2022-08-27T16:23:17.863',
+  appLastUpdateTimestamp: '2022-08-25T16:23:17.863',
+  appLastUpdateUserid: 'dbo',
+  appCreateUserid: 'dbo',
+  rowVersion: 1,
+});

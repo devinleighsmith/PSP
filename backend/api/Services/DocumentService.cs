@@ -101,7 +101,7 @@ namespace Pims.Api.Services
 
                 // Save metadata of document
                 IList<Task<ExternalResult<DocumentMetadata>>> metadataTasks = new List<Task<ExternalResult<DocumentMetadata>>>();
-                foreach (var metadata in uploadRequest.DocumentMetadata)
+                foreach (var metadata in uploadRequest?.DocumentMetadata ?? new List<DocumentMetadataUpdateModel>())
                 {
                     metadataTasks.Add(documentStorageRepository.CreateDocumentMetadataAsync(externalDocument.Id, metadata.MetadataTypeId, metadata.Value));
                 }

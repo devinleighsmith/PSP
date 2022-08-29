@@ -62,7 +62,7 @@ export const columns: ColumnWithProps<Api_AcquisitionFile>[] = [
   },
   {
     Header: 'Status',
-    accessor: 'acquisitionFileStatusTypeCode',
+    accessor: 'fileStatusTypeCode',
     align: 'left',
     clickable: true,
     sortable: true,

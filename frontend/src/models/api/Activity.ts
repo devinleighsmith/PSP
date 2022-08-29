@@ -12,6 +12,7 @@ export interface Api_Activity extends Api_ConcurrentVersion {
   description: string;
   activityStatusTypeCode?: Api_TypeCode<string>;
   activityTemplate: Api_ActivityTemplate;
+  activityDataJson: string;
 }
 
 export interface Api_ActivityTemplate extends Api_ConcurrentVersion {
