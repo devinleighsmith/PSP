@@ -1,18 +1,13 @@
 import GenericModal from 'components/common/GenericModal';
 import { SectionListHeader } from 'components/common/SectionListHeader';
-import { StyledAddButton } from 'components/common/styles';
 import { TableSort } from 'components/Table/TableSort';
 import Claims from 'constants/claims';
 import { DocumentRelationshipType } from 'constants/documentRelationshipType';
 import { Section } from 'features/mapSideBar/tabs/Section';
-import useKeycloakWrapper from 'hooks/useKeycloakWrapper';
 import { defaultDocumentFilter, IDocumentFilter } from 'interfaces/IDocumentResults';
 import { orderBy } from 'lodash';
 import { Api_Document, Api_DocumentRelationship } from 'models/api/Document';
 import React, { useState } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
-import { FaUpload } from 'react-icons/fa';
-import styled from 'styled-components';
 
 import { DocumentDetailModal } from '../documentDetail/DocumentDetailModal';
 import { DocumentUploadModal } from '../documentUpload/DocumentUploadModal';

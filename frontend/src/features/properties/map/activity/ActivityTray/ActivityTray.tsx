@@ -36,9 +36,9 @@ export const ActivityTray = ({
   const [show, setShow] = useState(true);
   let trayContent = (
     <HalfHeightDiv>
-      {!!activity && (
+      {!!activity?.id && (
         <ActivityForm
-          activity={activity}
+          activity={{ ...activity, id: +activity.id }}
           file={file}
           editMode={editMode}
           setEditMode={setEditMode}

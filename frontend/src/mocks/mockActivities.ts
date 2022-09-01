@@ -56,6 +56,11 @@ export const getMockActivityResponse: () => Api_Activity = () => ({
     description: 'General',
     isDisabled: false,
   },
+  activityStatusTypeCode: {
+    id: 'NOSTART',
+    description: 'Not Started',
+    isDisabled: false,
+  },
   activityTemplate: {
     id: 1,
     activityTemplateTypeCode: {
@@ -70,7 +75,7 @@ export const getMockActivityResponse: () => Api_Activity = () => ({
     rowVersion: 1,
   },
   appCreateTimestamp: '0001-01-01T00:00:00',
-  appLastUpdateTimestamp: '0001-01-01T00:00:00',
+  appLastUpdateTimestamp: '0001-02-01T00:00:00',
   rowVersion: 0,
   description: 'test description',
   activityDataJson: '{}',

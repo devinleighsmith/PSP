@@ -2,6 +2,7 @@ import { waitForElementToBeRemoved } from '@testing-library/react';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import LoadingBackdrop from 'components/maps/leaflet/LoadingBackdrop/LoadingBackdrop';
+import { FileTypes } from 'constants/fileTypes';
 import { SideBarContextProvider } from 'features/properties/map/context/sidebarContext';
 import { mockLookups } from 'mocks';
 import { mockAcquisitionFileResponse } from 'mocks/mockAcquisitionFiles';
@@ -39,7 +40,12 @@ describe('Activity Container', () => {
   ) => {
     // render component under test
     const component = render(
-      <SideBarContextProvider file={renderOptions?.file ?? mockAcquisitionFileResponse()}>
+      <SideBarContextProvider
+        file={{
+          ...(renderOptions?.file ?? mockAcquisitionFileResponse()),
+          fileType: FileTypes.Acquisition,
+        }}
+      >
         <ActivityContainer
           View={ActivityView}
           onClose={onClose}

@@ -26,7 +26,7 @@ describe('ActivityForm test', () => {
     const component = render(
       <ActivityForm
         file={renderOptions?.file ?? { ...mockAcquisitionFileResponse(), id: 1 }}
-        activity={renderOptions?.activity ?? getMockActivityResponse()}
+        activity={renderOptions?.activity ?? { ...getMockActivityResponse(), id: 2 }}
         editMode={renderOptions?.editMode ?? false}
         setEditMode={renderOptions?.setEditMode ?? setEditMode}
         onSave={onSave}

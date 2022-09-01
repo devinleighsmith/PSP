@@ -5,11 +5,11 @@ import { getCancelModalProps, useModalContext } from 'hooks/useModalContext';
 import { Api_Activity } from 'models/api/Activity';
 import * as React from 'react';
 
-import { ActivityFile } from './ActivityContainer';
+import { Activity, ActivityFile } from './ActivityContainer';
 import { ActivityView } from './ActivityView';
 
 export interface IActivityFormProps {
-  activity: Api_Activity;
+  activity: Activity;
   file: ActivityFile;
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;

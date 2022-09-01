@@ -36,20 +36,20 @@ exports[`ActivityView test Renders as expected 1`] = `
           class="col-5"
         >
           <div
-            class="row"
+            class="flex-nowrap row"
           >
             <div
               class="pr-0 text-left col-3"
             >
               <label>
-                File: 
+                File:
               </label>
             </div>
             <div
               class="pl-1 text-left col-auto"
             >
               <strong>
-                1-12345-01
+                1-12345-01 - Test ACQ File
               </strong>
             </div>
           </div>
@@ -59,7 +59,7 @@ exports[`ActivityView test Renders as expected 1`] = `
         >
           Created: 
           <strong>
-            Jul 29, 2022
+            Jan 1, 0001
           </strong>
            by 
           <span
@@ -70,7 +70,7 @@ exports[`ActivityView test Renders as expected 1`] = `
             <span
               class="c0"
             >
-              admin
+              USER
             </span>
           </span>
         </div>
@@ -86,7 +86,7 @@ exports[`ActivityView test Renders as expected 1`] = `
         >
           Last updated: 
           <strong>
-            Jul 28, 2022
+            Feb 1, 0001
           </strong>
            by 
           <span
@@ -97,7 +97,7 @@ exports[`ActivityView test Renders as expected 1`] = `
             <span
               class="c0"
             >
-              admin
+              USER
             </span>
           </span>
         </div>
@@ -125,7 +125,7 @@ exports[`ActivityView test Renders as expected 1`] = `
               class="pl-1 text-left col-auto"
             >
               <strong>
-                Active
+                Not Started
               </strong>
             </div>
           </div>

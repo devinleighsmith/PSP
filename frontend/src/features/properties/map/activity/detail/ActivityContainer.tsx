@@ -18,6 +18,10 @@ export interface ActivityFile extends Api_File {
   id: number;
 }
 
+export interface Activity extends Api_Activity {
+  id: number;
+}
+
 export const ActivityContainer: React.FunctionComponent<IActivityContainerProps> = ({
   activityId,
   onClose,
@@ -33,7 +37,6 @@ export const ActivityContainer: React.FunctionComponent<IActivityContainerProps>
   useDeepCompareEffect(() => {
     fetchActivity();
   }, [activityId, getActivity]);
-
   const fetchActivity = async () => {
     if (!!activityId) {
       await getActivity(activityId);
@@ -41,7 +44,8 @@ export const ActivityContainer: React.FunctionComponent<IActivityContainerProps>
   };
 
   const editActivity = async (activity: Api_Activity) => {
-    return await updateActivity(activity);
+    const updatedActivity = await updateActivity(activity);
+    return updatedActivity;
   };
 
   if (!!file && file?.id === undefined && fileLoading === false) {

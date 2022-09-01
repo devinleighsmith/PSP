@@ -92,7 +92,7 @@ namespace Pims.Dal.Repositories
         public IEnumerable<PimsNote> GetActivityNotes(long entityId)
         {
             return this.Context.PimsActivityInstanceNotes
-                .Where(x => x.ActivityInstanceId == entityId && (x.IsDisabled ?? false) == false).Select(x => x.Note).ToList();
+                .Where(x => x.ActivityInstanceId == entityId).Select(x => x.Note).ToList();
         }
 
         public void DeleteActivityNotes(long entityId)

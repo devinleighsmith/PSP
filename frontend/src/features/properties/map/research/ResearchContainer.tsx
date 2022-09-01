@@ -3,6 +3,7 @@ import GenericModal from 'components/common/GenericModal';
 import { useMapSearch } from 'components/maps/hooks/useMapSearch';
 import LoadingBackdrop from 'components/maps/leaflet/LoadingBackdrop/LoadingBackdrop';
 import { Claims } from 'constants/claims';
+import { FileTypes } from 'constants/fileTypes';
 import MapSideBarLayout from 'features/mapSideBar/layout/MapSideBarLayout';
 import ResearchFileLayout from 'features/mapSideBar/layout/ResearchFileLayout';
 import { getResearchPropertyName } from 'features/properties/selector/utils';
@@ -60,12 +61,14 @@ export const ResearchContainer: React.FunctionComponent<IResearchContainerProps>
   const fetchResearchFile = React.useCallback(async () => {
     var retrieved = await getResearchFile(props.researchFileId);
     setResearchFile(retrieved);
-    setFile(retrieved);
+    setFile({ ...retrieved, fileType: FileTypes.Research });
   }, [getResearchFile, props.researchFileId, setFile]);
 
   React.useEffect(() => {
-    fetchResearchFile();
-  }, [fetchResearchFile]);
+    if (researchFile === undefined) {
+      fetchResearchFile();
+    }
+  }, [fetchResearchFile, researchFile]);
 
   if (researchFile === undefined && loadingResearchFile) {
     return (

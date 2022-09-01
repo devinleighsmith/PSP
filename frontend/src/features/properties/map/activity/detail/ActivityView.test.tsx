@@ -25,7 +25,7 @@ describe('ActivityView test', () => {
       <Formik onSubmit={noop} initialValues={renderOptions?.activity ?? getMockActivityResponse()}>
         <ActivityView
           file={renderOptions?.file ?? { ...mockAcquisitionFileResponse(), id: 1 }}
-          activity={renderOptions?.activity ?? getMockActivityResponse()}
+          activity={renderOptions?.activity ?? { ...getMockActivityResponse(), id: 2 }}
           editMode={renderOptions?.editMode ?? false}
           setEditMode={renderOptions?.setEditMode ?? noop}
         />
