@@ -7,7 +7,7 @@ import { noop } from 'lodash';
 import { mockLookups } from 'mocks';
 import { mockDocumentsResponse, mockDocumentTypesResponse } from 'mocks/mockDocuments';
 import { lookupCodesSlice } from 'store/slices/lookupCodes';
-import { cleanup, mockKeycloak, render, RenderOptions, waitFor } from 'utils/test-utils';
+import { cleanup, getByText, mockKeycloak, render, RenderOptions, waitFor } from 'utils/test-utils';
 
 import { DocumentListView, IDocumentListViewProps } from './DocumentListView';
 
@@ -91,7 +91,7 @@ describe('Document List View', () => {
 
   it('should have the Documents add button in the component', () => {
     mockKeycloak({ claims: [Claims.DOCUMENT_ADD, Claims.DOCUMENT_DELETE] });
-    const { getByTestId } = setup({
+    const { getByText } = setup({
       hideFilters: false,
       isLoading: false,
       parentId: 0,
@@ -100,6 +100,6 @@ describe('Document List View', () => {
       onDelete: deleteMock,
       refreshDocumentList: noop,
     });
-    expect(getByTestId('document-add-button')).toBeInTheDocument();
+    expect(getByText('Add a Document')).toBeInTheDocument();
   });
 });

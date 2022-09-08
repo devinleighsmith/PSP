@@ -61,7 +61,7 @@ export const DocumentListView: React.FunctionComponent<IDocumentListViewProps> =
           const keyName = (sort as any)[sortFields[0]];
           return orderBy(
             documentItems,
-            sortFields[0] === 'statusTypeCode' ? 'statusTypeCode.description' : sortFields[0],
+            sortFields[0] === 'documentType' ? 'documentType.documentType' : sortFields[0],
             keyName,
           );
         }
