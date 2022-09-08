@@ -7,7 +7,7 @@ import { noop } from 'lodash';
 import { mockLookups } from 'mocks';
 import { mockDocumentsResponse, mockDocumentTypesResponse } from 'mocks/mockDocuments';
 import { lookupCodesSlice } from 'store/slices/lookupCodes';
-import { cleanup, getByText, mockKeycloak, render, RenderOptions, waitFor } from 'utils/test-utils';
+import { cleanup, mockKeycloak, render, RenderOptions, waitFor } from 'utils/test-utils';
 
 import { DocumentListView, IDocumentListViewProps } from './DocumentListView';
 
