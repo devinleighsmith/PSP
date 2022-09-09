@@ -78,7 +78,9 @@ namespace Pims.Api.Services
             if (existingActivityDocuments.Count == 1)
             {
                 documentActivityRespository.Delete(activityDocument);
-                return await DeleteDocumentAsync(activityDocument.Document);
+                var deletedDocumentFlag = await DeleteDocumentAsync(activityDocument.Document);
+                documentActivityRespository.CommitTransaction();
+                return deletedDocumentFlag;
             }
             else
             {
