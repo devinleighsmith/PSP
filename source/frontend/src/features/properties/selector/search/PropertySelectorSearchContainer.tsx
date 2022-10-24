@@ -59,7 +59,10 @@ export const PropertySelectorSearchContainer: React.FunctionComponent<
     findByPlanNumber,
     findByLegalDescription,
     loadingIndicator: isMapLayerLoading,
-  } = useFullyAttributedParcelMapLayer(parcelMapFullyAttributed.url, parcelMapFullyAttributed.name);
+  } = useFullyAttributedParcelMapLayer(
+    parcelMapFullyAttributed.url,
+    parcelMapFullyAttributed.name ?? '',
+  );
 
   React.useEffect(() => {
     const searchFunc = async () => {

@@ -1,4 +1,5 @@
 import { usePropertyDetails } from 'features/mapSideBar/hooks/usePropertyDetails';
+import BcAssessmentTabView from 'features/mapSideBar/tabs/bcAssessment/BcAssessmentTabView';
 import {
   InventoryTabNames,
   InventoryTabs,
@@ -44,7 +45,14 @@ export const PropertyContainer: React.FunctionComponent<IPropertyContainerProps>
   });
 
   tabViews.push({
-    content: <></>,
+    content: (
+      <BcAssessmentTabView
+        requestedOn={composedProperty.bcAssessmentWrapper?.requestedOn}
+        summaryData={composedProperty.bcAssessmentSummary}
+        loading={composedProperty.composedLoading}
+        pid={composedProperty?.pid?.toString()}
+      />
+    ),
     key: InventoryTabNames.value,
     name: 'Value',
   });

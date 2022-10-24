@@ -60,6 +60,9 @@ describe('MotiInventoryContainer component', () => {
 
   it('requests ltsa data by pid', async () => {
     mockAxios.onPost().reply(200, {});
+    mockAxios.onGet(new RegExp('https://delivery.apps.gov.bc.ca/ext/sgw/geo.bca*')).reply(200, {
+      features: [{ properties: { FOLIO_ID: '1234', ROLL_NUMBER: '4321' } }],
+    });
     mockAxios.onGet().reply(200, {});
 
     setup({
@@ -104,6 +107,9 @@ describe('MotiInventoryContainer component', () => {
     };
     mockAxios.onGet(new RegExp('/properties/*')).reply(404, error);
     mockAxios.onGet(new RegExp('ogs-internal/*')).reply(200, {});
+    mockAxios.onGet(new RegExp('https://delivery.apps.gov.bc.ca/ext/sgw/geo.bca*')).reply(200, {
+      features: [{ properties: { FOLIO_ID: '1234', ROLL_NUMBER: '4321' } }],
+    });
 
     const { queryByText, getByText, queryAllByTestId } = setup({
       pid: '9212434',

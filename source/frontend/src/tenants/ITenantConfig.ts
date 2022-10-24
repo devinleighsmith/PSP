@@ -21,7 +21,9 @@ export interface ITenantConfig {
   // the url that should be used to query the PSP properties layer.
   propertiesUrl?: string;
   // configuration pertaining the Fully Attributed Parcel Map layer
-  parcelMapFullyAttributed: IFullyAttributedParcelLayerConfig;
+  parcelMapFullyAttributed: ITenantLayerConfig;
+  // configuration pertaining the BC Assessment Layer
+  bcAssessment: ITenantLayerConfig;
 }
 
 export interface ITenantLoginConfig {
@@ -44,7 +46,8 @@ export interface ITenantLogoConfig {
   imageWithText: string;
 }
 
-export interface IFullyAttributedParcelLayerConfig {
+export interface ITenantLayerConfig {
   url: string;
-  name: string;
+  name?: string;
+  names?: { [key: string]: string };
 }

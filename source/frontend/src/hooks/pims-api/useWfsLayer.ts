@@ -13,6 +13,7 @@ export interface IUseWfsLayerOptions {
   outputFormat?: string;
   outputSrsName?: string;
   withCredentials?: boolean;
+  errorFunction?: () => React.ReactText;
 }
 
 export interface IWfsGetAllFeaturesOptions {
@@ -42,7 +43,10 @@ export const useWfsLayer = (url: string, layerOptions: IUseWfsLayerOptions) => {
         }
 
         // call WFS service
-        const data = await wfsAxios(options?.timeout).get<FeatureCollection>(urlObj.href, {
+        const data = await wfsAxios(
+          options?.timeout,
+          layerOptions.errorFunction,
+        ).get<FeatureCollection>(urlObj.href, {
           withCredentials: layerOptions.withCredentials,
         });
 
