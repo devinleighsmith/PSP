@@ -6,6 +6,7 @@ using Pims.Api.Helpers.Exceptions;
 using Pims.Api.Models.Concepts;
 using Pims.Api.Policies;
 using Pims.Api.Services;
+using Pims.Core.Json;
 using Pims.Dal.Security;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -50,6 +51,7 @@ namespace Pims.Api.Areas.Projects.Controllers
         [ProducesResponseType(typeof(ProjectModel), 200)]
         [ProducesResponseType(typeof(ProjectModel), 404)]
         [SwaggerOperation(Tags = new[] { "project" })]
+        [TypeFilter(typeof(NullJsonResultFilter))]
         public IActionResult GetById([FromRoute] long id)
         {
             var project = _projectService.GetById(id);
@@ -69,6 +71,7 @@ namespace Pims.Api.Areas.Projects.Controllers
         [ProducesResponseType(typeof(List<ProjectModel>), 200)]
         [ProducesResponseType(typeof(Api.Models.ErrorResponseModel), 400)]
         [SwaggerOperation(Tags = new[] { "project" })]
+        [TypeFilter(typeof(NullJsonResultFilter))]
         public IActionResult SearchProjects(string input, int top)
         {
             if (string.IsNullOrEmpty(input))
@@ -129,6 +132,7 @@ namespace Pims.Api.Areas.Projects.Controllers
         [ProducesResponseType(typeof(List<ProductModel>), 200)]
         [ProducesResponseType(typeof(Api.Models.ErrorResponseModel), 400)]
         [SwaggerOperation(Tags = new[] { "project" })]
+        [TypeFilter(typeof(NullJsonResultFilter))]
         public IActionResult GetProducts(long projectId)
         {
             var products = _projectService.GetProducts(projectId);

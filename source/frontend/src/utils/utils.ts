@@ -204,11 +204,11 @@ export const formatDate = (date?: string | Date | Moment) => {
   return !!date ? moment(date).format('YYYY-MM-DD') : '';
 };
 
-export const prettyFormatDate = (date?: string | Date | Moment) => {
+export const prettyFormatDate = (date?: string | Date | Moment | null) => {
   return !!date ? moment(date).format('MMM D, YYYY') : '';
 };
 
-export const prettyFormatDateTime = (date?: string | Date | Moment) => {
+export const prettyFormatDateTime = (date?: string | Date | Moment | null) => {
   return !!date ? moment.utc(date).local().format('MMM D, YYYY hh:mm a') : '';
 };
 
