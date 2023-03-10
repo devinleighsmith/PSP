@@ -233,7 +233,7 @@ const IndeterminateCheckbox = React.forwardRef(
 );
 
 export interface IIdentifiedObject {
-  id?: number | string;
+  id: number | string | undefined | null;
 }
 
 const validateProps = <T extends IIdentifiedObject, TFilter extends object = {}>(
