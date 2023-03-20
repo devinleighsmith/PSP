@@ -104,6 +104,8 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsProjectStatusType> GetAllProjectStatusTypes();
 
+        IEnumerable<PimsFormType> GetAllFormTypes();
+
         IEnumerable<PimsConsultationType> GetAllConsultationTypes();
 
         IEnumerable<PimsConsultationStatusType> GetAllConsultationStatusTypes();
