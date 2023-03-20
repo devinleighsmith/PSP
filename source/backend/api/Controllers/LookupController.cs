@@ -134,6 +134,7 @@ namespace Pims.Api.Controllers
                 var tenantTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllTenantTypes());
                 var acqFundingTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionFundingTypes());
                 var projectStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllProjectStatusTypes());
+                var formTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllFormTypes());
 
                 var codes = new List<object>();
                 codes.AddRange(areaUnitTypes);
@@ -182,6 +183,7 @@ namespace Pims.Api.Controllers
                 codes.AddRange(tenantTypes);
                 codes.AddRange(acqFundingTypes);
                 codes.AddRange(projectStatusTypes);
+                codes.AddRange(formTypes);
 
                 var response = new JsonResult(codes);
 

@@ -303,6 +303,11 @@ namespace Pims.Dal.Repositories
         {
             return this.Context.PimsProjectStatusTypes.AsNoTracking().ToArray();
         }
+
+        public IEnumerable<PimsFormType> GetAllFormTypes()
+        {
+            return this.Context.PimsFormTypes.AsNoTracking().ToArray();
+        }
         #endregion
     }
 }
