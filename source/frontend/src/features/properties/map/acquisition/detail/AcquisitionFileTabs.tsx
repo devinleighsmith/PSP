@@ -55,8 +55,7 @@ export const AcquisitionFileTabs: React.FunctionComponent<
     });
   }
 
-  if (acquisitionFile?.id) {
-    //TODO: claims
+  if (acquisitionFile?.id && hasClaim(Claims.FORM_VIEW)) {
     tabViews.push({
       content: (
         <FormListViewContainer

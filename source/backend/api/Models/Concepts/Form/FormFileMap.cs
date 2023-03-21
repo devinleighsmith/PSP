@@ -9,14 +9,14 @@ namespace Pims.Api.Models.Concepts
         {
             config.NewConfig<Entity.PimsAcquisitionFileForm, FileFormModel>()
                 .PreserveReference(true)
-                .Map(dest => dest.Id, src => src.AcquisitionFileId)
+                .Map(dest => dest.Id, src => src.AcquisitionFileFormId)
                 .Map(dest => dest.FormTypeCode, src => src.FormTypeCodeNavigation)
                 .Map(dest => dest.FileId, src => src.AcquisitionFileId)
                 .Inherits<Entity.IBaseAppEntity, BaseAppModel>();
 
             config.NewConfig<FileFormModel, Entity.PimsAcquisitionFileForm>()
                 .PreserveReference(true)
-                .Map(dest => dest.AcquisitionFileId, src => src.Id)
+                .Map(dest => dest.AcquisitionFileFormId, src => src.Id)
                 .Map(dest => dest.FormTypeCodeNavigation, src => src.FormTypeCode)
                 .Map(dest => dest.AcquisitionFileId, src => src.FileId)
                 .Inherits<BaseAppModel, Entity.IBaseAppEntity>();

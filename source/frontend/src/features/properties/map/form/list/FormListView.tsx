@@ -17,7 +17,7 @@ export const FormListView: React.FunctionComponent<IFormListViewProps> = ({ save
   const { hasClaim } = useKeycloakWrapper();
   return (
     <Section>
-      {hasClaim(Claims.ACQUISITION_VIEW) && (
+      {hasClaim(Claims.FORM_ADD) && (
         <AddForm
           onAddForm={(formTypeId: string) => {
             saveForm(formTypeId);

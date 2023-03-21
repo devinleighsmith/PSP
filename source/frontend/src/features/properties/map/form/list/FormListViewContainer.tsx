@@ -1,5 +1,4 @@
 import { FileTypes } from 'constants/fileTypes';
-import useKeycloakWrapper from 'hooks/useKeycloakWrapper';
 import { IActivityFilter } from 'interfaces/IActivityResults';
 import { Api_FileForm } from 'models/api/Form';
 import React from 'react';
@@ -23,7 +22,6 @@ export const FormListViewContainer: React.FunctionComponent<
   const {
     addFilesForm: { execute: addForm },
   } = useFormRepository();
-  const { hasClaim } = useKeycloakWrapper();
 
   const saveForm = (formTypeId: string) => {
     const fileForm: Api_FileForm = {

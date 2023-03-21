@@ -2,7 +2,9 @@ using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Pims.Api.Models.Lookup;
 using Pims.Dal.Entities;
+using Pims.Dal.Helpers.Extensions;
 using Pims.Dal.Repositories;
+using Pims.Dal.Security;
 
 namespace Pims.Api.Services
 {
@@ -24,6 +26,8 @@ namespace Pims.Api.Services
         public PimsAcquisitionFileForm AddAcquisitionForm(LookupModel<string> formType, long acquisitionFileId)
         {
             _logger.LogInformation("Adding acquisition form ...");
+            this.User.ThrowIfNotAuthorized(Permissions.FormAdd, Permissions.ActivityEdit);
+
             var createdFileForm = _acquisitionFileFormRepository.Add(new PimsAcquisitionFileForm() { AcquisitionFileId = acquisitionFileId, FormTypeCode = formType.Id });
             _acquisitionFileFormRepository.CommitTransaction();
             return createdFileForm;

@@ -52,7 +52,7 @@ namespace Pims.Api.Areas.Forms.Controllers
         /// <param name="formFileModel">The form to add.</param>
         /// <returns></returns>
         [HttpPost("{fileType}")]
-        [HasPermission(Permissions.AcquisitionFileAdd)]
+        [HasPermission(Permissions.FormAdd)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(FileFormModel), 200)]
         [SwaggerOperation(Tags = new[] { "form" })]
