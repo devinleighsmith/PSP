@@ -1,10 +1,13 @@
 import { FileTypes } from 'constants/fileTypes';
 import { createMemoryHistory } from 'history';
+import { filter, sortBy } from 'lodash';
 import { mockLookups } from 'mocks';
+import { getMockApiFileForms } from 'mocks/mockForm';
 import { lookupCodesSlice } from 'store/slices/lookupCodes';
-import { render, RenderOptions, waitFor } from 'utils/test-utils';
+import { act, render, RenderOptions, waitFor } from 'utils/test-utils';
 
 import { SideBarContextProvider } from '../../context/sidebarContext';
+import { useFormRepository } from '../hooks/useFormRepository';
 import { IFormListViewProps } from './FormListView';
 import FormListViewContainer, { IFormListViewContainerProps } from './FormListViewContainer';
 
@@ -18,11 +21,14 @@ const mockApi = {
   execute: jest.fn(),
   loading: false,
 };
-jest.mock('../hooks/useFormRepository', () => ({
-  useFormRepository: () => ({
-    addFileForm: mockApi,
-  }),
-}));
+
+const mockGetApi = {
+  error: undefined,
+  response: getMockApiFileForms(),
+  execute: jest.fn(),
+  loading: false,
+};
+jest.mock('../hooks/useFormRepository');
 
 const history = createMemoryHistory();
 jest.mock('@react-keycloak/web');
@@ -34,7 +40,7 @@ const FormListView = (props: IFormListViewProps) => {
   return <></>;
 };
 
-describe(' form list view container', () => {
+describe('form list view container', () => {
   const setup = (renderOptions?: RenderOptions & Partial<IFormListViewContainerProps>) => {
     // render component under test
     const component = render(
@@ -58,6 +64,14 @@ describe(' form list view container', () => {
     };
   };
 
+  beforeEach(() => {
+    (useFormRepository as jest.Mock).mockImplementation(() => ({
+      addFileForm: mockApi,
+      deleteFileForm: mockApi,
+      getFileForms: mockGetApi,
+    }));
+  });
+
   it('renders as expected', async () => {
     const { asFragment } = setup({
       claims: [],
@@ -74,7 +88,80 @@ describe(' form list view container', () => {
 
     expect(mockApi.execute).toHaveBeenCalledWith('acquisition', {
       fileId: 0,
-      formTypeCode: { id: 'h120' },
+      id: null,
+      formTypeCode: { id: 'h120', name: null },
     });
+  });
+
+  it('Delete form calls api delete', async () => {
+    setup({
+      claims: [],
+    });
+    viewProps.onDelete(1);
+
+    expect(mockApi.execute).toHaveBeenCalledWith('acquisition', 1);
+  });
+
+  it('fetchs data when no data is currently available in container', async () => {
+    (useFormRepository as jest.Mock).mockImplementation(() => ({
+      addFileForm: mockApi,
+      deleteFileForm: mockApi,
+      getFileForms: mockApi,
+    }));
+
+    setup({
+      claims: [],
+    });
+
+    expect(mockApi.execute).toHaveBeenCalledWith('acquisition', 0);
+  });
+
+  it('fetchs data when no data is currently available in container', async () => {
+    (useFormRepository as jest.Mock).mockImplementation(() => ({
+      addFileForm: mockApi,
+      deleteFileForm: mockApi,
+      getFileForms: mockApi,
+    }));
+
+    setup({
+      claims: [],
+    });
+
+    expect(mockApi.execute).toHaveBeenCalledWith('acquisition', 0);
+  });
+
+  it('sorts as expected when setSort is called', async () => {
+    setup({
+      claims: [],
+    });
+    act(() => viewProps.setSort({ formTypeCode: 'asc' }));
+
+    await waitFor(() => {
+      expect(viewProps.forms).toStrictEqual(
+        sortBy(getMockApiFileForms(), form => form.formTypeCode.name),
+      );
+    });
+  });
+
+  it('sorts as expected when an invalid sort key is included', async () => {
+    setup({
+      claims: [],
+    });
+    act(() => viewProps.setSort({ blah: 'asc' } as any));
+
+    await waitFor(() => {
+      expect(viewProps.forms).toStrictEqual(getMockApiFileForms());
+    });
+  });
+
+  it('makes a filter call to api when setFilter is called', async () => {
+    setup({
+      claims: [],
+    });
+    act(() => viewProps.setFormFilter({ formTypeId: 'h120' }));
+
+    expect(viewProps.forms).toStrictEqual(
+      filter(getMockApiFileForms(), form => form.formTypeCode.id === 'h120'),
+    );
   });
 });

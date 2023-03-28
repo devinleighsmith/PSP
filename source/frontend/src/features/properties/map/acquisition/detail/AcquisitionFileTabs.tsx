@@ -77,8 +77,7 @@ export const AcquisitionFileTabs: React.FC<IAcquisitionFileTabsProps> = ({
     });
   }
 
-  if (acquisitionFile?.id) {
-    //TODO: claims
+  if (acquisitionFile?.id && hasClaim(Claims.FORM_VIEW)) {
     tabViews.push({
       content: (
         <FormListViewContainer
@@ -107,7 +106,6 @@ export const AcquisitionFileTabs: React.FC<IAcquisitionFileTabsProps> = ({
       name: 'Notes',
     });
   }
-
 
   const [activeTab, setActiveTab] = useState<FileTabNames>(defaultTab);
 

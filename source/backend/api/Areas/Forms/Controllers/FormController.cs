@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Pims.Api.Constants;
 using Pims.Api.Helpers.Exceptions;
 using Pims.Api.Models.Concepts;
+using Pims.Api.Models.Lookup;
 using Pims.Api.Policies;
 using Pims.Api.Services;
 using Pims.Dal.Entities;
 using Pims.Dal.Security;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Pims.Api.Areas.Forms.Controllers
 {
@@ -52,7 +55,7 @@ namespace Pims.Api.Areas.Forms.Controllers
         /// <param name="formFileModel">The form to add.</param>
         /// <returns></returns>
         [HttpPost("{fileType}")]
-        [HasPermission(Permissions.AcquisitionFileAdd)]
+        [HasPermission(Permissions.FormAdd)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(FileFormModel), 200)]
         [SwaggerOperation(Tags = new[] { "form" })]
@@ -65,6 +68,71 @@ namespace Pims.Api.Areas.Forms.Controllers
                 _ => throw new BadRequestException("File type must be a known type"),
             };
             return new JsonResult(createdFormModel);
+        }
+
+        /// <summary>
+        /// Get all the forms corresponding to the passed file id.
+        /// </summary>
+        /// <param name="fileType">The type of the file.</param>
+        /// <param name="fileId">The file to retrieve forms for.</param>
+        /// <returns></returns>
+        [HttpGet("{fileType}/file/{fileId}")]
+        [HasPermission(Permissions.FormView)]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(FileFormModel), 200)]
+        [SwaggerOperation(Tags = new[] { "form" })]
+        public IActionResult GetFileForms(FileType fileType, long fileId)
+        {
+            IEnumerable<FileFormModel> forms;
+            forms = fileType switch
+            {
+                FileType.Acquisition => _mapper.Map<IEnumerable<FileFormModel>>(_formService.GetAcquisitionForms(fileId)),
+                _ => throw new BadRequestException("File type must be a known type"),
+            };
+            return new JsonResult(forms);
+        }
+
+        /// <summary>
+        /// Get the form corresponding to the passed file form id.
+        /// </summary>
+        /// <param name="fileType">The type of the file.</param>
+        /// <param name="fileFormId">The form to add.</param>
+        /// <returns></returns>
+        [HttpGet("{fileType}/{fileFormId}")]
+        [HasPermission(Permissions.FormView)]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(FileFormModel), 200)]
+        [SwaggerOperation(Tags = new[] { "form" })]
+        public IActionResult GetFileForm(FileType fileType, long fileFormId)
+        {
+            FileFormModel form;
+            form = fileType switch
+            {
+                FileType.Acquisition => _mapper.Map<FileFormModel>(_formService.GetAcquisitionForm(fileFormId)),
+                _ => throw new BadRequestException("File type must be a known type"),
+            };
+            return new JsonResult(form);
+        }
+
+        /// <summary>
+        /// Deletes the file form.
+        /// </summary>
+        /// <param name="fileType">The type of the file.</param>
+        /// <param name="fileFormId">Used to identify the form and delete it.</param>
+        /// <returns></returns>
+        [HttpDelete("{fileType}/{fileFormId:long}")]
+        [Produces("application/json")]
+        [HasPermission(Permissions.FormDelete)]
+        [ProducesResponseType(typeof(bool), 200)]
+        [SwaggerOperation(Tags = new[] { "activity" })]
+        public IActionResult DeleteFileForm(FileType fileType, long fileFormId)
+        {
+            var deleted = fileType switch
+            {
+                FileType.Acquisition => _formService.DeleteAcquisitionFileForm(fileFormId),
+                _ => throw new BadRequestException("File type must be a known type"),
+            };
+            return new JsonResult(deleted);
         }
         #endregion
     }

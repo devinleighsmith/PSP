@@ -357,7 +357,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 'GOVGOV',
-    name: 'Gov\u0027t to Gov\u0027t',
+    name: "Gov't to Gov't",
     isDisabled: false,
     displayOrder: 0,
     type: 'PimsLeaseCategoryType',
@@ -2123,7 +2123,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 6,
-    key: '0c070a80-98ca-4cfe-bf0c-c0c51cd0156c',
+    key: 'e157eb8b-8122-4b0f-9176-ae74682d7f5c',
     name: 'Finance',
     description: 'Finance team members.',
     isDisabled: false,
@@ -2134,7 +2134,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 7,
-    key: '9e7f35be-b796-4744-8025-3daefbcf1d01',
+    key: 'e963e11f-3c82-4710-8151-9db8997994ba',
     name: 'Functional',
     description: 'PLMB staff (includes team members from HQ, regions and districts).',
     isDisabled: false,
@@ -2145,7 +2145,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 8,
-    key: '8e37c14b-fe4a-48ea-aab5-766e364788a6',
+    key: 'd9adc114-8d6a-496c-9f95-77de4e1dc6b2',
     name: 'Functional (Restricted)',
     description: 'Contractors, Internal ministry staff.',
     isDisabled: false,
@@ -2156,7 +2156,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 2,
-    key: '58534482-0086-487c-bbc7-b26f25b0ee1c',
+    key: 'fe89354a-ee69-4af7-a167-d7271c6ace05',
     name: 'Organization Administrator',
     description: "Administrator of the user's organization.",
     isDisabled: true,
@@ -2167,7 +2167,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 9,
-    key: '3a01aacc-1cba-430f-9df9-e2260556ace9',
+    key: '0b4f9a8a-d8fc-4873-842a-718908ee6437',
     name: 'Read Only',
     description: 'Other ministries (e.g. Attorney General).',
     isDisabled: false,
@@ -2178,7 +2178,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 5,
-    key: 'a0d878c6-17c5-49dd-bcba-dfc3f07005b7',
+    key: 'ad47d199-ff34-4a81-92ec-cae43bdf391c',
     name: 'Real Estate Analyst',
     description: 'Real Estate Analyst can manage properties within their organization.',
     isDisabled: true,
@@ -2189,7 +2189,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 4,
-    key: '05fef182-f7a7-4fc7-8ba9-df049faf5601',
+    key: '7acce397-c69d-416b-807f-cfd5e55db51b',
     name: 'Real Estate Manager',
     description: 'Real Estate Manager can manage properties within their agency.',
     isDisabled: true,
@@ -2200,7 +2200,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 1,
-    key: '5e3c3115-1485-47fe-aa37-e8c0426af516',
+    key: '669b521a-f949-40c5-96ea-1fc81f8f3c5b',
     name: 'System Administrator',
     description: 'System Administrator of the PIMS solution.',
     isDisabled: false,
@@ -2211,7 +2211,7 @@ export const mockLookups: Partial<ILookupCode>[] = [
   },
   {
     id: 3,
-    key: 'e5c58c28-062c-4796-b021-e139e1a33253',
+    key: 'e1aeb98c-e24e-49bb-8412-09a7ceaced7a',
     name: 'Undetermined',
     description: 'The user has an undetermined role with their organization.',
     isDisabled: true,
@@ -3570,6 +3570,38 @@ export const mockLookups: Partial<ILookupCode>[] = [
     isDisabled: false,
     displayOrder: 0,
     type: 'PimsProjectStatusType',
+    rowVersion: 0,
+  },
+  {
+    id: 'H120',
+    name: 'Payment requisition (H120)',
+    isDisabled: false,
+    displayOrder: 0,
+    type: 'PimsFormType',
+    rowVersion: 0,
+  },
+  {
+    id: 'H179A',
+    name: 'Offer agreement - Section 3 (H179 A)',
+    isDisabled: false,
+    displayOrder: 0,
+    type: 'PimsFormType',
+    rowVersion: 0,
+  },
+  {
+    id: 'H179P',
+    name: 'Offer agreement - Partial (H179 P)',
+    isDisabled: false,
+    displayOrder: 0,
+    type: 'PimsFormType',
+    rowVersion: 0,
+  },
+  {
+    id: 'H179T',
+    name: 'Offer agreement - Total (H179 T)',
+    isDisabled: false,
+    displayOrder: 0,
+    type: 'PimsFormType',
     rowVersion: 0,
   },
   {

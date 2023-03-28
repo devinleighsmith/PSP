@@ -48,7 +48,7 @@ namespace Pims.Api.Test.Services
         public void AddFormFile_Success()
         {
             // Arrange
-            var service = CreateFormServiceWithPermissions(Permissions.ActivityAdd, Permissions.ResearchFileEdit);
+            var service = CreateFormServiceWithPermissions(Permissions.FormAdd);
 
             var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
             repository.Setup(x => x.Add(It.IsAny<PimsAcquisitionFileForm>()));
@@ -76,7 +76,103 @@ namespace Pims.Api.Test.Services
             repository.Verify(x => x.Add(It.IsAny<PimsAcquisitionFileForm>()), Times.Never);
         }
 
-        
+        [Fact]
+        public void GetFormFile_Success()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions(Permissions.FormView);
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+            repository.Setup(x => x.GetByAcquisitionFileFormId(It.IsAny<long>()));
+
+            // Act
+            var result = service.GetAcquisitionForm(1);
+
+            // Assert
+            repository.Verify(x => x.GetByAcquisitionFileFormId(It.IsAny<long>()), Times.Once);
+        }
+
+        [Fact]
+        public void GetFormFile_NoPermission()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions();
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+
+            // Act
+            Action act = () => service.GetAcquisitionForm(1);
+
+            // Assert
+            act.Should().Throw<NotAuthorizedException>();
+            repository.Verify(x => x.GetByAcquisitionFileFormId(It.IsAny<long>()), Times.Never);
+        }
+
+        [Fact]
+        public void GetFormFiles_Success()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions(Permissions.FormView);
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+            repository.Setup(x => x.GetAllByAcquisitionFileId(It.IsAny<long>()));
+
+            // Act
+            var result = service.GetAcquisitionForms(1);
+
+            // Assert
+            repository.Verify(x => x.GetAllByAcquisitionFileId(It.IsAny<long>()), Times.Once);
+        }
+
+        [Fact]
+        public void GetFormFiles_NoPermission()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions();
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+
+            // Act
+            Action act = () => service.GetAcquisitionForms(1);
+
+            // Assert
+            act.Should().Throw<NotAuthorizedException>();
+            repository.Verify(x => x.GetAllByAcquisitionFileId(It.IsAny<long>()), Times.Never);
+        }
+
+        [Fact]
+        public void DeleteFormFile_Success()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions(Permissions.FormDelete);
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+            repository.Setup(x => x.TryDelete(It.IsAny<long>()));
+
+            // Act
+            var result = service.DeleteAcquisitionFileForm(1);
+
+            // Assert
+            repository.Verify(x => x.TryDelete(It.IsAny<long>()), Times.Once);
+        }
+
+        [Fact]
+        public void DeleteFormFile_NoPermission()
+        {
+            // Arrange
+            var service = CreateFormServiceWithPermissions();
+
+            var repository = _helper.GetService<Mock<IAcquisitionFileFormRepository>>();
+
+            // Act
+            Action act = () => service.DeleteAcquisitionFileForm(1);
+
+            // Assert
+            act.Should().Throw<NotAuthorizedException>();
+            repository.Verify(x => x.TryDelete(It.IsAny<long>()), Times.Never);
+        }
+
+
         #endregion
 
         #endregion
