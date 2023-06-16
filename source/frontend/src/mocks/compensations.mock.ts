@@ -98,7 +98,7 @@ export const getMockApiCompensationList = (): Api_CompensationRequisition[] => [
         isDisabled: false,
         rowVersion: 1,
         financialActivityCodeId: 1,
-        financialActivityCode: { id: 1 },
+        financialActivityCode: { id: 1, code: 'code' },
       },
       {
         id: 2,
@@ -110,7 +110,7 @@ export const getMockApiCompensationList = (): Api_CompensationRequisition[] => [
         isDisabled: false,
         rowVersion: 1,
         financialActivityCodeId: 3,
-        financialActivityCode: { id: 3 },
+        financialActivityCode: { id: 3, code: 'code2' },
       },
       {
         id: 3,

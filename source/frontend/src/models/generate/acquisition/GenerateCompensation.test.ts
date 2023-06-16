@@ -82,6 +82,16 @@ describe('GenerateCompensation tests', () => {
     expect(compensation.file_financial_total).toBe('$1,200.00');
   });
 
+  it('file financials use code and not id for activity', () => {
+    const compensation = new Api_GenerateCompensation(
+      getMockApiCompensationList()[1],
+      {} as any,
+      getMockH120Categories(),
+      mockCompReqH120s(),
+    );
+    expect(compensation.financial_activities[0].financial_activity_code).toBe('code');
+  });
+
   it('adds h120 financial totals', () => {
     const compensation = new Api_GenerateCompensation(
       getMockApiCompensationList()[1],
