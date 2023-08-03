@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
   DTS:refId="Package"
   DTS:CreationDate="9/25/2021 5:35:06 PM"
@@ -8,14 +8,14 @@
   DTS:DelayValidation="True"
   DTS:DTSID="{F52C02E8-065D-4664-8087-94D5A462F8F8}"
   DTS:ExecutableType="Microsoft.Package"
-  DTS:LastModifiedProductVersion="15.0.2000.180"
+  DTS:LastModifiedProductVersion="16.0.948.0"
   DTS:LocaleID="4105"
   DTS:ObjectName="PMBC_PIMS_BCTFA"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
   DTS:TransactionOption="0"
-  DTS:VersionBuild="1307"
-  DTS:VersionGUID="{B113FCE4-D4DE-45AC-ACC5-9F358C4B6F3A}">
+  DTS:VersionBuild="1310"
+  DTS:VersionGUID="{5CFE645E-0180-46F2-A806-4A152BB23251}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -28,7 +28,11 @@
         <DTS:ConnectionManager
           DTS:ConnectRetryCount="1"
           DTS:ConnectRetryInterval="5"
-          DTS:ConnectionString="Data Source=localhost,5433;User ID=admin;Initial Catalog=pims;Provider=SQLNCLI11.1;Auto Translate=False;Application Name=SSIS-Package2-{397DB851-677E-4A08-84AE-EE76A4654BC7}PIMS;" />
+          DTS:ConnectionString="Data Source=localhost,5433;User ID=admin;Initial Catalog=pims;Provider=SQLNCLI11.1;Auto Translate=False;Application Name=SSIS-Package2-{397DB851-677E-4A08-84AE-EE76A4654BC7}PIMS;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"></DTS:Password>
+        </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -1232,7 +1236,7 @@
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -1412,7 +1416,7 @@
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -1592,7 +1596,7 @@
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -1761,13 +1765,13 @@
                   description="Specifies the SQL statement that generates the lookup table."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY]</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY]</property>
                 <property
                   dataType="System.String"
                   description="Specifies a SQL statement that uses parameters to generate the lookup table."
                   expressionType="Notify"
                   name="SqlCommandParam"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY]) [refTable]
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY]) [refTable]
 where [refTable].[PID] = ?</property>
                 <property
                   dataType="System.Int32"
@@ -1918,13 +1922,13 @@ where [refTable].[PID] = ?</property>
                   description="Specifies the SQL statement that generates the lookup table."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY_HIST]</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY_HIST]</property>
                 <property
                   dataType="System.String"
                   description="Specifies a SQL statement that uses parameters to generate the lookup table."
                   expressionType="Notify"
                   name="SqlCommandParam"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY_HIST]) [refTable]
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY_HIST]) [refTable]
 where [refTable].[PID] = ?</property>
                 <property
                   dataType="System.Int32"
@@ -2071,7 +2075,7 @@ where [refTable].[PID] = ?</property>
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -2603,7 +2607,7 @@ where [refTable].[PID] = ?</property>
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -3161,7 +3165,7 @@ where [refTable].[PID] = ?</property>
                   dataType="System.String"
                   description="The SQL command to be executed."
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT 'CROWNPSRVD'                                                        AS PROPERTY_TYPE_CODE
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT 'CROWNPSRVD'                                                        AS PROPERTY_TYPE_CODE
      , 'COREOPER'                                                          AS PROPERTY_CLASSIFICATION_TYPE_CODE
      , 4                                                                   AS REGION_CODE
      , 12                                                                  AS DISTRICT_CODE
@@ -4024,13 +4028,13 @@ where pmbc.pid_number in (000016004,000016012,000016021,000016063,000016071,0000
                   description="Specifies the SQL statement that generates the lookup table."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY_HIST]</property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[PIMS_PROPERTY_HIST]</property>
                 <property
                   dataType="System.String"
                   description="Specifies a SQL statement that uses parameters to generate the lookup table."
                   expressionType="Notify"
                   name="SqlCommandParam"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY_HIST]) [refTable]
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[PIMS_PROPERTY_HIST]) [refTable]
 where [refTable].[PID] = ? and [refTable].[APP_CREATE_USERID] = ?</property>
                 <property
                   dataType="System.Int32"
@@ -4186,7 +4190,7 @@ where [refTable].[PID] = ? and [refTable].[APP_CREATE_USERID] = ?</property>
                   description="The SQL command to be executed."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">update pims_property_hist
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">update pims_property_hist
 set PROPERTY_TYPE_CODE=?,
     PROPERTY_CLASSIFICATION_TYPE_CODE=?,
     REGION_CODE=?,
@@ -4717,7 +4721,7 @@ WHERE APP_LAST_UPDATE_USERID = ?</property>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="192.8,41.6"
+          Size="193,42"
           Id="Package\Load BCTFA Properties"
           TopLeft="223.871776216443,1117.83549322412" />
       </GraphLayout>
@@ -4729,23 +4733,23 @@ WHERE APP_LAST_UPDATE_USERID = ?</property>
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="159.2,42"
+          Size="159,42"
           Id="Package\Load BCTFA Properties\Data Conversion"
           TopLeft="60.0153833174847,133.854837658254" />
         <NodeLayout
-          Size="123.2,41.6"
+          Size="123,42"
           Id="Package\Load BCTFA Properties\Error Log 2"
           TopLeft="705.053861968476,522.770611216063" />
         <NodeLayout
-          Size="271.2,42"
+          Size="271,42"
           Id="Package\Load BCTFA Properties\Records to update PIMS_PROP history"
           TopLeft="633.9969371281,288.480650566774" />
         <NodeLayout
-          Size="231.2,41.6"
+          Size="231,42"
           Id="Package\Load BCTFA Properties\Insert PIMS_PROPERTY_HIST"
           TopLeft="332.423088914544,370.005961992684" />
         <NodeLayout
-          Size="250.4,41.6"
+          Size="250,42"
           Id="Package\Load BCTFA Properties\Existing PIMS_PROPERTY records"
           TopLeft="24.7,288.084225352113" />
         <NodeLayout
@@ -4753,39 +4757,39 @@ WHERE APP_LAST_UPDATE_USERID = ?</property>
           Id="Package\Load BCTFA Properties\PMBC_POLYGON_FABRIC"
           TopLeft="33.5538463795679,50.3322573872188" />
         <NodeLayout
-          Size="156,41.6"
+          Size="156,42"
           Id="Package\Load BCTFA Properties\Derived Column 2"
           TopLeft="688.892323563367,444.506094641949" />
         <NodeLayout
-          Size="248,41.6"
+          Size="248,42"
           Id="Package\Load BCTFA Properties\UPDATE PIMS_PROPERTY_HIST"
           TopLeft="639.307715133804,366.596416525944" />
         <NodeLayout
-          Size="277.6,41.6"
+          Size="278,42"
           Id="Package\Load BCTFA Properties\Existint PIMS_PROPERTY_HIST records"
           TopLeft="307.9,287.315774647887" />
         <NodeLayout
-          Size="156,41.6"
+          Size="156,42"
           Id="Package\Load BCTFA Properties\Derived Column"
           TopLeft="69.6000005501967,453.306446478345" />
         <NodeLayout
-          Size="123.2,41.6"
+          Size="123,42"
           Id="Package\Load BCTFA Properties\Error Log"
           TopLeft="85.5153846012779,526.538705065349" />
         <NodeLayout
-          Size="210.4,41.6"
+          Size="210,42"
           Id="Package\Load BCTFA Properties\Insert PIMS_PROPERTIES"
           TopLeft="39.9076911085455,369.725801310604" />
         <NodeLayout
-          Size="132,41.6"
+          Size="132,42"
           Id="Package\Load BCTFA Properties\Error Log 1"
           TopLeft="378.346168108947,523.461293134983" />
         <NodeLayout
-          Size="127.2,42"
+          Size="127,42"
           Id="Package\Load BCTFA Properties\Audit Trail"
           TopLeft="79.2461554544213,210.067740813106" />
         <NodeLayout
-          Size="164.8,41.6"
+          Size="165,42"
           Id="Package\Load BCTFA Properties\Derived Column 1"
           TopLeft="363.092321912777,449.577421728609" />
         <EdgeLayout
@@ -4878,7 +4882,7 @@ WHERE APP_LAST_UPDATE_USERID = ?</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-70.70890625,8.60015155800249,141.4178125,11.609375"
+              BoundingBox="-70.70890625,8.6001515580025,141.4178125,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -4902,7 +4906,7 @@ WHERE APP_LAST_UPDATE_USERID = ?</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-55.80638671875,10.9904061723983,111.6127734375,11.609375"
+              BoundingBox="-55.80638671875,10.9904061723984,111.6127734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
