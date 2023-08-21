@@ -1,5 +1,5 @@
 import { PayeeOption } from '@/features/mapSideBar/acquisition/models/PayeeOptionModel';
-import { IAutocompletePrediction } from '@/interfaces/IAutocomplete';
+import { IAutocompletePrediction } from '@/interfaces';
 import { Api_CompensationFinancial } from '@/models/api/CompensationFinancial';
 import { Api_CompensationRequisition } from '@/models/api/CompensationRequisition';
 import { Api_FinancialCode } from '@/models/api/FinancialCode';
