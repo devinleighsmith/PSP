@@ -86,7 +86,7 @@ export class CompensationRequisitionFormModel {
     compensation.chartOfAccounts = apiModel.chartOfAccounts;
     compensation.responsibilityCentre = apiModel.responsibilityId?.toString() || '';
     compensation.alternateProject =
-      apiModel.alternateProject !== null
+      apiModel.alternateProject?.id !== null
         ? {
             id: apiModel.alternateProject?.id || 0,
             text: apiModel.alternateProject?.description || '',
