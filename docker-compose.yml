@@ -1,20 +1,6 @@
 version: "3.5"
 
 services:
-  ####################### Keycloak #######################
-  keycloak:
-    restart: on-failure:1
-    container_name: psp-keycloak
-    build:
-      context: ./auth/keycloak
-    env_file:
-      - auth/keycloak/.env
-    volumes:
-      - ./auth/keycloak/config/realm-export.json:/tmp/realm-export.json
-    ports:
-      - ${KEYCLOAK_PORT:-8080}:8080
-    networks:
-      - psp
 
   ####################### Database #######################
   database:
@@ -24,9 +10,9 @@ services:
     restart: on-failure:1
     container_name: psp-db
     build:
-      context: database/mssql/scripts/dbscripts
+      context: source/database/mssql/scripts/dbscripts
     env_file:
-      - database/mssql/.env
+      - source/database/mssql/.env
     ports:
       - ${DATABASE_PORT:-5433}:1433
     volumes:
@@ -39,16 +25,15 @@ services:
     restart: on-failure:1
     container_name: psp-api
     build:
-      context: backend
+      context: source/backend
       args:
         BUILD_CONFIGURATION: Debug
-    env_file: backend/api/.env
+    env_file: source/backend/api/.env
     ports:
       - ${API_HTTPS_PORT:-5001}:443
       - ${API_HTTP_PORT:-5000}:8080
     depends_on:
       - database
-      - keycloak
       - geoserver
     networks:
       - psp
@@ -60,16 +45,16 @@ services:
     restart: on-failure:1
     container_name: psp-app
     build:
-      context: frontend
+      context: source/frontend
     volumes:
-      - ./frontend/src:/usr/app/src
-      - ./frontend/public:/usr/app/public
+      - ./source/frontend/src:/usr/app/src
+      - ./source/frontend/public:/usr/app/public
       - frontend-node-cache:/usr/app/node_modules
     ports:
       - ${APP_HTTP_PORT:-3000}:3000
     depends_on:
       - backend
-    env_file: ./frontend/.env
+    env_file: ./source/frontend/.env
     networks:
       - psp
 
@@ -77,11 +62,11 @@ services:
   geoserver:
     image: kartoza/geoserver:2.19.2
     volumes:
-      - ./geoserver/geoserver_data:/opt/geoserver/data_dir/workspaces
+      - ./tools/geoserver/geoserver_data:/opt/geoserver/data_dir/workspaces
     ports:
       - 8600:8080
     restart: on-failure
-    env_file: ./geoserver/.env
+    env_file: tools/geoserver/.env
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
@@ -94,6 +79,9 @@ services:
   # example av test file here: https://serverfault.com/questions/484082/how-should-i-test-clam-anti-virus
   clamav:
     image: mkodockx/docker-clamav:alpine-idb-amd64
+    environment:
+      - CLAMD_CONF_MaxFileSize=500M
+      - CLAMD_CONF_StreamMaxLength=500M
     ports:
       - 3310:3310
     restart: on-failure

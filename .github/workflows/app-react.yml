@@ -7,23 +7,40 @@ on:
     branches: [master, dev, test]
 
 jobs:
+  # JOB to run change detection
+  check-changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'source/frontend/**'
+
   build-frontend:
+    needs: check-changes
+    if: ${{ needs.check-changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     env:
       CI: true
-      working-directory: ./frontend
+      working-directory: ./source/frontend
       GIT_BRANCH: "${{github.ref}}"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Extract Branch Name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
         id: extract_branch
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: "16.15.0"
       - run: npm ci
@@ -35,11 +52,11 @@ jobs:
       - run: npm run build --if-present
         working-directory: ${{env.working-directory}}
 
-      - run: npm run coverage
+      - run: npm run coverage -- --maxWorkers=2
         working-directory: ${{env.working-directory}}
 
       - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3.1.1
         with:
           # User defined upload name. Visible in Codecov UI
           name: PIMS
@@ -57,7 +74,7 @@ jobs:
       - name: SonarQube Scan
         id: scan
         uses: sonarsource/sonarqube-scan-action@master
-        if: ${{ github.event_name == 'push' && github.event.pull_request.head.repo.full_name == github.repository }}
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == 'bcgov/PSP' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
@@ -75,7 +92,7 @@ jobs:
         env:
           MS_TEAMS_NOTIFY_URL: ${{ secrets.MS_TEAMS_NOTIFY_URL }}
         if: env.MS_TEAMS_NOTIFY_URL != '' && failure() && steps.scan.outcome == 'failure'
-        uses: jdcargile/ms-teams-notification@v1.3
+        uses: dragos-cojocari/ms-teams-notification@v1.0.2
         with:
           github-token: ${{ github.token }}
           ms-teams-webhook-uri: ${{ env.MS_TEAMS_NOTIFY_URL }}

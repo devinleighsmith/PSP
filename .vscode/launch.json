@@ -4,56 +4,35 @@
   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
   "version": "0.2.0",
   "configurations": [
-
     {
       "name": "Tool-Keycloak-Sync",
       "type": "coreclr",
       "request": "launch",
       "console": "internalConsole",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/tools/keycloak/sync/bin/Debug/net5.0/Pims.Tools.Keycloak.Sync.dll",
+      "program": "${workspaceRoot}/tools/keycloak/sync/bin/Debug/net6.0/Pims.Tools.Keycloak.Sync.dll",
       "cwd": "${workspaceRoot}/tools/keycloak/sync",
       "stopAtEntry": false
     },
     {
-      "name": "Tool-Converter",
-      "type": "coreclr",
-      "request": "launch",
-      "console": "internalConsole",
-      "preLaunchTask": "build",
-      "program": "${workspaceRoot}/tools/converters/excel/bin/Debug/net5.0/Pims.Tools.Converters.ExcelConverter.dll",
-      "cwd": "${workspaceRoot}/tools/converters/excel",
-      "stopAtEntry": false
-    },
-    {
-      "name": "Tool-Import",
-      "type": "coreclr",
-      "request": "launch",
-      "console": "internalConsole",
-      "preLaunchTask": "build",
-      "program": "${workspaceRoot}/tools/import/bin/Debug/net5.0/Pims.Tools.Import.dll",
-      "cwd": "${workspaceRoot}/tools/import",
-      "stopAtEntry": false
-    },
-    {
-      "name": ".NET 5 Launch (api)",
+      "name": ".NET 6 Launch (api)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/backend/api/bin/Debug/net5.0/Pims.Api.dll",
+      "program": "${workspaceRoot}/source/backend/api/bin/Debug/net6.0/Pims.Api.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/backend/api",
+      "cwd": "${workspaceRoot}/source/backend/api",
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Local",
         "ASPNETCORE_URLS": "http://*:5000;https://*:433"
       },
       "sourceFileMap": {
-        "/Views": "${workspaceFolder}/backend/Views"
+        "/Views": "${workspaceRoot}/source/backend/Views"
       }
     },
     {
-      "name": ".NET 5 Attach",
+      "name": ".NET 6 Attach",
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:pickProcess}"
@@ -62,7 +41,7 @@
       "name": "Debug Frontend Tests",
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/react-scripts",
+      "runtimeExecutable": "${workspaceRoot}/source/frontend/node_modules/.bin/react-scripts",
       "args": [
         "test",
         "${fileBasenameNoExtension}",
@@ -70,7 +49,7 @@
         "--no-cache",
         "--watchAll=false"
       ],
-      "cwd": "${workspaceRoot}/frontend",
+      "cwd": "${workspaceRoot}/source/frontend",
       "protocol": "inspector",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReceivedDepositModal component renders as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  <div />
+</DocumentFragment>
+`;
+
+exports[`ReceivedDepositModal component renders with data as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  <div />
+</DocumentFragment>
+`;

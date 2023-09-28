@@ -8,7 +8,6 @@
         <UseWinAuth>false</UseWinAuth>
         <WinAuthUserName />
         <WinAuthDomain />
-        <Run64BitRuntime>false</Run64BitRuntime>
         <UserIDs />
         <UserPasswords />
         <OfflineMode>false</OfflineMode>
@@ -17,7 +16,7 @@
           <ConfigurationSetting>
             <Id>LastModifiedTime</Id>
             <Name>LastModifiedTime</Name>
-            <Value xsi:type="xsd:dateTime">2022-07-21T23:11:18.5159589Z</Value>
+            <Value xsi:type="xsd:dateTime">2023-01-31T04:22:52.6500813Z</Value>
           </ConfigurationSetting>
         </ParameterConfigurationSensitiveValues>
       </Options>

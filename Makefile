@@ -91,12 +91,8 @@ github-auth: require-gh ## Checks GITHUB_TOKEN has been set
 # look for GITHUB_TOKEN in the environment
 ifdef GITHUB_TOKEN
 	$(info GITHUB_TOKEN found in the environment)
-endif
-# if the token isn't available in the environment we try using the GitHub CLI
-ifeq ($(shell gh config get oauth_token -h github.com),)
-	$(error Failed to fetch GitHub token using GitHub CLI)
 else
-	$(info GITHUB_TOKEN fetched via GitHub CLI)
+	$(info GITHUB_TOKEN not set, you might need to authenticate manually to use GH CLI)
 endif
 	@exit 0
 
@@ -105,24 +101,24 @@ endif
 ##############################################################################
 .PHONY: version
 version: require-node ## Outputs the latest released version
-	@build/version.sh
+	@tools/cicd/build/version.sh
 
 .PHONY: version-next
 version-next: require-node ## Outputs the next unreleased version
-	@build/version-next.sh
+	@tools/cicd/build/version-next.sh
 
 .PHONY: bump
 bump: require-node ## Bumps the version number
 ifndef $(ARGS)
 	$(eval ARGS := --build)
 endif
-	@build/bump.sh $(ARGS) --apply
+	@tools/cicd/build/bump.sh $(ARGS) --apply
 
 branch = HEAD
 
 .PHONY: tag
 tag: require-node require-git require-gh ## Creates a pre-release tag
-	$(eval CURRENT_VERSION := $(shell build/version.sh))
+	$(eval CURRENT_VERSION := $(shell tools/cicd/build/version.sh))
 	$(eval tag := v$(CURRENT_VERSION))
 	$(eval owner := $(shell gh repo view --json owner --jq '.owner.login'))
 	$(eval repo := $(shell gh repo view --json name --jq '.name'))
@@ -134,20 +130,21 @@ tag: require-node require-git require-gh ## Creates a pre-release tag
 
 .PHONY: release
 release: github-auth require-node require-gh ## Creates a new github release
-	$(eval CURRENT_VERSION := $(shell build/version.sh))
+	$(eval CURRENT_VERSION := $(shell tools/cicd/build/version.sh))
 	$(eval CURRENT_DATE := $(shell date +'%b %d, %Y'))
 	$(eval tag := v$(CURRENT_VERSION))
 	$(eval owner := $(shell gh repo view --json owner --jq '.owner.login'))
 	$(eval repo := $(shell gh repo view --json name --jq '.name'))
-	$(eval release_notes := Release $(tag) ($(CURRENT_DATE)))
 
 	$(info Releasing version $(CURRENT_VERSION))
 	$(info Using tag: $(tag))
+	$(info Using previous_tag: $(previous_tag))
 	$(info Using repo: $(owner)/$(repo))
-ifdef changelog
-	gh release create $(tag) -R $(owner)/$(repo) --title $(tag) --notes-file $(changelog)
+
+ifdef previous_tag
+	gh release create $(tag) -R $(owner)/$(repo) --title $(tag) --generate-notes --notes-start-tag $(previous_tag)
 else
-	gh release create $(tag) -R $(owner)/$(repo) --title $(tag) --notes "$(release_notes)"
+	gh release create $(tag) -R $(owner)/$(repo) --title $(tag) --generate-notes
 endif
 
 ##############################################################################
@@ -170,7 +167,7 @@ devops-scan: | devops-install ## Scans the repo for accidental leaks of password
 	@trufflehog3 -R trufflehog_report.json --output trufflehog_report.html
 	@echo "$(P) HTML report saved to trufflehog_report.html"
 	@echo
-	@./build/secops_report.sh trufflehog_report.json
+	@./tools/cicd/build/secops_report.sh trufflehog_report.json
 
 ##############################################################################
 # Docker Development
@@ -180,10 +177,10 @@ restart: | stop build up ## Restart local docker environment
 
 refresh: | down build up ## Recreates local docker environment
 
-.PHONY: start-infra
-start-infra: ## Starts infrastructure containers (e.g. keycloak, database, geoserver). Useful for local debugging
+.PHONY: infra
+infra: ## Starts infrastructure containers (e.g. database, geoserver). Useful for local debugging
 	@echo "$(P) Starting up infrastructure containers..."
-	@"$(MAKE)" start n="keycloak database geoserver"
+	@"$(MAKE)" start n="database geoserver"
 
 start: ## Starts the local containers (n=service name)
 	@echo "$(P) Starting client and server containers..."
@@ -239,7 +236,7 @@ server-test: ## Runs the server tests in a container
 
 server-run: ## Starts local server containers
 	@echo "$(P) Starting server containers..."
-	@docker-compose up -d keycloak backend
+	@docker-compose up -d backend
 
 npm-clean: ## Removes local containers, images, volumes, for frontend application.
 	@echo "$(P) Removing frontend containers and volumes."
@@ -258,23 +255,23 @@ db-clean: ## create a new, clean database using the script file in the database.
 
 db-seed: ## create a new, database seeded with test data using the script file in the database. defaults to using the folder specified in database/mssql/.env, but can be overriden with n=PSP_PIMS_S15_00.
 	@echo "$(P) Seed the database with test data. n=FOLDER_NAME (PSP_PIMS_S15_00)"
-	TARGET_SPRINT=$(n) SEED=TRUE docker-compose up -d --build database;
+	TARGET_SPRINT=$(n) SEED=TRUE docker-compose up -d --build --force-recreate database;
 
 db-drop: ## Drop the database.
 	@echo "$(P) Drop the database."
-	@cd backend/dal; dotnet ef database drop;
+	@cd source/backend/dal; dotnet ef database drop;
 
 db-deploy:
 	@echo "$(P) deployment script that facilitates releasing database changes."
-	@cd database/mssql/scripts/dbscripts; TARGET_SPRINT=$(n) ./deploy.sh
+	@cd source/database/mssql/scripts/dbscripts; TARGET_SPRINT=$(n) ./deploy.sh
 
 db-upgrade: ## Upgrade an existing database to the TARGET_VERSION (if passed) or latest version (default), n=TARGET_VERSION (16.01).
 	@echo "$(P) Upgrade an existing database to the TARGET_VERSION (if passed) or latest version (default), n=TARGET_VERSION (16.01)"
-	@cd database/mssql/scripts/dbscripts; TARGET_VERSION=$(n) ./db-upgrade.sh
+	@cd source/database/mssql/scripts/dbscripts; TARGET_VERSION=$(n) ./db-upgrade.sh
 
 db-scaffold: ## Requires local install of sqlcmd
 	@echo "$(P) regenerate ef core entities from database"
-	@cd backend/dal; eval $(grep -v '^#' .env | xargs) dotnet ef dbcontext scaffold Name=PIMS Microsoft.EntityFrameworkCore.SqlServer -o ../entities/ef --schema dbo --context PimsContext --context-namespace Pims.Dal --context-dir . --startup-project ../api --no-onconfiguring --namespace Pims.Dal.Entities --data-annotations -v -f
+	@cd source/backend/entities; eval $(grep -v '^#' .env | xargs) dotnet ef dbcontext scaffold Name=PIMS Microsoft.EntityFrameworkCore.SqlServer -o ../entities/ef --schema dbo --context PimsBaseContext --context-namespace Pims.Dal --context-dir . --no-onconfiguring --namespace Pims.Dal.Entities --data-annotations -v -f --startup-project ../api
 
 keycloak-sync: ## Syncs accounts with Keycloak and PIMS
 	@echo "$(P) Syncing keycloak with PIMS..."
@@ -286,7 +283,7 @@ convert: ## Convert Excel files to JSON
 
 backend-test: ## Run backend unit tests
 	@echo "$(P) Run backend unit tests"
-	@cd backend; dotnet test;
+	@cd source/backend; dotnet test;
 
 frontend-test: ## Run frontend unit tests
 	@echo "$(P) Run frontend unit tests"
@@ -294,14 +291,14 @@ frontend-test: ## Run frontend unit tests
 
 backend-coverage: ## Generate coverage report for backend
 	@echo "$(P) Generate coverage report for backend"
-	@cd backend/tests/unit/api; dotnet build;
-	@cd backend/tests/unit/dal; dotnet build;
-	@cd backend/tests/unit/mockdal; dotnet build;
-	@cd backend; coverlet ./tests/unit/api/bin/Debug/net6.0/Pims.Api.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.json" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" -f json
-	@cd backend; coverlet ./tests/unit/dal/bin/Debug/net6.0/Pims.Dal.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.xml" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" --merge-with "tests/TestResults/coverage.json" -f cobertura
-	@cd backend; coverlet ./tests/unit/mockdal/bin/Debug/net6.0/Pims.Dal.Mock.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.xml" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" --merge-with "tests/TestResults/coverage.json" -f cobertura
-	@cd backend; reportgenerator "-reports:./tests/TestResults/coverage.xml" "-targetdir:./tests/TestResults/Coverage" -reporttypes:Html
-	@cd backend; start ./tests/TestResults/Coverage/index.htm
+	@cd source/backend/tests/unit/api; dotnet build;
+	@cd source/backend/tests/unit/dal; dotnet build;
+	@cd source/backend/tests/unit/mockdal; dotnet build;
+	@cd source/backend; coverlet ./tests/unit/api/bin/Debug/net6.0/Pims.Api.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.json" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" -f json
+	@cd source/backend; coverlet ./tests/unit/dal/bin/Debug/net6.0/Pims.Dal.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.xml" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" --merge-with "tests/TestResults/coverage.json" -f cobertura
+	@cd source/backend; coverlet ./tests/unit/mockdal/bin/Debug/net6.0/Pims.Dal.Mock.Test.dll --target "dotnet" --targetargs "test ./ --no-build" -o "./tests/TestResults/coverage.xml" --exclude "[*.Test]*" --exclude "[*]*Model" --exclude-by-attribute "CompilerGenerated" --merge-with "tests/TestResults/coverage.json" -f cobertura
+	@cd source/backend; reportgenerator "-reports:./tests/TestResults/coverage.xml" "-targetdir:./tests/TestResults/Coverage" -reporttypes:Html
+	@cd source/backend; start ./tests/TestResults/Coverage/index.htm
 
 frontend-coverage: ## Generate coverage report for frontend
 	@echo "$(P) Generate coverage report for frontend"
@@ -309,11 +306,11 @@ frontend-coverage: ## Generate coverage report for frontend
 
 env: ## Generate env files
 	@echo "$(P) Generate/Regenerate env files required for application (generated passwords only match if database .env file does not already exist)"
-	@./scripts/gen-env-files.sh;
+	@./tools/cicd/scripts/gen-env-files.sh;
 
 mayan-up: ## Calls the docker compose up for the mayan images
 	@echo "$(P) Create or start mayan-edms system"
-	@cd tools/mayan-edms; docker-compose up -d
+	@cd tools/mayan-edms; docker-compose --profile all up -d
 
 .PHONY: logs start destroy local setup restart refresh up down stop build rebuild clean client-test server-test pause-30 server-run db-clean db-drop db-seed db-refresh db-script db-scaffold npm-clean npm-refresh keycloak-sync convert backend-coverage frontend-coverage backend-test frontend-test env mayan-up
 

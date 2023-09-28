@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Start notification to Teams Channel
-        uses: jdcargile/ms-teams-notification@v1.3
+        uses: dragos-cojocari/ms-teams-notification@v1.0.2
         with:
           github-token: ${{ github.token }}
           ms-teams-webhook-uri: ${{ env.MS_TEAMS_WEBHOOK_BUILD_CHANNEL }}
@@ -48,7 +48,7 @@ jobs:
     needs: ci-cd-start-notification
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: master
           fetch-depth: 0
@@ -64,7 +64,7 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: Display the maintenance page instead of the app
         run: |
-          ./maintenance/maintenance.sh prod on
+          ./tools/cicd/maintenance/maintenance.sh prod on
       - name: call scripts to deploy api and frontend
         run: |
           [[ -z ${{github.event.inputs.OVERRIDE_VERSION}} ]] && RELEASE_VERSION=${{steps.previoustag.outputs.tag}}-master || RELEASE_VERSION=${{github.event.inputs.OVERRIDE_VERSION}}-master

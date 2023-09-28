@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`geocoder auto complete tests renders correctly... 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  <div
+    class="GeocoderAutoComplete"
+  >
+    <div
+      class="form-group"
+    >
+      <input
+        class="form-control"
+        data-testid="geocoder-input"
+        field="test"
+        id="input-test"
+        name="test"
+        value=""
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

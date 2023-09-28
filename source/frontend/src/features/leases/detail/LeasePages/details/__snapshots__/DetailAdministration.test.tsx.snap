@@ -1,0 +1,703 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DetailAdministration component renders a complete lease as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  .c2 {
+  float: right;
+  cursor: pointer;
+}
+
+.c1 {
+  font-weight: bold;
+  border-bottom: 0.2rem solid;
+  margin-bottom: 2rem;
+}
+
+.c0 {
+  margin: 1.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  text-align: left;
+  border-radius: 0.5rem;
+}
+
+.c4.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c3 {
+  font-weight: bold;
+}
+
+.c5 input.form-control {
+  font-size: 1.8rem;
+}
+
+<div
+    class="c0 form-section"
+  >
+    <h2
+      class="c1"
+    >
+      <div
+        class="no-gutters row"
+      >
+        <div
+          class="col"
+        >
+          Administration
+        </div>
+        <div
+          class="col-1"
+        >
+          <svg
+            class="c2"
+            fill="currentColor"
+            height="1em"
+            stroke="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              collapse-section
+            </title>
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+            <path
+              d="M7 14l5-5 5 5z"
+            />
+          </svg>
+        </div>
+      </div>
+    </h2>
+    <div
+      class="collapse show"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Program:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="c5 input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-programName"
+              name="programName"
+              title="A program"
+              value="A program"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Account type:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-type.description"
+              name="type.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Receivable to:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-paymentReceivableType.description"
+              name="paymentReceivableType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Category:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-categoryType.description"
+              name="categoryType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Purpose:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-purposeType.description"
+              name="purposeType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Initiator:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-initiatorType.description"
+              name="initiatorType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Responsibility:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-responsibilityType.description"
+              name="responsibilityType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Effective date:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        />
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            MoTI contact:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-motiName"
+              name="motiName"
+              title="test moti name"
+              value="test moti name"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Intended use:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-description"
+              name="description"
+              title="a test description"
+              value="a test description"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DetailAdministration component renders minimally as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  .c2 {
+  float: right;
+  cursor: pointer;
+}
+
+.c1 {
+  font-weight: bold;
+  border-bottom: 0.2rem solid;
+  margin-bottom: 2rem;
+}
+
+.c0 {
+  margin: 1.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  text-align: left;
+  border-radius: 0.5rem;
+}
+
+.c4.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c3 {
+  font-weight: bold;
+}
+
+.c5 input.form-control {
+  font-size: 1.8rem;
+}
+
+<div
+    class="c0 form-section"
+  >
+    <h2
+      class="c1"
+    >
+      <div
+        class="no-gutters row"
+      >
+        <div
+          class="col"
+        >
+          Administration
+        </div>
+        <div
+          class="col-1"
+        >
+          <svg
+            class="c2"
+            fill="currentColor"
+            height="1em"
+            stroke="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>
+              collapse-section
+            </title>
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+            <path
+              d="M7 14l5-5 5 5z"
+            />
+          </svg>
+        </div>
+      </div>
+    </h2>
+    <div
+      class="collapse show"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Program:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="c5 input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-programName"
+              name="programName"
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Account type:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-type.description"
+              name="type.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Receivable to:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-paymentReceivableType.description"
+              name="paymentReceivableType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Category:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-categoryType.description"
+              name="categoryType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Purpose:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-purposeType.description"
+              name="purposeType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Initiator:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-initiatorType.description"
+              name="initiatorType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Responsibility:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-responsibilityType.description"
+              name="responsibilityType.description"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Effective date:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        />
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            MoTI contact:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-motiName"
+              name="motiName"
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-3"
+        >
+          <label
+            class="c3"
+          >
+            Intended use:
+          </label>
+        </div>
+        <div
+          class="c4 text-left col"
+        >
+          <div
+            class="input form-group"
+          >
+            <input
+              class="form-control"
+              id="input-description"
+              name="description"
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

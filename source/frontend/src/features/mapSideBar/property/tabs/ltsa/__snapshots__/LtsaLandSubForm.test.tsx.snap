@@ -1,0 +1,418 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LtsaLandSubForm component renders charge sub form 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="pr-0 text-left col-4"
+    >
+      <label
+        class="c0"
+      >
+        PID:
+      </label>
+    </div>
+    <div
+      class="c1 text-left col"
+    >
+      <div
+        class="input form-group"
+      >
+        <input
+          class="form-control"
+          id="input-titleOrders.0.orderedProduct.fieldedData.descriptionsOfLand.0.parcelIdentifier"
+          name="titleOrders.0.orderedProduct.fieldedData.descriptionsOfLand.0.parcelIdentifier"
+          title="009-212-434"
+          value="009-212-434"
+        />
+      </div>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="pr-0 text-left col-4"
+    >
+      <label
+        class="c0"
+      >
+        Legal description:
+      </label>
+    </div>
+    <div
+      class="c1 text-left col"
+    >
+      <p>
+        LOT 4 EXCEPT: FIRSTLY: PART ON STATUTORY RIGHT OF WAY PLAN 30557;
+SECONDLY: PART ON STATUTORY RIGHT OF WAY PLAN 45999A;
+DISTRICT LOT 26 GROUP 2 AND SECTION 11 TOWNSHIP 6 NEW WESTMINSTER DISTRICT
+PLAN 24843
+      </p>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Legal notations#:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          CV1442411
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Status:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          ACTIVE
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Cancellation date:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        />
+      </div>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="pr-0 text-left col-4"
+    >
+      <label
+        class="c0"
+      >
+        Legal notations:
+      </label>
+    </div>
+    <div
+      class="c1 text-left col"
+    >
+      <p>
+        THIS CERTIFICATE OF TITLE MAY BE AFFECTED BY THE AGRICULTURAL LAND
+COMMISSION ACT, SEE AGRICULTURAL LAND RESERVE PLAN NO. 2
+DEPOSITED JULY 30TH, 1974.
+      </p>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Legal notations#:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          CV1442412
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Status:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          ACTIVE
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Cancellation date:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        />
+      </div>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="pr-0 text-left col-4"
+    >
+      <label
+        class="c0"
+      >
+        Legal notations:
+      </label>
+    </div>
+    <div
+      class="c1 text-left col"
+    >
+      <p>
+        ZONING REGULATION AND PLAN UNDER THE AERONAUTICS ACT (CANADA) FILED
+10.2.1981 UNDER NO. T17084 PLAN NO. 61216
+      </p>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Legal notations#:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          CV1442414
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Status:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        >
+          ACTIVE
+        </div>
+      </div>
+    </div>
+    <div
+      class="col"
+    >
+      <div
+        class="pb-2 row"
+      >
+        <div
+          class="pr-0 text-left col-auto"
+        >
+          <label
+            class="c0"
+          >
+            Cancellation date:
+          </label>
+        </div>
+        <div
+          class="c1 text-left col"
+        />
+      </div>
+    </div>
+  </div>
+  .c1.required::before {
+  content: '*';
+  position: absolute;
+  top: 0.75rem;
+  left: 0rem;
+}
+
+.c0 {
+  font-weight: bold;
+}
+
+<div
+    class="pb-2 row"
+  >
+    <div
+      class="pr-0 text-left col-4"
+    >
+      <label
+        class="c0"
+      >
+        Legal notations:
+      </label>
+    </div>
+    <div
+      class="c1 text-left col"
+    >
+      <p>
+        LAND HEREIN CHARGED UNDER THE
+MUNICIPAL ACT, PART 25
+D.F. D21890
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

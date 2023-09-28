@@ -1,0 +1,269 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DepositsReturnedContainer component renders as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="Toastify"
+  />
+  <div />
+  .c1 {
+  font-weight: bold;
+  border-bottom: 0.2rem solid;
+  margin-bottom: 2rem;
+}
+
+.c0 {
+  margin: 1.5rem;
+  padding: 1.5rem;
+  background-color: white;
+  text-align: left;
+  border-radius: 0.5rem;
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+
+.c3 .btn.btn-primary {
+  background-color: transparent;
+  padding: 0;
+}
+
+<div
+    class="c0 form-section"
+  >
+    <h2
+      class="c1"
+    >
+      <div
+        class="no-gutters row"
+      >
+        <div
+          class="col"
+        >
+          Deposits Returned
+        </div>
+      </div>
+    </h2>
+    <div
+      class="collapse show"
+    >
+      <div
+        class="table"
+        data-testid="securityDepositReturnsTable"
+        role="table"
+      >
+        <div
+          class="thead thead-light"
+        >
+          <div
+            class="tr"
+            role="row"
+            style="display: flex; flex: 1 0 auto; min-width: 270px;"
+          >
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: left; text-align: left; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Deposit type
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Termination or Surrender date
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 40 0 auto; min-width: 30px; width: 40px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Deposit amount
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Claims against deposit
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Returned amount (without interest)
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Interest paid
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Return date
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 70 0 auto; min-width: 30px; width: 70px; justify-content: left; text-align: left; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Payee name
+              </div>
+            </div>
+            <div
+              class="th"
+              colspan="1"
+              role="columnheader"
+              style="box-sizing: border-box; flex: 30 0 auto; min-width: 30px; width: 30px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+            >
+              <div
+                class="sortable-column"
+              >
+                Actions
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tbody"
+          role="rowgroup"
+        >
+          <div
+            class="tr-wrapper"
+          >
+            <div
+              class="tr"
+              role="row"
+              style="display: flex; flex: 1 0 auto; min-width: 270px;"
+            >
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: left; text-align: left; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              />
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                Feb 1, 2022
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 40 0 auto; min-width: 30px; width: 40px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                $2,000.00
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                $1,234.00
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                $123.00
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                $1.00
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 50 0 auto; min-width: 30px; width: 50px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                Feb 16, 2022
+              </div>
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 70 0 auto; min-width: 30px; width: 70px; justify-content: left; text-align: left; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              />
+              <div
+                class="td"
+                role="cell"
+                style="box-sizing: border-box; flex: 30 0 auto; min-width: 30px; width: 30px; justify-content: right; text-align: right; flex-wrap: wrap; align-items: center; display: flex;"
+                title=""
+              >
+                <div
+                  class="c2 c3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
