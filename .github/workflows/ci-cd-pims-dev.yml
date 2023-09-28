@@ -124,7 +124,7 @@ jobs:
         run: dotnet run
         working-directory: ${{env.sync-directory}}
 
-  deploy:
+  database-upgrade:
     name: Upgrade database
     needs: [deploy]
     runs-on: ubuntu-latest
