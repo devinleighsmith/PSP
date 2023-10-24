@@ -1,0 +1,2176 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/23/2023 4:37:21 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="XERCES"
+  DTS:CreatorName="Xerces\Devin Smith"
+  DTS:DTSID="{74037122-414C-4317-B096-F0B5505A0733}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.948.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="4"
+  DTS:VersionGUID="{EEF53B54-2F0C-43E3-A7D8-FA4B08009BB5}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[PIMS]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C854C770-B13C-477E-8DD4-44721E1B9FCF}"
+      DTS:ObjectName="PIMS">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=sqldevtst.th.gov.bc.ca;Initial Catalog=PIMS_DEV;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;Application Name=SSIS-Package-{C854C770-B13C-477E-8DD4-44721E1B9FCF}sqldevtst.th.gov.bc.ca.PIMS_DEV;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Correct PIMS Locations"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{0672244B-9B78-4F1F-A275-B350033D157F}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Correct PIMS Locations"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="PIMS_PROPERTY_BOUNDARY_VIEW"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[PIMS_PROPERTY_BOUNDARY_VW]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[PIMS]"
+                  connectionManagerRefId="Package.ConnectionManagers[PIMS]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_ID]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_ID]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_ID]"
+                      name="PROPERTY_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PID]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PID]"
+                      name="PID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PID_PADDED]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PID_PADDED]"
+                      length="9"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PID_PADDED]"
+                      name="PID_PADDED"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PIN]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PIN]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PIN]"
+                      name="PIN"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_TYPE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_TYPE_CODE]"
+                      name="PROPERTY_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_STATUS_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_STATUS_TYPE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_STATUS_TYPE_CODE]"
+                      name="PROPERTY_STATUS_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      name="PROPERTY_DATA_SOURCE_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      name="PROPERTY_DATA_SOURCE_EFFECTIVE_DATE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      name="PROPERTY_CLASSIFICATION_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_TENURE_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_TENURE_TYPE_CODE]"
+                      length="4000"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_TENURE_TYPE_CODE]"
+                      name="PROPERTY_TENURE_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_1]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_1]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_1]"
+                      name="STREET_ADDRESS_1"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_2]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_2]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_2]"
+                      name="STREET_ADDRESS_2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_3]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_3]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[STREET_ADDRESS_3]"
+                      name="STREET_ADDRESS_3"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[MUNICIPALITY_NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[MUNICIPALITY_NAME]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[MUNICIPALITY_NAME]"
+                      name="MUNICIPALITY_NAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[POSTAL_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[POSTAL_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[POSTAL_CODE]"
+                      name="POSTAL_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROVINCE_STATE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROVINCE_STATE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROVINCE_STATE_CODE]"
+                      name="PROVINCE_STATE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROVINCE_NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROVINCE_NAME]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROVINCE_NAME]"
+                      name="PROVINCE_NAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[COUNTRY_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[COUNTRY_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[COUNTRY_CODE]"
+                      name="COUNTRY_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[COUNTRY_NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[COUNTRY_NAME]"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[COUNTRY_NAME]"
+                      name="COUNTRY_NAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[NAME]"
+                      length="250"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[NAME]"
+                      name="NAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[DESCRIPTION]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[DESCRIPTION]"
+                      length="2000"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[DESCRIPTION]"
+                      name="DESCRIPTION"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ADDRESS_ID]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ADDRESS_ID]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ADDRESS_ID]"
+                      name="ADDRESS_ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[REGION_CODE]"
+                      dataType="i2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[REGION_CODE]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[REGION_CODE]"
+                      name="REGION_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[DISTRICT_CODE]"
+                      dataType="i2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[DISTRICT_CODE]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[DISTRICT_CODE]"
+                      name="DISTRICT_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[GEOMETRY]"
+                      dataType="image"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[GEOMETRY]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[GEOMETRY]"
+                      name="GEOMETRY"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      name="PROPERTY_AREA_UNIT_TYPE_CODE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[LAND_AREA]"
+                      dataType="r4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[LAND_AREA]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[LAND_AREA]"
+                      name="LAND_AREA"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[LAND_LEGAL_DESCRIPTION]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[LAND_LEGAL_DESCRIPTION]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[LAND_LEGAL_DESCRIPTION]"
+                      name="LAND_LEGAL_DESCRIPTION"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[SURVEY_PLAN_NUMBER]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[SURVEY_PLAN_NUMBER]"
+                      length="250"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[SURVEY_PLAN_NUMBER]"
+                      name="SURVEY_PLAN_NUMBER"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ENCUMBRANCE_REASON]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ENCUMBRANCE_REASON]"
+                      length="500"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ENCUMBRANCE_REASON]"
+                      name="ENCUMBRANCE_REASON"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_SENSITIVE]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_SENSITIVE]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_SENSITIVE]"
+                      name="IS_SENSITIVE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_OWNED]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_OWNED]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_OWNED]"
+                      name="IS_OWNED"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_PROPERTY_OF_INTEREST]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_PROPERTY_OF_INTEREST]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_PROPERTY_OF_INTEREST]"
+                      name="IS_PROPERTY_OF_INTEREST"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      name="IS_VISIBLE_TO_OTHER_AGENCIES"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ZONING]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ZONING]"
+                      length="50"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ZONING]"
+                      name="ZONING"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ZONING_POTENTIAL]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ZONING_POTENTIAL]"
+                      length="50"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[ZONING_POTENTIAL]"
+                      name="ZONING_POTENTIAL"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_PAYABLE_LEASE]"
+                      dataType="bool"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_PAYABLE_LEASE]"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[IS_PAYABLE_LEASE]"
+                      name="IS_PAYABLE_LEASE"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_ID]"
+                      dataType="i8"
+                      name="PROPERTY_ID" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PID]"
+                      dataType="i4"
+                      name="PID" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PID_PADDED]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="PID_PADDED" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PIN]"
+                      dataType="i4"
+                      name="PIN" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROPERTY_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_STATUS_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROPERTY_STATUS_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROPERTY_DATA_SOURCE_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      dataType="dbDate"
+                      name="PROPERTY_DATA_SOURCE_EFFECTIVE_DATE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROPERTY_CLASSIFICATION_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_TENURE_TYPE_CODE]"
+                      dataType="wstr"
+                      length="4000"
+                      name="PROPERTY_TENURE_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_1]"
+                      dataType="wstr"
+                      length="200"
+                      name="STREET_ADDRESS_1" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_2]"
+                      dataType="wstr"
+                      length="200"
+                      name="STREET_ADDRESS_2" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[STREET_ADDRESS_3]"
+                      dataType="wstr"
+                      length="200"
+                      name="STREET_ADDRESS_3" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[MUNICIPALITY_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      name="MUNICIPALITY_NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[POSTAL_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="POSTAL_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROVINCE_STATE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROVINCE_STATE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROVINCE_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      name="PROVINCE_NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[COUNTRY_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="COUNTRY_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[COUNTRY_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      name="COUNTRY_NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[NAME]"
+                      dataType="wstr"
+                      length="250"
+                      name="NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[DESCRIPTION]"
+                      dataType="wstr"
+                      length="2000"
+                      name="DESCRIPTION" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ADDRESS_ID]"
+                      dataType="i8"
+                      name="ADDRESS_ID" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[REGION_CODE]"
+                      dataType="i2"
+                      name="REGION_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[DISTRICT_CODE]"
+                      dataType="i2"
+                      name="DISTRICT_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[GEOMETRY]"
+                      dataType="image"
+                      name="GEOMETRY" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      name="PROPERTY_AREA_UNIT_TYPE_CODE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[LAND_AREA]"
+                      dataType="r4"
+                      name="LAND_AREA" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[LAND_LEGAL_DESCRIPTION]"
+                      dataType="nText"
+                      name="LAND_LEGAL_DESCRIPTION" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[SURVEY_PLAN_NUMBER]"
+                      dataType="wstr"
+                      length="250"
+                      name="SURVEY_PLAN_NUMBER" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ENCUMBRANCE_REASON]"
+                      dataType="wstr"
+                      length="500"
+                      name="ENCUMBRANCE_REASON" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_SENSITIVE]"
+                      dataType="bool"
+                      name="IS_SENSITIVE" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_OWNED]"
+                      dataType="bool"
+                      name="IS_OWNED" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_PROPERTY_OF_INTEREST]"
+                      dataType="bool"
+                      name="IS_PROPERTY_OF_INTEREST" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      dataType="bool"
+                      name="IS_VISIBLE_TO_OTHER_AGENCIES" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ZONING]"
+                      dataType="wstr"
+                      length="50"
+                      name="ZONING" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[ZONING_POTENTIAL]"
+                      dataType="wstr"
+                      length="50"
+                      name="ZONING_POTENTIAL" />
+                    <externalMetadataColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].ExternalColumns[IS_PAYABLE_LEASE]"
+                      dataType="bool"
+                      name="IS_PAYABLE_LEASE" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_ID]"
+                      dataType="i8"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_ID]"
+                      name="PROPERTY_ID" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PID]"
+                      dataType="i4"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PID]"
+                      name="PID" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PID_PADDED]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PID_PADDED]"
+                      name="PID_PADDED" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PIN]"
+                      dataType="i4"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PIN]"
+                      name="PIN" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_TYPE_CODE]"
+                      name="PROPERTY_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_STATUS_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_STATUS_TYPE_CODE]"
+                      name="PROPERTY_STATUS_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_DATA_SOURCE_TYPE_CODE]"
+                      name="PROPERTY_DATA_SOURCE_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      dataType="dbDate"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_DATA_SOURCE_EFFECTIVE_DATE]"
+                      name="PROPERTY_DATA_SOURCE_EFFECTIVE_DATE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_CLASSIFICATION_TYPE_CODE]"
+                      name="PROPERTY_CLASSIFICATION_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_TENURE_TYPE_CODE]"
+                      dataType="wstr"
+                      length="4000"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_TENURE_TYPE_CODE]"
+                      name="PROPERTY_TENURE_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_1]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_1]"
+                      name="STREET_ADDRESS_1" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_2]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_2]"
+                      name="STREET_ADDRESS_2" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_3]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[STREET_ADDRESS_3]"
+                      name="STREET_ADDRESS_3" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[MUNICIPALITY_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[MUNICIPALITY_NAME]"
+                      name="MUNICIPALITY_NAME" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[POSTAL_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[POSTAL_CODE]"
+                      name="POSTAL_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROVINCE_STATE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROVINCE_STATE_CODE]"
+                      name="PROVINCE_STATE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROVINCE_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROVINCE_NAME]"
+                      name="PROVINCE_NAME" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[COUNTRY_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[COUNTRY_CODE]"
+                      name="COUNTRY_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[COUNTRY_NAME]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[COUNTRY_NAME]"
+                      name="COUNTRY_NAME" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[NAME]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[NAME]"
+                      name="NAME" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[DESCRIPTION]"
+                      dataType="wstr"
+                      length="2000"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[DESCRIPTION]"
+                      name="DESCRIPTION" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ADDRESS_ID]"
+                      dataType="i8"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ADDRESS_ID]"
+                      name="ADDRESS_ID" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[REGION_CODE]"
+                      dataType="i2"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[REGION_CODE]"
+                      name="REGION_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[DISTRICT_CODE]"
+                      dataType="i2"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[DISTRICT_CODE]"
+                      name="DISTRICT_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[GEOMETRY]"
+                      dataType="image"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[GEOMETRY]"
+                      name="GEOMETRY" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[PROPERTY_AREA_UNIT_TYPE_CODE]"
+                      name="PROPERTY_AREA_UNIT_TYPE_CODE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[LAND_AREA]"
+                      dataType="r4"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[LAND_AREA]"
+                      name="LAND_AREA" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[LAND_LEGAL_DESCRIPTION]"
+                      dataType="nText"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[LAND_LEGAL_DESCRIPTION]"
+                      name="LAND_LEGAL_DESCRIPTION" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[SURVEY_PLAN_NUMBER]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[SURVEY_PLAN_NUMBER]"
+                      name="SURVEY_PLAN_NUMBER" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ENCUMBRANCE_REASON]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ENCUMBRANCE_REASON]"
+                      name="ENCUMBRANCE_REASON" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_SENSITIVE]"
+                      dataType="bool"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_SENSITIVE]"
+                      name="IS_SENSITIVE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_OWNED]"
+                      dataType="bool"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_OWNED]"
+                      name="IS_OWNED" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_PROPERTY_OF_INTEREST]"
+                      dataType="bool"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_PROPERTY_OF_INTEREST]"
+                      name="IS_PROPERTY_OF_INTEREST" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      dataType="bool"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_VISIBLE_TO_OTHER_AGENCIES]"
+                      name="IS_VISIBLE_TO_OTHER_AGENCIES" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ZONING]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ZONING]"
+                      name="ZONING" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ZONING_POTENTIAL]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ZONING_POTENTIAL]"
+                      name="ZONING_POTENTIAL" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_PAYABLE_LEASE]"
+                      dataType="bool"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[IS_PAYABLE_LEASE]"
+                      name="IS_PAYABLE_LEASE" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Correct PIMS Locations\Script Component"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Includes and runs custom script code. For example, apply a business rule that limits the range of valid values in an &quot;income&quot; column or add values in two columns and calculate the average of the sum.;Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;12"
+              description="Includes and runs custom script code. For example, apply a business rule that limits the range of valid values in an &quot;income&quot; column or add values in two columns and calculate the average of the sum."
+              name="Script Component"
+              version="12">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Stores the source code of the component"
+                  isArray="true"
+                  name="SourceCode"
+                  state="cdata">
+                  <arrayElements
+                    arrayElementCount="36">
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Properties\Settings.settings]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Properties\Resources.resx]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+</root>]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[main.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[#region Help:  Introduction to the Script Component
+/* The Script Component allows you to perform virtually any operation that can be accomplished in
+ * a .Net application within the context of an Integration Services data flow.
+ *
+ * Expand the other regions which have "Help" prefixes for examples of specific ways to use
+ * Integration Services features within this script component. */
+#endregion
+
+#region Namespaces
+using Microsoft.SqlServer.Types;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Drawing;
+using System.Text;
+#endregion
+
+/// <summary>
+/// This is the class to which to add your code.  Do not change the name, attributes, or parent
+/// of this class.
+/// </summary>
+[Microsoft.SqlServer.Dts.Pipeline.SSISScriptComponentEntryPointAttribute]
+public class ScriptMain : UserComponent
+{
+    #region Help:  Using Integration Services variables and parameters
+    /* To use a variable in this script, first ensure that the variable has been added to
+     * either the list contained in the ReadOnlyVariables property or the list contained in
+     * the ReadWriteVariables property of this script component, according to whether or not your
+     * code needs to write into the variable.  To do so, save this script, close this instance of
+     * Visual Studio, and update the ReadOnlyVariables and ReadWriteVariables properties in the
+     * Script Transformation Editor window.
+     * To use a parameter in this script, follow the same steps. Parameters are always read-only.
+     *
+     * Example of reading from a variable or parameter:
+     *  DateTime startTime = Variables.MyStartTime;
+     *
+     * Example of writing to a variable:
+     *  Variables.myStringVariable = "new value";
+     */
+    #endregion
+
+    #region Help:  Using Integration Services Connnection Managers
+    /* Some types of connection managers can be used in this script component.  See the help topic
+     * "Working with Connection Managers Programatically" for details.
+     *
+     * To use a connection manager in this script, first ensure that the connection manager has
+     * been added to either the list of connection managers on the Connection Managers page of the
+     * script component editor.  To add the connection manager, save this script, close this instance of
+     * Visual Studio, and add the Connection Manager to the list.
+     *
+     * If the component needs to hold a connection open while processing rows, override the
+     * AcquireConnections and ReleaseConnections methods.
+     * 
+     * Example of using an ADO.Net connection manager to acquire a SqlConnection:
+     *  object rawConnection = Connections.SalesDB.AcquireConnection(transaction);
+     *  SqlConnection salesDBConn = (SqlConnection)rawConnection;
+     *
+     * Example of using a File connection manager to acquire a file path:
+     *  object rawConnection = Connections.Prices_zip.AcquireConnection(transaction);
+     *  string filePath = (string)rawConnection;
+     *
+     * Example of releasing a connection manager:
+     *  Connections.SalesDB.ReleaseConnection(rawConnection);
+     */
+    #endregion
+
+    #region Help:  Firing Integration Services Events
+    /* This script component can fire events.
+     *
+     * Example of firing an error event:
+     *  ComponentMetaData.FireError(10, "Process Values", "Bad value", "", 0, out cancel);
+     *
+     * Example of firing an information event:
+     *  ComponentMetaData.FireInformation(10, "Process Values", "Processing has started", "", 0, fireAgain);
+     *
+     * Example of firing a warning event:
+     *  ComponentMetaData.FireWarning(10, "Process Values", "No rows were received", "", 0);
+     */
+    #endregion
+
+    /// <summary>
+    /// This method is called once, before rows begin to be processed in the data flow.
+    ///
+    /// You can remove this method if you don't need to do anything here.
+    /// </summary>
+    public override void PreExecute()
+    {
+        base.PreExecute();
+        /*
+         * Add your code here
+         */
+    }
+
+    /// <summary>
+    /// This method is called after all the rows have passed through this component.
+    ///
+    /// You can delete this method if you don't need to do anything here.
+    /// </summary>
+    public override void PostExecute()
+    {
+        base.PostExecute();
+        /*
+         * Add your code here
+         */
+    }
+
+    /// <summary>
+    /// This method is called once for every row that passes through the component from Input0.
+    ///
+    /// Example of reading a value from a column in the the row:
+    ///  string zipCode = Row.ZipCode
+    ///
+    /// Example of writing a value to a column in the row:
+    ///  Row.ZipCode = zipCode
+    /// </summary>
+    /// <param name="Row">The row that is currently passing through the component</param>
+    public override void Input0_ProcessInputRow(Input0Buffer Row)
+    {
+        /*
+         * Add your code here
+         */
+        if (Row.GEOMETRY_IsNull)
+        {
+            return;
+        }
+        //get the lenght of the string of our Meshblock
+        var spacelength = Convert.ToInt32(Row.GEOMETRY.Length);
+
+        //get our blobdata for our meshblock
+        var BlobData = Row.GEOMETRY.GetBlobData(0, spacelength);
+
+        //convert it to unicode
+        var StringData = Encoding.Unicode.GetString(BlobData);
+
+        //change my string data to sqlchars. this is needed for the STGeomFromText function
+        SqlChars myChar = new SqlChars(new SqlString(StringData));
+
+        //convert our string to geometry type. Our Mercator id is 3008.
+        SqlGeometry myGeo = SqlGeometry.STGeomFromText(myChar, 3008);
+
+        List<PointF> points = new List<PointF>();
+        for (int i = 1; i <= myGeo.STNumPoints(); i++)
+        {
+            SqlGeometry point = myGeo.STPointN(i);
+            points.Add(new PointF((float)point.STX, (float)point.STY));
+        }
+
+        var newPoint = PolyLabel.PolyLabel.GetPolyLabel(points);
+
+        newPoint = null;
+    }
+
+}
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[BufferWrapper.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[/* THIS IS AUTO-GENERATED CODE THAT WILL BE OVERWRITTEN! DO NOT EDIT!
+*  Microsoft SQL Server Integration Services buffer wrappers
+*  This module defines classes for accessing data flow buffers
+*  THIS IS AUTO-GENERATED CODE THAT WILL BE OVERWRITTEN! DO NOT EDIT! */
+
+
+
+using System;
+using System.Data;
+using Microsoft.SqlServer.Dts.Pipeline;
+using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
+
+public class Input0Buffer: ScriptBuffer
+
+{
+    public Input0Buffer(PipelineBuffer Buffer, int[] BufferColumnIndexes, OutputNameMap OutputMap)
+        : base(Buffer, BufferColumnIndexes, OutputMap)
+    {
+    }
+
+    public BlobColumn GEOMETRY
+    {
+        get
+        {
+            return (BlobColumn)Buffer[BufferColumnIndexes[0]];
+        }
+    }
+    public bool GEOMETRY_IsNull
+    {
+        get
+        {
+            return IsNull(0);
+        }
+    }
+
+    new public bool NextRow()
+    {
+        return base.NextRow();
+    }
+
+    new public bool EndOfRowset()
+    {
+        return base.EndOfRowset();
+    }
+
+}
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Properties\AssemblyInfo.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("SC_4664d38d6d774888963e21557351c901")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("SC_4664d38d6d774888963e21557351c901")]
+[assembly: AssemblyCopyright("Copyright @  2023")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.0.0")]
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[ComponentWrapper.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[/* THIS IS AUTO-GENERATED CODE THAT WILL BE OVERWRITTEN! DO NOT EDIT!
+*  Microsoft SQL Server Integration Services component wrapper
+*  This module defines the base class for your component
+*  THIS IS AUTO-GENERATED CODE THAT WILL BE OVERWRITTEN! DO NOT EDIT! */
+
+using System;
+using System.Data;
+using Microsoft.SqlServer.Dts.Pipeline;
+using Microsoft.SqlServer.Dts.Pipeline.Wrapper;
+using Microsoft.SqlServer.Dts.Runtime.Wrapper;
+
+public class UserComponent: ScriptComponent
+{
+    public Connections Connections;
+    public Variables Variables;
+    public UserComponent()
+    {
+        Connections = new Connections(this);
+        Variables = new Variables(this);
+    }
+
+    public override void ProcessInput(int InputID, string InputName, PipelineBuffer Buffer, OutputNameMap OutputMap)
+    {
+
+        if (InputName.Equals(@"Input 0", StringComparison.Ordinal))
+        {
+            Input0_ProcessInput(new Input0Buffer(Buffer, GetColumnIndexes(InputID), OutputMap));
+        }
+
+    }
+
+    public virtual void Input0_ProcessInput(Input0Buffer Buffer)
+    {
+        while (Buffer.NextRow())
+        {
+            Input0_ProcessInputRow(Buffer);
+        }
+    }
+
+    public virtual void Input0_ProcessInputRow(Input0Buffer Row)
+    {
+    }
+
+}
+
+public class Connections
+{
+    ScriptComponent ParentComponent;
+
+    public Connections(ScriptComponent Component)
+    {
+        ParentComponent = Component;
+    }
+
+}
+
+public class Variables
+{
+    ScriptComponent ParentComponent;
+
+    public Variables(ScriptComponent Component)
+    {
+        ParentComponent = Component;
+    }
+
+}
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Project]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF16LE]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<c:Project xmlns:c="http://schemas.microsoft.com/codeprojectml/2010/08/main" xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003" runtimeVersion="4.0" schemaVersion="1.0">
+  <msb:PropertyGroup>
+    <msb:CodeName>SC_4664d38d6d774888963e21557351c901</msb:CodeName>
+    <msb:Language>msBuild</msb:Language>
+    <msb:DisplayName>SC_4664d38d6d774888963e21557351c901</msb:DisplayName>
+    <msb:ProjectId>{2551ABFC-F471-459E-B970-C870E0B4B8D5}</msb:ProjectId>
+  </msb:PropertyGroup>
+  <msb:ItemGroup>
+    <msb:Project Include="SC_4664d38d6d774888963e21557351c901.csproj" />
+    <msb:File Include="main.cs" />
+    <msb:File Include="BufferWrapper.cs" />
+    <msb:File Include="ComponentWrapper.cs" />
+    <msb:File Include="PolyLabel.cs" />
+    <msb:File Include="Properties\AssemblyInfo.cs" />
+    <msb:File Include="Properties\Resources.resx" />
+    <msb:File Include="Properties\Resources.Designer.cs" />
+    <msb:File Include="Properties\Settings.settings" />
+    <msb:File Include="Properties\Settings.Designer.cs" />
+    <msb:File Include="packages.config" />
+    <msb:Breakpoint Include="5a3fda35ca5347c4a9abe110c30616cb">
+      <msb:FileName>main.cs</msb:FileName>
+      <msb:LineNumber>150</msb:LineNumber>
+      <msb:ColumnNumber>9</msb:ColumnNumber>
+      <msb:Enabled>True</msb:Enabled>
+      <msb:ConditionType>1</msb:ConditionType>
+      <msb:Condition>
+      </msb:Condition>
+      <msb:Language>C#</msb:Language>
+      <msb:HitCountType>1</msb:HitCountType>
+      <msb:HitCountTarget>1</msb:HitCountTarget>
+    </msb:Breakpoint>
+  </msb:ItemGroup>
+</c:Project>]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Properties\Settings.Designer.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SC_4664d38d6d774888963e21557351c901.Properties.Settings.get_Default():SC_4664d38d6d774888963e21557351c901.Properties.Sett" +
+    "ings")]
+
+namespace SC_4664d38d6d774888963e21557351c901.Properties {
+    
+    
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
+        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+        private static Settings defaultInstance = new Settings();
+        
+        public static Settings Default {
+            get {
+                return defaultInstance;
+            }
+        }
+    }
+}
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[SC_4664d38d6d774888963e21557351c901.csproj]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props" Condition="Exists('..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" />
+  <PropertyGroup>
+    <ProjectTypeGuids>{30D016F9-3734-4E33-A861-5E7D899E18F3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BA45C723-8B9F-453A-A231-4AA3D2D0ECDC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SC_4664d38d6d774888963e21557351c901</RootNamespace>
+    <AssemblyName>SC_4664d38d6d774888963e21557351c901</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ResolveAssemblyReferenceIgnoreTargetFrameworkAttributeVersionMismatch>true</ResolveAssemblyReferenceIgnoreTargetFrameworkAttributeVersionMismatch>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Devin Smith\AppData\Local\Temp\Vsta\SSIS_SC150\Vsta0np1P3umLkWzmT8MVR9UEA\packages\Microsoft.SqlServer.Types.160.1000.6\lib\net462\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="PriorityQueue, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5e136dbf0437dacd, processorArchitecture=MSIL">
+      <HintPath>C:\Users\Devin Smith\AppData\Local\Temp\Vsta\SSIS_SC150\Vsta0np1P3umLkWzmT8MVR9UEA\packages\OptimizedPriorityQueue.5.1.0\lib\net45\PriorityQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.SqlServer.TxScript, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.SqlServer.DTSRuntimeWrap, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.SqlServer.DTSPipelineWrap, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.SqlServer.PipelineHost, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Compile Include="main.cs" />
+    <Compile Include="BufferWrapper.cs" />
+    <Compile Include="ComponentWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+    <Compile Include="PolyLabel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <!-- Include the build rules for a C# project.-->
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- This section defines VSTA properties that describe the host-changable project properties. -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{30D016F9-3734-4E33-A861-5E7D899E18F3}">
+        <ProjectProperties HostName="VSTAHostName" HostPackage="{B3A685AA-7EAF-4BC6-9940-57959FA5AC07}" ApplicationType="usd" Language="cs" TemplatesPath="" />
+        <Host Name="ScriptComponent" IconIndex="0" />
+        <ProjectClient>
+          <HostIdentifier>SSIS_SC150</HostIdentifier>
+        </ProjectClient>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+  </Target>
+</Project>]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[Properties\Resources.Designer.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SC_4664d38d6d774888963e21557351c901.Properties.Resources.get_ResourceManager():System.Resources.Resou" +
+    "rceManager")]
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SC_4664d38d6d774888963e21557351c901.Properties.Resources.get_Culture():System.Globalization.CultureIn" +
+    "fo")]
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SC_4664d38d6d774888963e21557351c901.Properties.Resources.set_Culture(System.Globalization.CultureInfo" +
+    "):Void")]
+
+namespace SC_4664d38d6d774888963e21557351c901.Properties {
+    
+    
+    /// <summary>
+    ///   A strongly-typed resource class, for looking up localized strings, etc.
+    /// </summary>
+    // This class was auto-generated by the StronglyTypedResourceBuilder
+    // class via a tool like ResGen or Visual Studio.
+    // To add or remove a member, edit your .ResX file then rerun ResGen
+    // with the /str option, or rebuild your VS project.
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    internal class Resources {
+        
+        private static global::System.Resources.ResourceManager resourceMan;
+        
+        private static global::System.Globalization.CultureInfo resourceCulture;
+        
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal Resources() {
+        }
+        
+        /// <summary>
+        ///   Returns the cached ResourceManager instance used by this class.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if ((resourceMan == null)) {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SC_4664d38d6d774888963e21557351c901.Properties.Resources", typeof(Resources).Assembly);
+                    resourceMan = temp;
+                }
+                return resourceMan;
+            }
+        }
+        
+        /// <summary>
+        ///   Overrides the current thread's CurrentUICulture property for all
+        ///   resource lookups using this strongly typed resource class.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
+                return resourceCulture;
+            }
+            set {
+                resourceCulture = value;
+            }
+        }
+    }
+}
+]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[packages.config]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="OptimizedPriorityQueue" version="5.1.0" targetFramework="net47" />
+</packages>]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[PolyLabel.cs]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[UTF8]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using Priority_Queue;
+
+namespace PolyLabel
+{
+    public class PolyLabel
+    {
+        public PointF Centroid { get; set; }
+        public float Radius { get; set; }
+
+        public static PolyLabel GetPolyLabel(List<PointF> polygon, float precision = 1.0f, bool debug = false)
+        {
+            float minX = float.MaxValue;
+            float minY = float.MaxValue;
+            float maxX = float.MinValue;
+            float maxY = float.MinValue;
+
+            for (int i = 0; i < polygon.Count; i++)
+            {
+                PointF p = polygon[i];
+                if (i == 0 || p.X < minX) minX = p.X;
+                if (i == 0 || p.Y < minY) minY = p.Y;
+                if (i == 0 || p.X > maxX) maxX = p.X;
+                if (i == 0 || p.Y > maxY) maxY = p.Y;
+            }
+
+            float width = maxX - minX;
+            float height = maxY - minY;
+            float cellSize = Math.Min(width, height);
+            float h = cellSize / 2;
+
+            SimplePriorityQueue<Cell> cellQueue = new SimplePriorityQueue<Cell>();
+
+            if (cellSize == 0)
+            {
+                PolyLabel degeneratePoleOfInaccessibility = new PolyLabel()
+                {
+                    Centroid = new PointF(minX, minY),
+                    Radius = 0
+                };
+                return degeneratePoleOfInaccessibility;
+            }
+
+            for (var x = minX; x < maxX; x += cellSize)
+            {
+                for (var y = minY; y < maxY; y += cellSize)
+                {
+                    Cell cell = new Cell(x + h, y + h, h, polygon);
+                    cellQueue.Enqueue(cell, cell.Max);
+                }
+            }
+
+            Cell bestCell = GetCentroidCell(polygon);
+
+            Cell bBoxCell = new Cell(minX + width / 2, minY + height / 2, 0, polygon);
+            if (bBoxCell.D > bestCell.D)
+                bestCell = bBoxCell;
+
+            int numProbes = cellQueue.Count;
+
+            while (cellQueue.Count != 0)
+            {
+                // pick the most promising cell from the queue
+                var cell = cellQueue.Dequeue();
+
+                // update the best cell if we found a better one
+                if (cell.D > bestCell.D)
+                {
+                    bestCell = cell;
+                    if (debug)
+                        Console.WriteLine("found best {0} after {1} probes", Math.Round(1e4 * cell.D) / 1e4, numProbes);
+                }
+
+                // do not drill down further if there's no chance of a better solution
+                if (cell.Max - bestCell.D <= precision)
+                    continue;
+
+                // split the cell into four cells
+                h = cell.H / 2;
+
+                Cell temp;
+                temp = new Cell(cell.X - h, cell.Y - h, h, polygon);
+                cellQueue.Enqueue(temp, temp.Max);
+                temp = new Cell(cell.X + h, cell.Y - h, h, polygon);
+                cellQueue.Enqueue(temp, temp.Max);
+                temp = new Cell(cell.X - h, cell.Y + h, h, polygon);
+                cellQueue.Enqueue(temp, temp.Max);
+                temp = new Cell(cell.X + h, cell.Y + h, h, polygon);
+                cellQueue.Enqueue(temp, temp.Max);
+                numProbes += 4;
+            }
+
+            if (debug)
+            {
+                Console.WriteLine("num probes: " + numProbes);
+                Console.WriteLine("best distance: " + bestCell.D);
+            }
+
+            PolyLabel poleOfInaccessibility = new PolyLabel()
+            {
+                Centroid = new PointF(bestCell.X, bestCell.Y),
+                Radius = bestCell.D
+            };
+
+            return poleOfInaccessibility;
+        }
+
+        private static Cell GetCentroidCell(List<PointF> polygon)
+        {
+            float area = 0;
+            float x = 0;
+            float y = 0;
+            List<PointF> points = polygon;
+
+            for (int i = 0, len = points.Count, j = len - 1; i < len; j = i++)
+            {
+                PointF a = points[i];
+                PointF b = points[j];
+                float f = a.X * b.Y - b.X * a.Y;
+                x += (a.X + b.X) * f;
+                y += (a.Y + b.Y) * f;
+                area += f * 3;
+            }
+            if (area == 0)
+                return new Cell(points[0].X, points[0].Y, 0, polygon);
+
+            return new Cell(x / area, y / area, 0, polygon);
+        }
+
+        class Cell
+        {
+            public float X { get; set; }
+            public float Y { get; set; }
+            public float H { get; set; }
+            public float D { get; set; }
+            public float Max { get; set; }
+            public Cell(float x, float y, float h, List<PointF> polygon)
+            {
+                this.X = x;
+                this.Y = y;
+                this.H = h;
+                this.D = PointToPolygonDist(x, y, polygon);
+                this.Max = Convert.ToSingle(this.D + this.H * Math.Sqrt(2));
+            }
+
+            float PointToPolygonDist(float x, float y, List<PointF> polygon)
+            {
+                bool inside = false;
+                float minDistSq = float.PositiveInfinity;
+
+                for (int i = 0, len = polygon.Count, j = len - 1; i < len; j = i++)
+                {
+                    PointF a = polygon[i];
+                    PointF b = polygon[j];
+
+                    if ((a.Y > y != b.Y > y) && (x < (b.X - a.X) * (y - a.Y) / (b.Y - a.Y) + a.X))
+                        inside = !inside;
+
+                    minDistSq = Math.Min(minDistSq, GetSeqDistSq(x, y, a, b));
+                }
+
+                return Convert.ToSingle((inside ? 1 : -1) * Math.Sqrt(minDistSq));
+            }
+
+            float GetSeqDistSq(float px, float py, PointF a, PointF b)
+            {
+                float x = a.X;
+                float y = a.Y;
+                float dx = b.X - x;
+                float dy = b.Y - y;
+
+                if (dx != 0 || dy != 0)
+                {
+
+                    var t = ((px - x) * dx + (py - y) * dy) / (dx * dx + dy * dy);
+
+                    if (t > 1)
+                    {
+                        x = b.X;
+                        y = b.Y;
+
+                    }
+                    else if (t > 0)
+                    {
+                        x += dx * t;
+                        y += dy * t;
+                    }
+                }
+
+                dx = px - x;
+                dy = py - y;
+
+                return dx * dx + dy * dy;
+            }
+        }
+    }
+}]]></arrayElement>
+                  </arrayElements>
+                </property>
+                <property
+                  dataType="System.String"
+                  description="Stores the binary representation of the component"
+                  isArray="true"
+                  name="BinaryCode"
+                  state="cdata">
+                  <arrayElements
+                    arrayElementCount="2">
+                    <arrayElement
+                      dataType="System.String"><![CDATA[SC_4664d38d6d774888963e21557351c901.dll]]></arrayElement>
+                    <arrayElement
+                      dataType="System.String"><![CDATA[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
+HAB8CA8BHACGBDEBWQHEATYBeQEvAjsBcQHRBEIBMQEQCEYBeQEvAkwBgQHRBEIBWQGrCDYB+QAU
+AmcBDABFAKQBAgBJAKkBLgALAGoCLgATAHMCLgAbAJICLgAjAJsCLgArAMQCLgAzAMQCLgA7AMQC
+LgBDAJsCLgBLAMoCLgBTAMQCLgBbAOECQwBjACsDaQBzAJICiQBzAJIC4QB7ACsD4wBrACsDAQF7
+ACsDIQF7ACsDQQF7ACsDYQF7ACsDgQF7ACsDoQF7ACsDwQF7ACsD4AJ7ACsDAAN7ACsDIAN7ACsD
+QAN7ACsDwAN7ACsD4AN7ACsDAAR7ACsDIAR7ACsDQAR7ACsDYAR7ACsDgAR7ACsDoAR7ACsDwAR7
+ACsD4AR7ACsDGwDjAFEBbAF4AQMAAQAHAAMACAAFAAkABgAKAAgAAAC6AEkCAAB7BU4CAACJBlIC
+AAB/AlcCAABGCFwCAAAoAWECAAAJCGYCAAC0AGYCAADVAGYCAACXAGYCAACEAGYCAAA+CWYCAgAG
+AAMAAgAHAAUAAgARAAcAAgASAAkAAQATAAkAAgAUAAsAAgAXAA0AAQAYAA0AAgAZAA8AAQAaAA8A
+AgAeABEAAQAfABEAAgAgABMAAQAhABMAAgAiABUAAQAjABUAAgAkABcAAQAlABcAAgAmABkAAQAn
+ABkAWAAZASABBIAAAAEAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAAAAAAIAB7wAAAAAADwAAAAAA
+AAAAAAAAiQGGCAAAAAAQAAAAAAAAAAAAAACJAXUHAAAAAAQAAAAAAAAAAAAAAJIB5AQAAAAADwAA
+AAAAAAAAAAAAiQHDCAAAAAAEAAAAAAAAAAAAAACAAZQFAAAAAAUAAAAAAAAAAAAAAJsBeAQAAAAA
+BAAAAAAAAAAAAAAAgAHXAAAAAAAAAAAAAQAAAOoGAAAKAAkAAAAAAABTQ180NjY0ZDM4ZDZkNzc0
+ODg4OTYzZTIxNTU3MzUxYzkwMQBTaW1wbGVQcmlvcml0eVF1ZXVlYDEATGlzdGAxAFNxbEludDMy
+AFRvSW50MzIAU2ltcGxlUHJpb3JpdHlRdWV1ZWAyADxNb2R1bGU+AElucHV0SUQAZ2V0X0QAc2V0
+X0QAUG9pbnRGAGdldF9IAHNldF9IAFNUUG9pbnROAGdldF9TVFgAZ2V0X1gAc2V0X1gAZ2V0X0dF
+T01FVFJZAGdldF9TVFkAZ2V0X1kAc2V0X1kAU3lzdGVtLkRhdGEAR2V0QmxvYkRhdGEAbXNjb3Js
+aWIAU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMAQWRkAGdldF9DZW50cm9pZABzZXRfQ2VudHJv
+aWQAPEQ+a19fQmFja2luZ0ZpZWxkADxIPmtfX0JhY2tpbmdGaWVsZAA8WD5rX19CYWNraW5nRmll
+bGQAPFk+a19fQmFja2luZ0ZpZWxkADxDZW50cm9pZD5rX19CYWNraW5nRmllbGQAPFJhZGl1cz5r
+X19CYWNraW5nRmllbGQAPE1heD5rX19CYWNraW5nRmllbGQAUm91bmQAZGVmYXVsdEluc3RhbmNl
+AGdldF9Vbmljb2RlAFNxbERvdWJsZQBSdW50aW1lVHlwZUhhbmRsZQBHZXRUeXBlRnJvbUhhbmRs
+ZQBUb1NpbmdsZQBDb25zb2xlAElucHV0TmFtZQBXcml0ZUxpbmUATWljcm9zb2Z0LlNxbFNlcnZl
+ci5EdHMuUGlwZWxpbmUAVHlwZQBnZXRfQ3VsdHVyZQBzZXRfQ3VsdHVyZQByZXNvdXJjZUN1bHR1
+cmUAQXBwbGljYXRpb25TZXR0aW5nc0Jhc2UARWRpdG9yQnJvd3NhYmxlU3RhdGUAQ29tcGlsZXJH
+ZW5lcmF0ZWRBdHRyaWJ1dGUARGVidWdnZXJOb25Vc2VyQ29kZUF0dHJpYnV0ZQBEZWJ1Z2dhYmxl
+QXR0cmlidXRlAEVkaXRvckJyb3dzYWJsZUF0dHJpYnV0ZQBBc3NlbWJseVRpdGxlQXR0cmlidXRl
+AEFzc2VtYmx5VHJhZGVtYXJrQXR0cmlidXRlAFRhcmdldEZyYW1ld29ya0F0dHJpYnV0ZQBBc3Nl
+bWJseUNvbmZpZ3VyYXRpb25BdHRyaWJ1dGUAQXNzZW1ibHlEZXNjcmlwdGlvbkF0dHJpYnV0ZQBD
+b21waWxhdGlvblJlbGF4YXRpb25zQXR0cmlidXRlAEFzc2VtYmx5UHJvZHVjdEF0dHJpYnV0ZQBB
+c3NlbWJseUNvcHlyaWdodEF0dHJpYnV0ZQBTU0lTU2NyaXB0Q29tcG9uZW50RW50cnlQb2ludEF0
+dHJpYnV0ZQBBc3NlbWJseUNvbXBhbnlBdHRyaWJ1dGUAUnVudGltZUNvbXBhdGliaWxpdHlBdHRy
+aWJ1dGUAUHJlRXhlY3V0ZQBQb3N0RXhlY3V0ZQBQcmlvcml0eV9RdWV1ZQBQcmlvcml0eVF1ZXVl
+AERlcXVldWUARW5xdWV1ZQB2YWx1ZQBvcF9UcnVlAEVuY29kaW5nAFN5c3RlbS5SdW50aW1lLlZl
+cnNpb25pbmcAU3FsU3RyaW5nAFRvU3RyaW5nAEdldFN0cmluZwBTeXN0ZW0uRHJhd2luZwBkZWJ1
+ZwBNYXRoAGdldF9MZW5ndGgAb3BfTGVzc1RoYW5PckVxdWFsAEdldFBvbHlMYWJlbABTeXN0ZW0u
+Q29tcG9uZW50TW9kZWwAU0NfNDY2NGQzOGQ2ZDc3NDg4ODk2M2UyMTU1NzM1MWM5MDEuZGxsAEdl
+dENlbnRyb2lkQ2VsbABnZXRfR0VPTUVUUllfSXNOdWxsAGdldF9JdGVtAFN5c3RlbQByZXNvdXJj
+ZU1hbgBTcWxCb29sZWFuAE1pbgBTY3JpcHRNYWluAEJsb2JDb2x1bW4AcG9seWdvbgBwcmVjaXNp
+b24AU3lzdGVtLkNvbmZpZ3VyYXRpb24AU3lzdGVtLkdsb2JhbGl6YXRpb24AU3lzdGVtLlJlZmxl
+Y3Rpb24AU3RyaW5nQ29tcGFyaXNvbgBDdWx0dXJlSW5mbwBPdXRwdXROYW1lTWFwAE91dHB1dE1h
+cABHZXRTZXFEaXN0U3EASW5wdXQwQnVmZmVyAFBpcGVsaW5lQnVmZmVyAFNjcmlwdEJ1ZmZlcgBn
+ZXRfUmVzb3VyY2VNYW5hZ2VyAC5jdG9yAC5jY3RvcgBTeXN0ZW0uRGlhZ25vc3RpY3MAU3lzdGVt
+LlJ1bnRpbWUuQ29tcGlsZXJTZXJ2aWNlcwBTeXN0ZW0uUmVzb3VyY2VzAFNDXzQ2NjRkMzhkNmQ3
+NzQ4ODg5NjNlMjE1NTczNTFjOTAxLlByb3BlcnRpZXMuUmVzb3VyY2VzLnJlc291cmNlcwBEZWJ1
+Z2dpbmdNb2RlcwBTQ180NjY0ZDM4ZDZkNzc0ODg4OTYzZTIxNTU3MzUxYzkwMS5Qcm9wZXJ0aWVz
+AFZhcmlhYmxlcwBNaWNyb3NvZnQuU3FsU2VydmVyLlR5cGVzAFN5c3RlbS5EYXRhLlNxbFR5cGVz
+AEJ1ZmZlckNvbHVtbkluZGV4ZXMAR2V0Q29sdW1uSW5kZXhlcwBTZXR0aW5ncwBFcXVhbHMAQ29u
+bmVjdGlvbnMAU3FsQ2hhcnMAU1ROdW1Qb2ludHMAZ2V0X1JhZGl1cwBzZXRfUmFkaXVzAENvbmNh
+dABPYmplY3QARW5kT2ZSb3dzZXQAb3BfSW1wbGljaXQAb3BfRXhwbGljaXQAZ2V0X0RlZmF1bHQA
+VXNlckNvbXBvbmVudABQYXJlbnRDb21wb25lbnQAU2NyaXB0Q29tcG9uZW50AGdldF9Db3VudABN
+aWNyb3NvZnQuU3FsU2VydmVyLlR4U2NyaXB0AENvbnZlcnQAU3FydABQb2ludFRvUG9seWdvbkRp
+c3QATWljcm9zb2Z0LlNxbFNlcnZlci5QaXBlbGluZUhvc3QASW5wdXQwX1Byb2Nlc3NJbnB1dABT
+eXN0ZW0uVGV4dABTVEdlb21Gcm9tVGV4dABJbnB1dDBfUHJvY2Vzc0lucHV0Um93AE5leHRSb3cA
+Z2V0X01heABzZXRfTWF4AHB4AGdldF9Bc3NlbWJseQBweQBTcWxHZW9tZXRyeQAAAAAAD0kAbgBw
+AHUAdAAgADAAAHFTAEMAXwA0ADYANgA0AGQAMwA4AGQANgBkADcANwA0ADgAOAA4ADkANgAzAGUA
+MgAxADUANQA3ADMANQAxAGMAOQAwADEALgBQAHIAbwBwAGUAcgB0AGkAZQBzAC4AUgBlAHMAbwB1
+AHIAYwBlAHMAAD9mAG8AdQBuAGQAIABiAGUAcwB0ACAAewAwAH0AIABhAGYAdABlAHIAIAB7ADEA
+fQAgAHAAcgBvAGIAZQBzAAAZbgB1AG0AIABwAHIAbwBiAGUAcwA6ACAAAB9iAGUAcwB0ACAAZABp
+AHMAdABhAG4AYwBlADoAIAAAAAAAjJidFvhDxUyZ5WLWd7jiAQAEIAEBCAMgAAEFIAEBEREEIAEB
+DgUgAQERaRAHBggdBRI5FRI9ARFBCBI5AyAACQQAAQgJBiACHQUICAUAABKAgQUgAQ4dBQYgAQER
+gIUIAAISORKAiQgGFRI9ARFBBSABEjkIBSAAEYCNBgABDRGAjQUgAgEMDAUgAQETAAYAARGAkQgF
+IAARgJELAAIRgJURgJERgJEGAAECEYCVCSADARJJHQgSTQMGEkkDBh0IBCABHAgEIAECCAMgAAIH
+IAICDhGAnQUgAR0ICAgAARKAoRGApQUgABKAqQcgAgEOEoCpIQcUDAwMDAwMDAwVEnkBEigSKBIo
+CAgRQQwMEigSKBIoDAUgARMACAMgAAwDIAAIBQACDAwMBhUSeQESKAgVEoCxAhIoDAcgAgETABMB
+BCAAEwAEAAENDQYAAwEOHBwDIAAOBQACDg4OBAABAQ4VBwsMDAwVEj0BEUEICAgRQRFBDBFBBAAB
+DA0LBwcCDAgICBFBEUEHBwUMDAwMDAi3elxWGTTgiQiJhF3NgIDMkQiwP19/EdUKOgheE22/BDfa
+zQQAAIA/AQADBhIUAwYSGAMGElUDBhJhAwYSZQMGEiADBhFBAgYMBSABARIMBCAAElEJIAQBCA4S
+SRJNBSABARJVBAAAEmEEAAASZQUAAQESZQQAABIgAwAAAQQgABFBBSABARFBBCABAQwMAAMSJBUS
+PQERQQwCCgABEigVEj0BEUEMIAQBDAwMFRI9ARFBCyADDAwMFRI9ARFBCSAEDAwMEUERQQQoABJR
+AygAAgQIABJhBAgAEmUECAASIAQoABFBAygADAgBAAgAAAAAAB4BAAEAVAIWV3JhcE5vbkV4Y2Vw
+dGlvblRocm93cwEIAQACAAAAAAAoAQAjU0NfNDY2NGQzOGQ2ZDc3NDg4ODk2M2UyMTU1NzM1MWM5
+MDEAAAUBAAAAABYBABFDb3B5cmlnaHQgQCAgMjAyMwAASQEAGi5ORVRGcmFtZXdvcmssVmVyc2lv
+bj12NC43AQBUDhRGcmFtZXdvcmtEaXNwbGF5TmFtZRIuTkVUIEZyYW1ld29yayA0LjcEAQAAALQA
+AADOyu++AQAAAJEAAABsU3lzdGVtLlJlc291cmNlcy5SZXNvdXJjZVJlYWRlciwgbXNjb3JsaWIs
+IFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1
+NjE5MzRlMDg5I1N5c3RlbS5SZXNvdXJjZXMuUnVudGltZVJlc291cmNlU2V0AgAAAAAAAAAAAAAA
+UEFEUEFEULQAAAAoQQAAAAAAAAAAAABCQQAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANEEAAAAA
+AAAAAAAAAABfQ29yRGxsTWFpbgBtc2NvcmVlLmRsbAAAAAAA/yUAIAAQAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABAA
+AAAYAACAAAAAAAAAAAAAAAAAAAABAAEAAAAwAACAAAAAAAAAAAAAAAAAAAABAAAAAABIAAAAWGAA
+AOwDAAAAAAAAAAAAAOwDNAAAAFYAUwBfAFYARQBSAFMASQBPAE4AXwBJAE4ARgBPAAAAAAC9BO/+
+AAABAAAAAQAAAAAAAAABAAAAAAA/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAARAAAAAEAVgBh
+AHIARgBpAGwAZQBJAG4AZgBvAAAAAAAkAAQAAABUAHIAYQBuAHMAbABhAHQAaQBvAG4AAAAAAAAA
+sARMAwAAAQBTAHQAcgBpAG4AZwBGAGkAbABlAEkAbgBmAG8AAAAoAwAAAQAwADAAMAAwADAANABi
+ADAAAAAaAAEAAQBDAG8AbQBtAGUAbgB0AHMAAAAAAAAAIgABAAEAQwBvAG0AcABhAG4AeQBOAGEA
+bQBlAAAAAAAAAAAAcAAkAAEARgBpAGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AAAAAAFMAQwBf
+ADQANgA2ADQAZAAzADgAZAA2AGQANwA3ADQAOAA4ADgAOQA2ADMAZQAyADEANQA1ADcAMwA1ADEA
+YwA5ADAAMQAAADAACAABAEYAaQBsAGUAVgBlAHIAcwBpAG8AbgAAAAAAMQAuADAALgAwAC4AMAAA
+AHAAKAABAEkAbgB0AGUAcgBuAGEAbABOAGEAbQBlAAAAUwBDAF8ANAA2ADYANABkADMAOABkADYA
+ZAA3ADcANAA4ADgAOAA5ADYAMwBlADIAMQA1ADUANwAzADUAMQBjADkAMAAxAC4AZABsAGwAAABI
+ABIAAQBMAGUAZwBhAGwAQwBvAHAAeQByAGkAZwBoAHQAAABDAG8AcAB5AHIAaQBnAGgAdAAgAEAA
+IAAgADIAMAAyADMAAAAqAAEAAQBMAGUAZwBhAGwAVAByAGEAZABlAG0AYQByAGsAcwAAAAAAAAAA
+AHgAKAABAE8AcgBpAGcAaQBuAGEAbABGAGkAbABlAG4AYQBtAGUAAABTAEMAXwA0ADYANgA0AGQA
+MwA4AGQANgBkADcANwA0ADgAOAA4ADkANgAzAGUAMgAxADUANQA3ADMANQAxAGMAOQAwADEALgBk
+AGwAbAAAAGgAJAABAFAAcgBvAGQAdQBjAHQATgBhAG0AZQAAAAAAUwBDAF8ANAA2ADYANABkADMA
+OABkADYAZAA3ADcANAA4ADgAOAA5ADYAMwBlADIAMQA1ADUANwAzADUAMQBjADkAMAAxAAAANAAI
+AAEAUAByAG8AZAB1AGMAdABWAGUAcgBzAGkAbwBuAAAAMQAuADAALgAwAC4AMAAAADgACAABAEEA
+cwBzAGUAbQBiAGwAeQAgAFYAZQByAHMAaQBvAG4AAAAxAC4AMAAuADAALgAwAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAwAAABUMQAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=]]></arrayElement>
+                  </arrayElements>
+                </property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the Microsoft Visual Studio Tools for Applications project. Project names must be unique within a package."
+                  name="VSTAProjectName"
+                  typeConverter="NOTBROWSABLE">SC_4664d38d6d774888963e21557351c901</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the programming language used by the script."
+                  name="ScriptLanguage"
+                  typeConverter="Microsoft.SqlServer.VSTAHosting.ScriptingLanguages">CSharp</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a comma-separated list of read-only variables."
+                  name="ReadOnlyVariables"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ScriptUIVariablePickerDlg"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a comma-separated list of read/write variables."
+                  name="ReadWriteVariables"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ScriptUIWriteableVariablePickerDlg"></property>
+                <property
+                  dataType="System.String"
+                  description="List of breakpoints present on the script."
+                  isArray="true"
+                  name="BreakpointCollection"
+                  typeConverter="NOTBROWSABLE">
+                  <arrayElements
+                    arrayElementCount="1">
+                    <arrayElement
+                      dataType="System.String">&lt;SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;
+&lt;SOAP-ENV:Body&gt;
+&lt;a1:ScriptBreakpointInfo id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/Microsoft.SqlServer.VSTAHosting/Microsoft.SqlServer.VSTAScriptingLib%2C%20Version%3D15.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3D89845dcd8080cc91"&gt;
+&lt;Enabled&gt;true&lt;/Enabled&gt;
+&lt;File id="ref-3"&gt;main.cs&lt;/File&gt;
+&lt;FileLine&gt;150&lt;/FileLine&gt;
+&lt;FileColumn&gt;9&lt;/FileColumn&gt;
+&lt;/a1:ScriptBreakpointInfo&gt;
+&lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;
+</arrayElement>
+                  </arrayElements>
+                </property>
+                <property
+                  dataType="System.String"
+                  description="Checksum to match component metedata against compiled codes."
+                  name="MetadataChecksum140"
+                  typeConverter="NOTBROWSABLE">24</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.ScriptComponentHost</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Correct PIMS Locations\Script Component.Inputs[Input 0]"
+                  hasSideEffects="true"
+                  name="Input 0">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Correct PIMS Locations\Script Component.Inputs[Input 0].Columns[GEOMETRY]"
+                      cachedDataType="image"
+                      cachedName="GEOMETRY"
+                      lineageId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output].Columns[GEOMETRY]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Correct PIMS Locations\Script Component.Outputs[Output 0]"
+                  name="Output 0"
+                  synchronousInputId="Package\Correct PIMS Locations\Script Component.Inputs[Input 0]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Correct PIMS Locations.Paths[OLE DB Source Output]"
+              endId="Package\Correct PIMS Locations\Script Component.Inputs[Input 0]"
+              name="OLE DB Source Output"
+              startId="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="195,42"
+          Id="Package\Correct PIMS Locations"
+          TopLeft="405,133" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Correct PIMS Locations">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="167,42"
+          Id="Package\Correct PIMS Locations\Script Component"
+          TopLeft="355,489" />
+        <NodeLayout
+          Size="275,42"
+          Id="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW"
+          TopLeft="294,216" />
+        <EdgeLayout
+          Id="Package\Correct PIMS Locations.Paths[OLE DB Source Output]"
+          TopLeft="435,258">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,231"
+              Start="0,0"
+              End="0,223.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,223.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Correct PIMS Locations\PIMS_PROPERTY_BOUNDARY_VIEW">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">View</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
