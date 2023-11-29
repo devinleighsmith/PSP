@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { FormikProps } from 'formik';
 import React, { useContext } from 'react';
+import { MdOutlineCallMissedOutgoing } from 'react-icons/md';
 import {
   match,
   matchPath,
@@ -12,7 +13,6 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ReactComponent as RealEstateAgent } from '@/assets/images/real-estate-agent.svg';
 import { FileTypes } from '@/constants';
 import FileLayout from '@/features/mapSideBar/layout/FileLayout';
 import MapSideBarLayout from '@/features/mapSideBar/layout/MapSideBarLayout';
@@ -116,7 +116,7 @@ export const DispositionView: React.FunctionComponent<IDispositionViewProps> = (
           onClose={onClose}
           title={formTitle}
           icon={
-            <RealEstateAgent
+            <MdOutlineCallMissedOutgoing
               title="Disposition file Icon"
               width="2.6rem"
               height="2.6rem"
