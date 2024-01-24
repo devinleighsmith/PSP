@@ -45,5 +45,12 @@ export const UpdateDispositionFormYupSchema = yup
   .object()
   .shape({
     dispositionStatusTypeCode: yup.string().required('Disposition status is required'),
+    completionDate: yup.date().when('fileStatusTypeCode', {
+      is: (fileStatusTypeCode: string) => fileStatusTypeCode && fileStatusTypeCode === 'COMPLETE',
+      then: yup
+        .date()
+        .required(`Disposition completed date is required when file status is set to "Complete"`),
+      otherwise: yup.date().nullable(),
+    }),
   })
   .concat(AddDispositionFormYupSchema);

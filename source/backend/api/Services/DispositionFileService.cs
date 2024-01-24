@@ -109,13 +109,22 @@ namespace Pims.Api.Services
 
             dispositionFile.ThrowContractorRemovedFromTeam(_user, _userRepository);
 
-            if (!userOverrides.Contains(UserOverrideCode.DispositionFileFinalStatus))
+            var doNotAddToStatuses = new List<string>() { EnumDispositionFileStatusTypeCode.COMPLETE.ToString(), EnumDispositionFileStatusTypeCode.ARCHIVED.ToString() };
+            var currentDispositionFile = _dispositionFileRepository.GetById(id);
+
+            if (dispositionFile?.PimsDispositionSales?.FirstOrDefault()?.SaleFinalAmt == null)
             {
-                var doNotAddToStatuses = new List<string>() { EnumDispositionFileStatusTypeCode.COMPLETE.ToString(), EnumDispositionFileStatusTypeCode.ARCHIVED.ToString() };
-                if (doNotAddToStatuses.Contains(dispositionFile.DispositionFileStatusTypeCode))
-                {
-                    throw new UserOverrideException(UserOverrideCode.DispositionFileFinalStatus, "You are changing this file to a non-editable state. Only system administrators can edit the file when set to Archived, Cancelled or Completed state). Do you wish to continue?");
-                }
+                throw new BusinessRuleViolationException("You have not added a Sales Price. Please add a Sales Price before completion.");
+            }
+            else if (currentDispositionFile.DispositionFileStatusTypeCode != EnumDispositionFileStatusTypeCode.COMPLETE.ToString()
+                && dispositionFile.DispositionFileStatusTypeCode == EnumDispositionFileStatusTypeCode.COMPLETE.ToString()
+                && currentDispositionFile.PimsDispositionFileProperties.Count > 0)
+            {
+                DisposeofProperties(dispositionFile);
+            }
+            else if (!userOverrides.Contains(UserOverrideCode.DispositionFileFinalStatus) && doNotAddToStatuses.Contains(dispositionFile.DispositionFileStatusTypeCode))
+            {
+                throw new UserOverrideException(UserOverrideCode.DispositionFileFinalStatus, "You are changing this file to a non-editable state. Only system administrators can edit the file when set to Archived, Cancelled or Completed state). Do you wish to continue?");
             }
             if (!userOverrides.Contains(UserOverrideCode.UpdateRegion))
             {
@@ -451,6 +460,33 @@ namespace Pims.Api.Services
             };
 
             _entityNoteRepository.Add(fileNoteInstance);
+        }
+
+        /// <summary>
+        /// Attempt to dispose of any properties if all business rules are met.
+        /// </summary>
+        /// <param name="dispositionFile"></param>
+        private void DisposeofProperties(PimsDispositionFile dispositionFile)
+        {
+            var currentProperties = _dispositionFilePropertyRepository.GetPropertiesByDispositionFileId(dispositionFile.Internal_Id);
+            if (currentProperties.All(p => p.Property.IsOwned))
+            {
+                throw new UserOverrideException(UserOverrideCode.DisposeOfProperties, "You are completing this Disposition File with owned PIMS inventory properties. All properties will be removed from the PIMS inventory (any Other Interests will remain). Do you wish to proceed?");
+            }
+            else if (currentProperties.Any(p => p.Property.IsPropertyOfInterest))
+            {
+                throw new BusinessRuleViolationException("You have one or more properties attached to this Disposition file that is NOT in the \"Core Inventory\" (i.e. owned by BCTFA and/or HMK). To complete this file you must either, remove these non \"Non-Core Inventory\" properties, OR make sure the property is added to the PIMS inventory first.");
+            }
+
+            // Get the current properties in the research file
+            var ownedProperties = currentProperties.Where(p => p.Property.IsOwned);
+
+            // PSP-6111 Business rule: Transfer properties of interest to core inventory when acquisition file is completed
+            foreach (var dispositionProperty in ownedProperties)
+            {
+                var property = dispositionProperty.Property;
+                _propertyRepository.TransferFileProperty(property, false, false, true);
+            }
         }
 
         private static decimal CalculateNetProceedsBeforeSpp(PimsDispositionSale sale)
