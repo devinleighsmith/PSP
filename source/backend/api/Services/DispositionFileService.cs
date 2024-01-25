@@ -34,6 +34,7 @@ namespace Pims.Api.Services
         private readonly ILookupRepository _lookupRepository;
         private readonly IDispositionFileChecklistRepository _checklistRepository;
         private readonly IEntityNoteRepository _entityNoteRepository;
+        private readonly IDispositionStatusSolver _dispositionStatusSolver;
 
         public DispositionFileService(
             ClaimsPrincipal user,
@@ -46,7 +47,8 @@ namespace Pims.Api.Services
             ILookupRepository lookupRepository,
             IDispositionFileChecklistRepository checklistRepository,
             IEntityNoteRepository entityNoteRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IDispositionStatusSolver dispositionStatusSolver)
         {
             _user = user;
             _logger = logger;
@@ -59,6 +61,7 @@ namespace Pims.Api.Services
             _checklistRepository = checklistRepository;
             _entityNoteRepository = entityNoteRepository;
             _userRepository = userRepository;
+            _dispositionStatusSolver = dispositionStatusSolver;
         }
 
         public PimsDispositionFile Add(PimsDispositionFile dispositionFile, IEnumerable<UserOverrideCode> userOverrides)
@@ -102,6 +105,12 @@ namespace Pims.Api.Services
             if (id != dispositionFile.DispositionFileId)
             {
                 throw new BadRequestException("Invalid dispositionFileId.");
+            }
+
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFile.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditDetails(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
             }
 
             ValidateStaff(dispositionFile);
@@ -221,6 +230,12 @@ namespace Pims.Api.Services
                 throw new BadRequestException("Invalid dispositionFileId.");
             }
 
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFileParent.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
+
             ValidateDispositionOfferStatus(dispositionFileParent, dispositionOffer);
 
             var newOffer = _dispositionFileRepository.AddDispositionOffer(dispositionOffer);
@@ -240,6 +255,12 @@ namespace Pims.Api.Services
                 throw new BadRequestException("Invalid dispositionFileId.");
             }
 
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFileParent.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
+
             ValidateDispositionOfferStatus(dispositionFileParent, dispositionOffer);
 
             var updatedOffer = _dispositionFileRepository.UpdateDispositionOffer(dispositionOffer);
@@ -252,6 +273,13 @@ namespace Pims.Api.Services
         {
             _logger.LogInformation("Deleting Disposition Offer with id: {offerId}", offerId);
             _user.ThrowIfNotAuthorized(Permissions.DispositionEdit);
+
+            var dispositionFile = _dispositionFileRepository.GetById(dispositionFileId);
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFile.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
 
             var deleteResult = _dispositionFileRepository.TryDeleteDispositionOffer(dispositionFileId, offerId);
             _dispositionFileRepository.CommitTransaction();
@@ -319,6 +347,12 @@ namespace Pims.Api.Services
                 throw new DuplicateEntityException("Invalid Disposition Appraisal. An Appraisal has been already created for this Disposition File");
             }
 
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFileParent.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
+
             var newAppraisal = _dispositionFileRepository.AddDispositionFileAppraisal(dispositionAppraisal);
             _dispositionFileRepository.CommitTransaction();
 
@@ -334,6 +368,12 @@ namespace Pims.Api.Services
             if (dispositionFileId != dispositionAppraisal.DispositionFileId || dispositionAppraisal.DispositionAppraisalId != appraisalId || dispositionFileParent is null)
             {
                 throw new BadRequestException("Invalid dispositionFileId.");
+            }
+
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionFileParent.Internal_Id);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
             }
 
             var updatedAppraisal = _dispositionFileRepository.UpdateDispositionFileAppraisal(appraisalId, dispositionAppraisal);
@@ -645,6 +685,19 @@ namespace Pims.Api.Services
             {
                 throw new DbUpdateConcurrencyException("You are working with an older version of this acquisition file, please refresh the application and retry.");
             }
+        }
+
+        private DispositionStatusTypes? GetCurrentDispositionStatus(long dispositionFileId)
+        {
+            var currentDispositionFile = _dispositionFileRepository.GetById(dispositionFileId);
+            DispositionStatusTypes currentDispositionStatus;
+
+            if (Enum.TryParse(currentDispositionFile.DispositionFileStatusTypeCode, out currentDispositionStatus))
+            {
+                return currentDispositionStatus;
+            }
+
+            return currentDispositionStatus;
         }
     }
 }

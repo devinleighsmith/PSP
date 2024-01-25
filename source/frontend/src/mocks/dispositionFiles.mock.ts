@@ -1,3 +1,4 @@
+import { DispositionFileStatus } from '@/constants/dispositionFileStatus';
 import {
   Api_DispositionFile,
   Api_DispositionFileAppraisal,
@@ -98,8 +99,8 @@ export const mockDispositionFileResponse = (
   fileName: name ?? 'FILE_NAME B8233BF E8C7408',
   fileNumber: 'FILE_NUMBER 3A8F46B',
   fileStatusTypeCode: {
-    id: 'CANCELLED',
-    description: 'Cancelled',
+    id: 'DRAFT',
+    description: 'Draft',
     isDisabled: false,
   },
   dispositionAppraisal: {

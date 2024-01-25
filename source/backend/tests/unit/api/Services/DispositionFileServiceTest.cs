@@ -353,12 +353,17 @@ namespace Pims.Api.Test.Services
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
 
             dispFile.PimsDispositionFileTeams.Add(new PimsDispositionFileTeam() { PersonId = 1, DspFlTeamProfileTypeCode = "LISTAGENT" });
             dispFile.PimsDispositionFileTeams.Add(new PimsDispositionFileTeam() { PersonId = 2, DspFlTeamProfileTypeCode = "LISTAGENT" });
 
             repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.GetById(It.IsAny<long>())).Returns(dispFile);
 
             // Act
             Action act = () => service.Update(1, dispFile, new List<UserOverrideCode>());
@@ -373,6 +378,10 @@ namespace Pims.Api.Test.Services
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             dispFile.PimsDispositionSales = new List<PimsDispositionSale>() { new PimsDispositionSale() { SaleFinalAmt = 1 } };
 
@@ -395,6 +404,10 @@ namespace Pims.Api.Test.Services
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             var updateDispFile = EntityHelper.CreateDispositionFile(2);
             updateDispFile.DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString();
@@ -420,6 +433,10 @@ namespace Pims.Api.Test.Services
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
             var dispositionFilePropertyRepository = this._helper.GetService<Mock<IDispositionFilePropertyRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             dispFile.PimsDispositionFileProperties = new List<PimsDispositionFileProperty>() { new PimsDispositionFileProperty() };
             var updateDispFile = EntityHelper.CreateDispositionFile(2);
@@ -445,12 +462,39 @@ namespace Pims.Api.Test.Services
         }
 
         [Fact]
+        public void Update_Should_Fail_Final()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+            var dispFile = EntityHelper.CreateDispositionFile(1);
+            dispFile.DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString();
+            dispFile.PimsDispositionSales = new List<PimsDispositionSale>() { new PimsDispositionSale() { SaleFinalAmt = 1 } };
+
+            repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.GetRegion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.Update(It.IsAny<long>(), It.IsAny<PimsDispositionFile>())).Returns(dispFile);
+            repository.Setup(x => x.GetById(It.IsAny<long>())).Returns(dispFile);
+
+            // Act
+            Action act = () => service.Update(1, dispFile, new List<UserOverrideCode>() { UserOverrideCode.UpdateRegion, UserOverrideCode.DispositionFileFinalStatus });
+
+            // Assert
+            var ex = act.Should().Throw<BusinessRuleViolationException>();
+            ex.WithMessage("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+        }
+
+        [Fact]
         public void Update_UserOverride_Dispose()
         {
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
             var dispositionFilePropertyRepository = this._helper.GetService<Mock<IDispositionFilePropertyRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             dispFile.PimsDispositionFileProperties = new List<PimsDispositionFileProperty>() { new PimsDispositionFileProperty() };
             var updateDispFile = EntityHelper.CreateDispositionFile(2);
@@ -481,6 +525,10 @@ namespace Pims.Api.Test.Services
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             dispFile.DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.ARCHIVED.ToString();
             dispFile.PimsDispositionSales = new List<PimsDispositionSale>() { new PimsDispositionSale() { SaleFinalAmt = 1 } };
@@ -597,6 +645,10 @@ namespace Pims.Api.Test.Services
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             var dispFile = EntityHelper.CreateDispositionFile(1);
             dispFile.PimsDispositionSales = new List<PimsDispositionSale>() { new PimsDispositionSale() { SaleFinalAmt = 1 } };
 
@@ -607,6 +659,29 @@ namespace Pims.Api.Test.Services
 
             // Act
             var result = service.Update(1, dispFile, new List<UserOverrideCode>() { UserOverrideCode.UpdateRegion });
+
+            // Assert
+            Assert.NotNull(result);
+            repository.Verify(x => x.Update(It.IsAny<long>(), It.IsAny<PimsDispositionFile>()), Times.Once);
+        }
+
+        [Fact]
+        public void Update_Success_FinalButAdmin()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.SystemAdmin, Permissions.DispositionEdit);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+            var dispFile = EntityHelper.CreateDispositionFile(1);
+            dispFile.DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString();
+            dispFile.PimsDispositionSales = new List<PimsDispositionSale>() { new PimsDispositionSale() { SaleFinalAmt = 1 } };
+
+            repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.GetRegion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.Update(It.IsAny<long>(), It.IsAny<PimsDispositionFile>())).Returns(dispFile);
+            repository.Setup(x => x.GetById(It.IsAny<long>())).Returns(dispFile);
+
+            // Act
+            var result = service.Update(1, dispFile, new List<UserOverrideCode>() { UserOverrideCode.UpdateRegion, UserOverrideCode.DispositionFileFinalStatus });
 
             // Assert
             Assert.NotNull(result);
@@ -627,6 +702,9 @@ namespace Pims.Api.Test.Services
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
             var noteRepository = this._helper.GetService<Mock<IEntityNoteRepository>>();
             var lookupRepository = this._helper.GetService<Mock<ILookupRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditDetails(It.IsAny<DispositionStatusTypes>())).Returns(true);
 
             repository.Setup(x => x.Update(It.IsAny<long>(), It.IsAny<PimsDispositionFile>())).Returns(dspFile);
             repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
@@ -888,6 +966,8 @@ namespace Pims.Api.Test.Services
             act.Should().Throw<NotAuthorizedException>();
         }
 
+        #region AddDispositionFileAppraisal
+
         [Fact]
         public void AddDispositionFileAppraisal_Should_Fail_NoPermission()
         {
@@ -986,16 +1066,21 @@ namespace Pims.Api.Test.Services
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
 
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditOrDeleteValuesOffersSales(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
             {
                 DispositionFileId = 1,
                 PimsDispositionAppraisals = new List<PimsDispositionAppraisal>() { },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.ACTIVE.ToString()
             });
             repository.Setup(x => x.AddDispositionFileAppraisal(It.IsAny<PimsDispositionAppraisal>())).Returns(new PimsDispositionAppraisal()
             {
                 DispositionFileId = 1,
                 DispositionAppraisalId = 100,
             });
+            
 
             // Act
             var result = service.AddDispositionFileAppraisal(1, new()
@@ -1138,6 +1223,9 @@ namespace Pims.Api.Test.Services
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
 
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditOrDeleteValuesOffersSales(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
             {
                 DispositionFileId = 1,
@@ -1149,7 +1237,8 @@ namespace Pims.Api.Test.Services
                         DispositionFileId = 1,
                         DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.ACCCEPTED.ToString(),
                     }
-                }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.ACTIVE.ToString(),
             });
 
             // Act
@@ -1171,6 +1260,9 @@ namespace Pims.Api.Test.Services
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
 
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditOrDeleteValuesOffersSales(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
             {
                 DispositionFileId = 1,
@@ -1182,7 +1274,48 @@ namespace Pims.Api.Test.Services
                         DispositionFileId = 1,
                         DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.REJECTED.ToString(),
                     }
-                }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.ACTIVE.ToString(),
+            });
+            repository.Setup(x => x.AddDispositionOffer(It.IsAny<PimsDispositionOffer>())).Returns(new PimsDispositionOffer()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11
+            });
+
+            // Act
+            var result = service.AddDispositionFileOffer(1, new()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 0,
+                DispositionOfferStatusTypeCode = "OPEN"
+            });
+
+            // Assert
+            Assert.NotNull(result);
+            repository.Verify(x => x.AddDispositionOffer(It.IsAny<PimsDispositionOffer>()), Times.Once);
+        }
+
+        [Fact]
+        public void AddDispositionFileOffer_Success_Final_SystemAdmin()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit, Permissions.SystemAdmin);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
+            {
+                DispositionFileId = 1,
+                PimsDispositionOffers = new List<PimsDispositionOffer>()
+                {
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 10,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.REJECTED.ToString(),
+                    }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString(),                
             });
             repository.Setup(x => x.AddDispositionOffer(It.IsAny<PimsDispositionOffer>())).Returns(new PimsDispositionOffer()
             {
@@ -1271,6 +1404,9 @@ namespace Pims.Api.Test.Services
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
 
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditOrDeleteValuesOffersSales(It.IsAny<DispositionStatusTypes>())).Returns(true);
+
             repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
             {
                 DispositionFileId = 1,
@@ -1304,11 +1440,54 @@ namespace Pims.Api.Test.Services
         }
 
         [Fact]
+        public void AddDispositionFileOffer_Should_Fail_Final()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
+            {
+                DispositionFileId = 1,
+                PimsDispositionOffers = new List<PimsDispositionOffer>()
+                {
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 10,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.REJECTED.ToString(),
+                    }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString(),                
+            });
+            repository.Setup(x => x.AddDispositionOffer(It.IsAny<PimsDispositionOffer>())).Returns(new PimsDispositionOffer()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11
+            });
+
+            // Act
+            Action act = () => service.AddDispositionFileOffer(1, new()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 0,
+                DispositionOfferStatusTypeCode = "OPEN"
+            });
+
+            // Assert
+            var exception = act.Should().Throw<BusinessRuleViolationException>();
+            exception.WithMessage("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+        }
+
+        [Fact]
         public void UpdateDispositionFileOffer_Success()
         {
             // Arrange
             var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
             var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            var statusMock = this._helper.GetService<Mock<IDispositionStatusSolver>>();
+            statusMock.Setup(x => x.CanEditOrDeleteValuesOffersSales(It.IsAny<DispositionStatusTypes>())).Returns(true);
 
             repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
             {
@@ -1346,6 +1525,98 @@ namespace Pims.Api.Test.Services
             // Assert
             Assert.NotNull(result);
             repository.Verify(x => x.UpdateDispositionOffer(It.IsAny<PimsDispositionOffer>()), Times.Once);
+        }
+
+        [Fact]
+        public void UpdateDispositionFileOffer_Success_Final_SystemAdmin()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit, Permissions.SystemAdmin);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
+            {
+                DispositionFileId = 1,
+                PimsDispositionOffers = new List<PimsDispositionOffer>()
+                {
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 10,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.COLLAPSED.ToString(),
+                    },
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 11,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.OPEN.ToString(),
+                    }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString(),
+            });
+            repository.Setup(x => x.UpdateDispositionOffer(It.IsAny<PimsDispositionOffer>())).Returns(new PimsDispositionOffer()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11
+            });
+
+            // Act
+            var result = service.UpdateDispositionFileOffer(1, 11, new()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11,
+                DispositionOfferStatusTypeCode = "OPEN"
+            });
+
+            // Assert
+            Assert.NotNull(result);
+            repository.Verify(x => x.UpdateDispositionOffer(It.IsAny<PimsDispositionOffer>()), Times.Once);
+        }
+
+        [Fact]
+        public void UpdateDispositionFileOffer_Should_Fail_Final_SystemAdmin()
+        {
+            // Arrange
+            var service = this.CreateDispositionServiceWithPermissions(Permissions.DispositionEdit);
+            var repository = this._helper.GetService<Mock<IDispositionFileRepository>>();
+
+            repository.Setup(x => x.GetById(1)).Returns(new PimsDispositionFile()
+            {
+                DispositionFileId = 1,
+                PimsDispositionOffers = new List<PimsDispositionOffer>()
+                {
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 10,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.COLLAPSED.ToString(),
+                    },
+                    new PimsDispositionOffer()
+                    {
+                        DispositionOfferId = 11,
+                        DispositionFileId = 1,
+                        DispositionOfferStatusTypeCode = EnumDispositionOfferStatusTypeCode.OPEN.ToString(),
+                    }
+                },
+                DispositionFileStatusTypeCode = EnumDispositionFileStatusTypeCode.COMPLETE.ToString(),
+            });
+            repository.Setup(x => x.UpdateDispositionOffer(It.IsAny<PimsDispositionOffer>())).Returns(new PimsDispositionOffer()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11
+            });
+
+            // Act
+            Action act = () => service.UpdateDispositionFileOffer(1, 11, new()
+            {
+                DispositionFileId = 1,
+                DispositionOfferId = 11,
+                DispositionOfferStatusTypeCode = "OPEN"
+            });
+
+            // Assert
+            var exception = act.Should().Throw<BusinessRuleViolationException>();
+            exception.WithMessage("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
         }
 
         [Fact]
