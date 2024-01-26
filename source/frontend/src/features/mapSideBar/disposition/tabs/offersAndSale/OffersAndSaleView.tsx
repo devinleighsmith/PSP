@@ -164,13 +164,19 @@ const OffersAndSaleView: React.FunctionComponent<IOffersAndSaleViewProps> = ({
         header={
           <StyledSubHeader>
             <label>Sales Details</label>
-            {keycloak.hasClaim(Claims.DISPOSITION_EDIT) && (
+            {keycloak.hasClaim(Claims.DISPOSITION_EDIT) && canEditDetails() && (
               <EditButton
                 title="Edit Sale"
                 dataTestId={`sale-edit-btn`}
                 onClick={() => {
                   history.push(`${match.url}/sale/update`);
                 }}
+              />
+            )}
+            {keycloak.hasClaim(Claims.DISPOSITION_EDIT) && !canEditDetails() && (
+              <TooltipIcon
+                toolTipId={`${dispositionFile?.id || 0}-sale-summary-cannot-edit-tooltip`}
+                toolTip={cannotEditMessage}
               />
             )}
           </StyledSubHeader>

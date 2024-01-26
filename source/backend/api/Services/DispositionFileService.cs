@@ -300,6 +300,12 @@ namespace Pims.Api.Services
             _logger.LogInformation("Updating disposition file Sale with DispositionFileId: {id}", dispositionSale.DispositionSaleId);
             _user.ThrowIfNotAuthorized(Permissions.DispositionEdit);
 
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionSale.DispositionFileId);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
+
             var updatedSale = _dispositionFileRepository.UpdateDispositionFileSale(dispositionSale);
             _dispositionFileRepository.CommitTransaction();
 
@@ -310,6 +316,12 @@ namespace Pims.Api.Services
         {
             _logger.LogInformation("Adding disposition file Sale to Disposition File with Id: {id}", dispositionSale.DispositionFileId);
             _user.ThrowIfNotAuthorized(Permissions.DispositionEdit);
+
+            DispositionStatusTypes? currentDispositionStatus = GetCurrentDispositionStatus(dispositionSale.DispositionFileId);
+            if (!_dispositionStatusSolver.CanEditOrDeleteValuesOffersSales(currentDispositionStatus) && !_user.HasPermission(Permissions.SystemAdmin))
+            {
+                throw new BusinessRuleViolationException("The file you are editing is not active or draft, so you cannot save changes. Refresh your browser to see file state.");
+            }
 
             var dispositionFileParent = _dispositionFileRepository.GetById(dispositionSale.DispositionFileId);
             if (dispositionFileParent.PimsDispositionSales.Count > 0)

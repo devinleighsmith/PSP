@@ -159,6 +159,71 @@ describe('Disposition Offer Detail View component', () => {
     expect(editButton).toBeVisible();
   });
 
+  it('hides the edit button for Sale for users without permissions', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: { dispositionFile: mockDispositionFileResponse() },
+      claims: [Claims.DISPOSITION_VIEW],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeNull();
+    expect(icon).toBeNull();
+  });
+
+  it('shows a warning above sale if the user has edit permissions but file is in non-editable state', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeNull();
+    expect(icon).toBeVisible();
+  });
+
+  it('shows sale edit button if the user has edit permissions but file is in non-editable state and user is admin', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+      roles: [Roles.SYSTEM_ADMINISTRATOR],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeVisible();
+    expect(icon).toBeNull();
+  });
+
+  it('renders the edit button for Sale for users with disposition edit permissions', async () => {
+    const { getByTitle } = await setup({
+      props: { dispositionFile: mockDispositionFileResponse() },
+      claims: [Claims.DISPOSITION_EDIT],
+    });
+    await waitForEffects();
+
+    const editButton = getByTitle('Edit Sale');
+
+    expect(editButton).toBeVisible();
+  });
+
   it('displays a message when Disposition has no offers', async () => {
     const mockDisposition = mockDispositionFileApi;
     mockDisposition.dispositionSale = null;
