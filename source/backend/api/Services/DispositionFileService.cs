@@ -129,7 +129,7 @@ namespace Pims.Api.Services
                 && dispositionFile.DispositionFileStatusTypeCode == EnumDispositionFileStatusTypeCode.COMPLETE.ToString()
                 && currentDispositionFile.PimsDispositionFileProperties.Count > 0)
             {
-                DisposeofProperties(dispositionFile);
+                DisposeOfProperties(dispositionFile);
             }
             else if (!userOverrides.Contains(UserOverrideCode.DispositionFileFinalStatus) && doNotAddToStatuses.Contains(dispositionFile.DispositionFileStatusTypeCode))
             {
@@ -518,7 +518,7 @@ namespace Pims.Api.Services
         /// Attempt to dispose of any properties if all business rules are met.
         /// </summary>
         /// <param name="dispositionFile"></param>
-        private void DisposeofProperties(PimsDispositionFile dispositionFile)
+        private void DisposeOfProperties(PimsDispositionFile dispositionFile)
         {
             var currentProperties = _dispositionFilePropertyRepository.GetPropertiesByDispositionFileId(dispositionFile.Internal_Id);
             if (currentProperties.All(p => p.Property.IsOwned))
