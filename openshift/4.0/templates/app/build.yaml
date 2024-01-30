@@ -79,7 +79,7 @@ parameters:
 objects:
   # Image stream for the built base image.
   - kind: ImageStream
-    apiVersion: template.openshift.io/v1
+    apiVersion: v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}-base
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
@@ -135,7 +135,7 @@ objects:
 
   # Image stream for the built image.
   - kind: ImageStream
-    apiVersion: template.openshift.io/v1
+    apiVersion: v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
