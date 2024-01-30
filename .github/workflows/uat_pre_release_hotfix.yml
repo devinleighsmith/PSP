@@ -198,8 +198,8 @@ jobs:
           oc process -f ./openshift/4.0/templates/jobs/mayan-sync.yaml -p NAMESPACE=3cd915-test -p TOKEN_URL=https://test.loginproxy.gov.bc.ca:443/auth/realms/standard/protocol/openid-connect/token -p CLIENT_ID=property-services-project-api-4380 -p MAYAN_SYNC_URL=https://https://uat-pims.th.gov.bc.ca/:443/api/documents/sync/documenttype -p KEYCLOAK_SECRET_NAME=pims-api-sso-uat | oc create -f - | grep -oP "(?<=\/)[^\s]*" | (read TASK_NAME; oc wait --for=condition=succeeded taskruns/$TASK_NAME --timeout=80s)
           oc process -f ./openshift/4.0/templates/jobs/mayan-sync.yaml -p NAMESPACE=3cd915-test -p TOKEN_URL=https://test.loginproxy.gov.bc.ca:443/auth/realms/standard/protocol/openid-connect/token -p CLIENT_ID=property-services-project-api-4380 -p MAYAN_SYNC_URL=https://https://uat-pims.th.gov.bc.ca/:443/api/documents/sync/mayan -p KEYCLOAK_SECRET_NAME=pims-api-sso-uat | oc create -f - | grep -oP "(?<=\/)[^\s]*" | (read TASK_NAME; oc wait --for=condition=succeeded taskruns/$TASK_NAME --timeout=80s)
 
-
   ci-cd-end-notification:
+    if: always()
     name: CI-CD End Notification to Teams Channel
     runs-on: ubuntu-latest
     needs: mayan-sync
@@ -215,3 +215,23 @@ jobs:
           notification-summary: PIMS UAT Pre-Release Hotfix complete with status ${{ steps.check.outputs.status }}
           notification-color: 17a2b8
           timezone: America/Los_Angeles
+  
+  cleanup-builds:
+    if: always()
+    name: cleanup builds
+    needs: ci-cd-start-notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+      - name: Login to OpenShift
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+          openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+          insecure_skip_tls_verify: true
+          namespace: 3cd915-test
+      - name: create all PSP build configurations for branch
+        shell: bash
+        run: |
+          oc delete bc --selector ci_cd=true

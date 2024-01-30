@@ -175,6 +175,7 @@ jobs:
 
 
   ci-cd-end-notification:
+    if: always()
     name: CI-CD End Notification to Teams Channel
     runs-on: ubuntu-latest
     needs: mayan-sync
