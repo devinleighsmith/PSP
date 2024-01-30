@@ -1,4 +1,4 @@
-name: CI-CD PIMS Development
+name: UAT Hotfix
 env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   # service account: gitaction
