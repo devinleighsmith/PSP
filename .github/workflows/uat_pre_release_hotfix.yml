@@ -50,8 +50,8 @@ jobs:
           timezone: America/Los_Angeles
   
   create-builds:
-    name: sync mayan
-    needs: database-upgrade
+    name: create builds
+    needs: ci-cd-start-notification
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
@@ -72,7 +72,7 @@ jobs:
 
   build-frontend:
     name: Build frontend
-    needs: ci-cd-start-notification
+    needs: create-builds
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
@@ -91,7 +91,7 @@ jobs:
 
   build-api:
     name: Build api
-    needs: ci-cd-start-notification
+    needs: create-builds
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
