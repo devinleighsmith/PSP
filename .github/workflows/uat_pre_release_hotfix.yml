@@ -219,7 +219,7 @@ jobs:
   cleanup-builds:
     if: always()
     name: cleanup builds
-    needs: ci-cd-start-notification
+    needs: ci-cd-end-notification
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
