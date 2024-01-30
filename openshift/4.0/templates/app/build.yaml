@@ -1,5 +1,5 @@
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 metadata:
   name: pims-app-build
   annotations:
@@ -79,7 +79,7 @@ parameters:
 objects:
   # Image stream for the built base image.
   - kind: ImageStream
-    apiVersion: v1
+    apiVersion: template.openshift.io/v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}-base
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
@@ -93,7 +93,7 @@ objects:
 
   # The build config that will be created and be named for the branch you created it for.
   - kind: BuildConfig
-    apiVersion: v1
+    apiVersion: template.openshift.io/v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}-base.${GIT_REF}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
@@ -134,7 +134,7 @@ objects:
 
   # Image stream for the built image.
   - kind: ImageStream
-    apiVersion: v1
+    apiVersion: template.openshift.io/v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
@@ -148,7 +148,7 @@ objects:
 
   # The build config that will be created and be named for the branch you created it for.
   - kind: BuildConfig
-    apiVersion: v1
+    apiVersion: template.openshift.io/v1
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}.${GIT_REF}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
