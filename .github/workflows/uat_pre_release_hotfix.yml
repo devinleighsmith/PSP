@@ -86,8 +86,8 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: Call script to build frontend (pims-app and pims-app-base)
         run: |
-          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" && ./openshift/4.0/player.sh build app-base -apply
-          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&  ./openshift/4.0/player.sh build app -apply
+          OC_JOB_NAME=${{github.event.inputs.HOTFIX_BRANCH}} && ./openshift/4.0/player.sh build app-base -apply
+          OC_JOB_NAME=${{github.event.inputs.HOTFIX_BRANCH}} &&  ./openshift/4.0/player.sh build app -apply
 
   build-api:
     name: Build api
@@ -105,7 +105,7 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: Call script to build backend (pims-api)
         run: |
-          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" && ./openshift/4.0/player.sh build api -apply
+          OC_JOB_NAME=${{github.event.inputs.HOTFIX_BRANCH}} && ./openshift/4.0/player.sh build api -apply
 
   deploy:
     name: Deploy frontend and api to OpenShift
@@ -123,8 +123,8 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: call scripts to deploy api and frontend
         run: |
-          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&./openshift/4.0/player.sh deploy api $DESTINATION -apply
-          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&./openshift/4.0/player.sh deploy app $DESTINATION -apply
+          OC_JOB_NAME=${{github.event.inputs.HOTFIX_BRANCH}} &&./openshift/4.0/player.sh deploy api $DESTINATION -apply
+          OC_JOB_NAME=${{github.event.inputs.HOTFIX_BRANCH}} &&./openshift/4.0/player.sh deploy app $DESTINATION -apply
 
   # the command:
   # 1) creates an openshift job with generated name to avoid name conflict, substituting the variables in the template.
