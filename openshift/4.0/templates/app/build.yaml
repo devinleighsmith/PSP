@@ -35,7 +35,7 @@ parameters:
   - name: BUILDIMAGE_TAG
     displayName: "Source Image Tag"
     description: "The s2i image tag which is used to build the code."
-    value: "1-1"
+    value: "1-5"
 
   - name: RUNTIMEIMAGE_NAME
     displayName: "Source Image Name"
