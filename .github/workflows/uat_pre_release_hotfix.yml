@@ -66,9 +66,9 @@ jobs:
       - name: create all PSP build configurations for branch
         shell: bash
         run: |
-          oc process -f ./openshift/s2i/nginx-runtime/nginx-runtime.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create --selector ci_cd=true -f -
-          oc process -f ./openshift/4.0/templates/api/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create --selector ci_cd=true -f -
-          oc process -f ./openshift/4.0/templates/app/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" -p RUNTIMEIMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create --selector ci_cd=true -f -
+          oc process -f ./openshift/s2i/nginx-runtime/nginx-runtime.yaml -p GIT_REF=${{github.event.inputs.HOTFIX_BRANCH}} -p OUTPUT_IMAGE_TAG="latest-${{github.event.inputs.HOTFIX_BRANCH}}" | oc create --selector ci_cd=true -f -
+          oc process -f ./openshift/4.0/templates/api/build.yaml -p GIT_REF=${{github.event.inputs.HOTFIX_BRANCH}} -p OUTPUT_IMAGE_TAG="latest-${{github.event.inputs.HOTFIX_BRANCH}}" | oc create --selector ci_cd=true -f -
+          oc process -f ./openshift/4.0/templates/app/build.yaml -p GIT_REF=${{github.event.inputs.HOTFIX_BRANCH}} -p OUTPUT_IMAGE_TAG="latest-${{github.event.inputs.HOTFIX_BRANCH}}" -p RUNTIMEIMAGE_TAG="latest-${{github.event.inputs.HOTFIX_BRANCH}}" | oc create --selector ci_cd=true -f -
 
   build-frontend:
     name: Build frontend
@@ -86,8 +86,8 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: Call script to build frontend (pims-app and pims-app-base)
         run: |
-          OC_JOB_NAME="latest-${HOTFIX_BRANCH}" && ./openshift/4.0/player.sh build app-base -apply
-          OC_JOB_NAME="latest-${HOTFIX_BRANCH}" &&  ./openshift/4.0/player.sh build app -apply
+          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" && ./openshift/4.0/player.sh build app-base -apply
+          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&  ./openshift/4.0/player.sh build app -apply
 
   build-api:
     name: Build api
@@ -105,7 +105,7 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: Call script to build backend (pims-api)
         run: |
-          OC_JOB_NAME="latest-${HOTFIX_BRANCH}" && ./openshift/4.0/player.sh build api -apply
+          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" && ./openshift/4.0/player.sh build api -apply
 
   deploy:
     name: Deploy frontend and api to OpenShift
@@ -123,8 +123,8 @@ jobs:
           namespace: ${{ env.OPENSHIFT_TOOLS_NAMESPACE }}
       - name: call scripts to deploy api and frontend
         run: |
-          OC_JOB_NAME="latest-${HOTFIX_BRANCH}" &&./openshift/4.0/player.sh deploy api $DESTINATION -apply
-          OC_JOB_NAME="latest-${HOTFIX_BRANCH}" &&./openshift/4.0/player.sh deploy app $DESTINATION -apply
+          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&./openshift/4.0/player.sh deploy api $DESTINATION -apply
+          OC_JOB_NAME="latest-${{github.event.inputs.HOTFIX_BRANCH}}" &&./openshift/4.0/player.sh deploy app $DESTINATION -apply
 
   # the command:
   # 1) creates an openshift job with generated name to avoid name conflict, substituting the variables in the template.
@@ -147,7 +147,7 @@ jobs:
       - name: call scripts to upgrade database
         shell: bash
         run: |
-          oc process -f ./openshift/4.0/templates/jobs/db-deploy.yaml -p DB_SECRET_NAME=pims-database-uat -p GIT_BRANCH=$HOTFIX_BRANCH -p SERVER_NAME=sqlprd.th.gov.bc.ca -p DB_NAME=PIMS_UAT -p NAMESPACE=3cd915-test | oc create -f - | grep -oP "(?<=job\.batch/)[^\s]*" | (read JOB_NAME; oc wait --for=condition=complete job/$JOB_NAME --timeout=120s)
+          oc process -f ./openshift/4.0/templates/jobs/db-deploy.yaml -p DB_SECRET_NAME=pims-database-uat -p GIT_BRANCH=${{github.event.inputs.HOTFIX_BRANCH}} -p SERVER_NAME=sqlprd.th.gov.bc.ca -p DB_NAME=PIMS_UAT -p NAMESPACE=3cd915-test | oc create -f - | grep -oP "(?<=job\.batch/)[^\s]*" | (read JOB_NAME; oc wait --for=condition=complete job/$JOB_NAME --timeout=120s)
 
 # TODO: allow sync-keycloak github action to contact UAT backend.  
 # sync-keycloak:
