@@ -66,9 +66,9 @@ jobs:
       - name: create all PSP build configurations for branch
         shell: bash
         run: |
-          oc process -f ./openshift/s2i/nginx-runtime/nginx-runtime.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}"
-          oc process -f ./openshift/4.0/templates/api/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}"
-          oc process -f ./openshift/4.0/templates/app/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" -p RUNTIMEIMAGE_TAG="latest-${HOTFIX_BRANCH}"
+          oc process -f ./openshift/s2i/nginx-runtime/nginx-runtime.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create -f -
+          oc process -f ./openshift/4.0/templates/api/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create -f -
+          oc process -f ./openshift/4.0/templates/app/build.yaml -p GIT_REF=$HOTFIX_BRANCH -p OUTPUT_IMAGE_TAG="latest-${HOTFIX_BRANCH}" -p RUNTIMEIMAGE_TAG="latest-${HOTFIX_BRANCH}" | oc create -f -
 
   build-frontend:
     name: Build frontend
