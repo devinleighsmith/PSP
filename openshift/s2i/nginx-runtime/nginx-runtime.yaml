@@ -64,6 +64,7 @@ objects:
       name: ${NAME}.${GIT_REF}
       labels:
         app: ${NAME}
+        ci_cd: "true"
     spec:
       runPolicy: Serial
       source:
