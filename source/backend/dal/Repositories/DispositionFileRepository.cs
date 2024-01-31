@@ -129,15 +129,17 @@ namespace Pims.Dal.Repositories
 
             // Disposition Deleted Team
             // This is needed to get the disposition team last-updated-by when deleted
-            var teamHistLastUpdatedBy = this.Context.PimsDispositionFileTeamHists.AsNoTracking()
-              .Where(dph => dph.DispositionFileId == id)
-              .Select(dph => new LastUpdatedByModel()
-              {
-                  ParentId = id,
-                  AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
-                  AppLastUpdateUserGuid = dph.AppLastUpdateUserGuid, // TODO: Update this once the DB tracks the user
-                  AppLastUpdateTimestamp = dph.EndDateHist ?? DateTime.UnixEpoch,
-              })
+            var teamHist = this.Context.PimsDispositionFileTeamHists.AsNoTracking()
+              .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionFileTeamId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var teamHistLastUpdatedBy = teamHist.Select(dph => new LastUpdatedByModel()
+            {
+                ParentId = id,
+                AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
+                AppLastUpdateUserGuid = dph.AppLastUpdateUserGuid, // TODO: Update this once the DB tracks the user
+                AppLastUpdateTimestamp = dph.EndDateHist ?? DateTime.UnixEpoch,
+            })
               .OrderByDescending(lu => lu.AppLastUpdateTimestamp)
               .Take(1)
               .ToList();
@@ -160,9 +162,12 @@ namespace Pims.Dal.Repositories
 
             // Disposition Deleted Properties
             // This is needed to get the notes last-updated-by from the notes that where deleted
-            var propertiesHistoryLastUpdatedBy = Context.PimsDispositionFilePropertyHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var propertiesHistory = Context.PimsDispositionFilePropertyHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionFilePropertyId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+
+            var propertiesHistoryLastUpdatedBy = propertiesHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -190,9 +195,12 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(salesLastUpdatedBy);
 
             // Disposition Deleted Sales
-            var salesHistoryLastUpdatedBy = Context.PimsDispositionSaleHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var salesHistory = Context.PimsDispositionSaleHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionSaleId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+
+            var salesHistoryLastUpdatedBy = salesHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -220,9 +228,11 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(offerLastUpdatedBy);
 
             // Disposition Deleted Offers
-            var offerHistoryLastUpdatedBy = Context.PimsDispositionOfferHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var offerHistory = Context.PimsDispositionOfferHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionOfferId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var offerHistoryLastUpdatedBy = offerHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -250,9 +260,11 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(valueLastUpdatedBy);
 
             // Disposition Deleted Values
-            var valueHistoryLastUpdatedBy = Context.PimsDispositionAppraisalHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var valueHistory = Context.PimsDispositionAppraisalHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionAppraisalId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var valueHistoryLastUpdatedBy = valueHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -280,9 +292,11 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(checklistLastUpdatedBy);
 
             // Disposition Deleted Checklists
-            var checklistHistoryLastUpdatedBy = Context.PimsDispositionChecklistItemHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var checklistHistory = Context.PimsDispositionChecklistItemHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionChecklistItemId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var checklistHistoryLastUpdatedBy = checklistHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -310,9 +324,11 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(documentLastUpdatedBy);
 
             // Disposition Deleted Documents
-            var documentHistoryLastUpdatedBy = Context.PimsDispositionFileDocumentHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var documentHistory = Context.PimsDispositionFileDocumentHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionFileDocumentId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var documentHistoryLastUpdatedBy = documentHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
@@ -340,9 +356,11 @@ namespace Pims.Dal.Repositories
             lastUpdatedByAggregate.AddRange(notesLastUpdatedBy);
 
             // Disposition Deleted Notes
-            var notesHistoryLastUpdatedBy = Context.PimsDispositionFileNoteHists.AsNoTracking()
-            .Where(dph => dph.DispositionFileId == id)
-            .Select(dph => new LastUpdatedByModel()
+            var notesHistory = Context.PimsDispositionFileNoteHists.AsNoTracking()
+            .Where(aph => aph.DispositionFileId == id)
+               .GroupBy(aph => aph.DispositionFileNoteId)
+               .Select(gaph => gaph.OrderByDescending(a => a.EffectiveDateHist).FirstOrDefault()).ToList();
+            var notesHistoryLastUpdatedBy = notesHistory.Select(dph => new LastUpdatedByModel()
             {
                 ParentId = id,
                 AppLastUpdateUserid = dph.AppLastUpdateUserid, // TODO: Update this once the DB tracks the user
