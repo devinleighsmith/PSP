@@ -1,15 +1,15 @@
 import { createMemoryHistory } from 'history';
 
 import Claims from '@/constants/claims';
+import { DispositionFileStatus } from '@/constants/dispositionFileStatus';
+import Roles from '@/constants/roles';
 import {
   mockDispositionFileResponse,
   mockDispositionFileSaleApi,
 } from '@/mocks/dispositionFiles.mock';
 import { render, RenderOptions, waitFor, waitForEffects } from '@/utils/test-utils';
 
-import OffersAndSaleContainerView, {
-  IOffersAndSaleContainerViewProps,
-} from './OffersAndSaleContainerView';
+import OffersAndSaleView, { IOffersAndSaleViewProps } from './OffersAndSaleView';
 
 const history = createMemoryHistory();
 jest.mock('@react-keycloak/web');
@@ -21,10 +21,10 @@ const onDelete = jest.fn();
 
 describe('Disposition Offer Detail View component', () => {
   const setup = async (
-    renderOptions: RenderOptions & { props?: Partial<IOffersAndSaleContainerViewProps> },
+    renderOptions: RenderOptions & { props?: Partial<IOffersAndSaleViewProps> },
   ) => {
     const utils = render(
-      <OffersAndSaleContainerView
+      <OffersAndSaleView
         {...renderOptions.props}
         loading={renderOptions.props?.loading ?? false}
         dispositionFile={renderOptions.props?.dispositionFile ?? mockDispositionFileApi}
@@ -95,15 +95,56 @@ describe('Disposition Offer Detail View component', () => {
   });
 
   it('hides the edit button for Appraisal for users without permissions', async () => {
-    const { queryByTitle } = await setup({
+    const { queryByTitle, queryByTestId } = await setup({
       props: { dispositionFile: mockDispositionFileResponse() },
       claims: [Claims.DISPOSITION_VIEW],
     });
     await waitForEffects();
 
     const editButton = queryByTitle('Edit Appraisal');
+    const icon = queryByTestId('tooltip-icon-1-values-summary-cannot-edit-tooltip');
 
     expect(editButton).toBeNull();
+    expect(icon).toBeNull();
+  });
+
+  it('shows a warning if the user has edit permissions but file is in non-editable state', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Appraisal');
+    const icon = queryByTestId('tooltip-icon-1-values-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeNull();
+    expect(icon).toBeVisible();
+  });
+
+  it('shows edit button if the user has edit permissions but file is in non-editable state and user is admin', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+      roles: [Roles.SYSTEM_ADMINISTRATOR],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Appraisal');
+    const icon = queryByTestId('tooltip-icon-1-values-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeVisible();
+    expect(icon).toBeNull();
   });
 
   it('renders the edit button for Appraisal for users with disposition edit permissions', async () => {
@@ -114,6 +155,71 @@ describe('Disposition Offer Detail View component', () => {
     await waitForEffects();
 
     const editButton = getByTitle('Edit Appraisal');
+
+    expect(editButton).toBeVisible();
+  });
+
+  it('hides the edit button for Sale for users without permissions', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: { dispositionFile: mockDispositionFileResponse() },
+      claims: [Claims.DISPOSITION_VIEW],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeNull();
+    expect(icon).toBeNull();
+  });
+
+  it('shows a warning above sale if the user has edit permissions but file is in non-editable state', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeNull();
+    expect(icon).toBeVisible();
+  });
+
+  it('shows sale edit button if the user has edit permissions but file is in non-editable state and user is admin', async () => {
+    const { queryByTitle, queryByTestId } = await setup({
+      props: {
+        dispositionFile: {
+          ...mockDispositionFileResponse(),
+          fileStatusTypeCode: { id: DispositionFileStatus.Complete },
+        },
+      },
+      claims: [Claims.DISPOSITION_EDIT],
+      roles: [Roles.SYSTEM_ADMINISTRATOR],
+    });
+    await waitForEffects();
+
+    const editButton = queryByTitle('Edit Sale');
+    const icon = queryByTestId('tooltip-icon-1-sale-summary-cannot-edit-tooltip');
+
+    expect(editButton).toBeVisible();
+    expect(icon).toBeNull();
+  });
+
+  it('renders the edit button for Sale for users with disposition edit permissions', async () => {
+    const { getByTitle } = await setup({
+      props: { dispositionFile: mockDispositionFileResponse() },
+      claims: [Claims.DISPOSITION_EDIT],
+    });
+    await waitForEffects();
+
+    const editButton = getByTitle('Edit Sale');
 
     expect(editButton).toBeVisible();
   });
