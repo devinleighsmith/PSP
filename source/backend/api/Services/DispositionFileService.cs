@@ -121,7 +121,7 @@ namespace Pims.Api.Services
             var doNotAddToStatuses = new List<string>() { EnumDispositionFileStatusTypeCode.COMPLETE.ToString(), EnumDispositionFileStatusTypeCode.ARCHIVED.ToString() };
             var currentDispositionFile = _dispositionFileRepository.GetById(id);
 
-            if (dispositionFile?.PimsDispositionSales?.FirstOrDefault()?.SaleFinalAmt == null)
+            if (currentDispositionFile?.PimsDispositionSales?.FirstOrDefault()?.SaleFinalAmt == null)
             {
                 throw new BusinessRuleViolationException("You have not added a Sales Price. Please add a Sales Price before completion.");
             }
