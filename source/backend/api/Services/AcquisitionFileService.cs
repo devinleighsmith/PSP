@@ -730,7 +730,7 @@ namespace Pims.Api.Services
                 {
                     throw new UserOverrideException(UserOverrideCode.PoiToInventory, "You have one or more take(s) that will be added to MoTI Inventory. Do you want to acknowledge and proceed?");
                 }
-                _propertyRepository.TransferFileProperty(property, isOwned, isPropertyOfInterest, isOtherInterest);
+                _propertyRepository.TransferFileProperty(property, isOwned, isPropertyOfInterest, false, isOtherInterest);
             }
         }
 

@@ -683,29 +683,29 @@ namespace Pims.Api.Test.Services
         public static IEnumerable<object[]> takesTestParameters = new List<object[]>() {
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true }, new PimsTake() { IsNewLicenseToConstruct = true } }, true, false },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true }, new PimsTake() { IsNewLicenseToConstruct = true } }, true, false }, // core inventory takes priority over other interest
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActEndDt = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)) }, new PimsTake() { IsNewLicenseToConstruct = true } }, false, false }, // should ignore any expired takes
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActEndDt = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)) }, new PimsTake() { IsNewLicenseToConstruct = true } }, false, false, true }, // should ignore any expired takes
             new object[] { new List<PimsTake>(), false, true }, // No takes should be core inventory
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActEndDt = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)) } }, true, false }, // only expired takes is the same as no takes
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true }, new PimsTake() { IsNewLicenseToConstruct = true } }, true, false },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true }, new PimsTake() { IsNewLicenseToConstruct = true } }, true, false },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true }, new PimsTake() { IsNewLicenseToConstruct = true } }, true, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 15" } }, false, false },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 15" } }, false, false, true },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 16" } }, true, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 17" } }, false, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "NOI" } }, false, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 66" } }, false, false },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 17" } }, false, false, true },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "NOI" } }, false, false, true },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 66" } }, false, false, true },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Crown Grant (New)" } }, true, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewInterestInSrw = true } }, false, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLicenseToConstruct = true } }, false, false },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewInterestInSrw = true } }, false, false, true },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLicenseToConstruct = true } }, false, false, true },
             new object[] { new List<PimsTake>() { new PimsTake() { IsThereSurplus = true } }, true, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true } }, false, true },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true, IsAcquiredForInventory = false } }, false, true },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true } }, false, true, false },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = true, IsAcquiredForInventory = false } }, false, true, false },
             new object[] { new List<PimsTake>() { new PimsTake() { IsNewHighwayDedication = false, IsAcquiredForInventory = true } }, true, false },
-            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 16", IsNewHighwayDedication = true, IsAcquiredForInventory = false } }, false, true },
+            new object[] { new List<PimsTake>() { new PimsTake() { IsNewLandAct = true, LandActTypeCode = "Section 16", IsNewHighwayDedication = true, IsAcquiredForInventory = false } }, false, true, false },
         }.ToArray();
 
         [Theory, MemberData(nameof(takesTestParameters))]
-        public void Update_Success_Transfer_MultipleTakes_Core(List<PimsTake> takes, bool isOwned, bool isPropertyOfInterest)
+        public void Update_Success_Transfer_MultipleTakes_Core(List<PimsTake> takes, bool isOwned, bool isPropertyOfInterest, bool isOtherInterest = false)
         {
             // Arrange
             var service = this.CreateAcquisitionServiceWithPermissions(Permissions.AcquisitionFileEdit);
@@ -740,7 +740,7 @@ namespace Pims.Api.Test.Services
 
             // Assert
             repository.Verify(x => x.Update(It.IsAny<PimsAcquisitionFile>()), Times.Once);
-            propertyRepository.Verify(x => x.TransferFileProperty(It.IsAny<PimsProperty>(), isOwned, isPropertyOfInterest, It.IsAny<Boolean>(), It.IsAny<Boolean>()), Times.Once);
+            propertyRepository.Verify(x => x.TransferFileProperty(It.IsAny<PimsProperty>(), isOwned, isPropertyOfInterest, false, isOtherInterest), Times.Once);
         }
 
         [Fact]
