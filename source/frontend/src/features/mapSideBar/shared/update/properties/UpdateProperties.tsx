@@ -14,7 +14,8 @@ import SelectedPropertyRow from '@/components/propertySelector/selectedPropertyL
 import { SideBarContext } from '@/features/mapSideBar/context/sidebarContext';
 import MapSideBarLayout from '@/features/mapSideBar/layout/MapSideBarLayout';
 import { useBcaAddress } from '@/features/properties/map/hooks/useBcaAddress';
-import { Api_File } from '@/models/api/File';
+import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
+import { ApiGen_Concepts_File } from '@/models/api/generated/ApiGen_Concepts_File';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
 
 import { AddressForm, FileForm, PropertyForm } from '../../models';
@@ -22,13 +23,13 @@ import SidebarFooter from '../../SidebarFooter';
 import { UpdatePropertiesYupSchema } from './UpdatePropertiesYupSchema';
 
 export interface IUpdatePropertiesProps {
-  file: Api_File;
+  file: ApiGen_Concepts_File;
   setIsShowingPropertySelector: (isShowing: boolean) => void;
   onSuccess: () => void;
   updateFileProperties: (
-    file: Api_File,
+    file: ApiGen_Concepts_File,
     userOverrideCodes: UserOverrideCode[],
-  ) => Promise<Api_File | undefined>;
+  ) => Promise<ApiGen_Concepts_File | undefined>;
   canRemove: (propertyId: number) => Promise<boolean>;
   formikRef?: React.RefObject<FormikProps<any>>;
 }
@@ -41,10 +42,10 @@ export const UpdateProperties: React.FunctionComponent<
   const formFile = FileForm.fromApi(props.file);
 
   const [showSaveConfirmModal, setShowSaveConfirmModal] = useState<boolean>(false);
-  const [showCancelConfirmModal, setShowCancelConfirmModal] = useState<boolean>(false);
   const [showAssociatedEntityWarning, setShowAssociatedEntityWarning] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>(true);
 
+  const { setModalContent, setDisplayModal } = useModalContext();
   const { resetFilePropertyLocations } = useContext(SideBarContext);
 
   const { getPrimaryAddressByPid, bcaLoading } = useBcaAddress();
@@ -62,7 +63,15 @@ export const UpdateProperties: React.FunctionComponent<
   const handleCancelClick = () => {
     if (formikRef !== undefined) {
       if (formikRef.current?.dirty) {
-        setShowCancelConfirmModal(true);
+        setModalContent({
+          ...getCancelModalProps(),
+          handleOk: () => {
+            handleCancelConfirm();
+            setDisplayModal(false);
+          },
+          handleCancel: () => setDisplayModal(false),
+        });
+        setDisplayModal(true);
       } else {
         handleCancelConfirm();
       }
@@ -83,16 +92,15 @@ export const UpdateProperties: React.FunctionComponent<
       formikRef.current?.resetForm();
     }
     resetFilePropertyLocations();
-    setShowCancelConfirmModal(false);
     props.setIsShowingPropertySelector(false);
   };
 
-  const saveFile = async (file: Api_File) => {
+  const saveFile = async (file: ApiGen_Concepts_File) => {
     try {
       const response = await props.updateFileProperties(file, []);
 
       formikRef.current?.setSubmitting(false);
-      if (!!response?.fileName) {
+      if (response?.fileName) {
         if (file.fileProperties?.find(fp => !fp.property?.address && !fp.property?.id)) {
           toast.warn(
             'Address could not be retrieved for this property, it will have to be provided manually in property details tab',
@@ -109,6 +117,7 @@ export const UpdateProperties: React.FunctionComponent<
       }
     }
   };
+
   return (
     <>
       <LoadingBackdrop show={bcaLoading} />
@@ -129,7 +138,7 @@ export const UpdateProperties: React.FunctionComponent<
           initialValues={formFile}
           validationSchema={UpdatePropertiesYupSchema}
           onSubmit={async (values: FileForm) => {
-            const file: Api_File = values.toApi();
+            const file: ApiGen_Concepts_File = values.toApi();
             await saveFile(file);
           }}
         >
@@ -217,24 +226,6 @@ export const UpdateProperties: React.FunctionComponent<
         }
         handleOk={() => setShowAssociatedEntityWarning(false)}
         okButtonText="Close"
-        show
-      />
-
-      <GenericModal
-        variant="info"
-        display={showCancelConfirmModal}
-        title={'Confirm changes'}
-        message={
-          <>
-            <div>If you choose to cancel now, your changes will not be saved.</div>
-            <br />
-            <strong>Do you want to proceed?</strong>
-          </>
-        }
-        handleOk={handleCancelConfirm}
-        handleCancel={() => setShowCancelConfirmModal(false)}
-        okButtonText="Yes"
-        cancelButtonText="No"
         show
       />
     </>

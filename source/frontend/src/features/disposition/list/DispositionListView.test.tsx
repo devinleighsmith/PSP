@@ -7,7 +7,8 @@ import { IPagedItems } from '@/interfaces';
 import { getMockApiAddress } from '@/mocks/address.mock';
 import { mockDispositionFileResponse } from '@/mocks/dispositionFiles.mock';
 import { mockLookups } from '@/mocks/lookups.mock';
-import { Api_DispositionFile } from '@/models/api/DispositionFile';
+import { ApiGen_Concepts_DispositionFile } from '@/models/api/generated/ApiGen_Concepts_DispositionFile';
+import { getEmptyProperty } from '@/models/defaultInitializers';
 import { lookupCodesSlice } from '@/store/slices/lookupCodes';
 import {
   act,
@@ -35,8 +36,8 @@ const exportDispositionFilesFn = jest.fn();
 });
 
 const mockPagedResults = (
-  searchResults?: Api_DispositionFile[],
-): Partial<AxiosResponse<IPagedItems<Api_DispositionFile>, any>> => {
+  searchResults?: ApiGen_Concepts_DispositionFile[],
+): Partial<AxiosResponse<IPagedItems<ApiGen_Concepts_DispositionFile>, any>> => {
   const results = searchResults ?? [];
   const len = results.length;
   return {
@@ -106,7 +107,7 @@ describe('Disposition List View', () => {
   });
 
   it('searches by pid', async () => {
-    let results = mockPagedResults([
+    const results = mockPagedResults([
       {
         ...mockDispositionFileResponse(),
         fileProperties: [
@@ -115,10 +116,15 @@ describe('Disposition List View', () => {
             fileId: 1,
             propertyId: 1,
             property: {
+              ...getEmptyProperty(),
               id: 1,
               address: getMockApiAddress(),
               pid: 123,
             },
+            displayOrder: null,
+            file: null,
+            propertyName: null,
+            rowVersion: null,
           },
         ],
       },
@@ -154,7 +160,7 @@ describe('Disposition List View', () => {
   });
 
   it(`renders the 'add disposition' button when user has permissions`, async () => {
-    let results = mockPagedResults([]);
+    const results = mockPagedResults([]);
     getDispositionFilesPagedApiFn.mockResolvedValue(results);
     setup({ claims: [Claims.DISPOSITION_VIEW, Claims.DISPOSITION_ADD] });
     await waitForElementToBeRemoved(screen.getByTitle('table-loading'));
@@ -163,7 +169,7 @@ describe('Disposition List View', () => {
   });
 
   it(`hides the 'add disposition' button when user has no permissions`, async () => {
-    let results = mockPagedResults([]);
+    const results = mockPagedResults([]);
     getDispositionFilesPagedApiFn.mockResolvedValue(results);
     setup({ claims: [Claims.DISPOSITION_VIEW] });
     await waitForElementToBeRemoved(screen.getByTitle('table-loading'));
@@ -172,7 +178,7 @@ describe('Disposition List View', () => {
   });
 
   it('navigates to create disposition route when user clicks add button', async () => {
-    let results = mockPagedResults([]);
+    const results = mockPagedResults([]);
     getDispositionFilesPagedApiFn.mockResolvedValue(results);
     setup({ claims: [Claims.DISPOSITION_VIEW, Claims.DISPOSITION_ADD] });
     await waitForElementToBeRemoved(screen.getByTitle('table-loading'));
@@ -183,7 +189,7 @@ describe('Disposition List View', () => {
   });
 
   it('calls export function when export button clicked', async () => {
-    let results = mockPagedResults([]);
+    const results = mockPagedResults([]);
     getDispositionFilesPagedApiFn.mockResolvedValue(results);
     setup({ claims: [Claims.DISPOSITION_VIEW, Claims.DISPOSITION_ADD] });
     await waitForElementToBeRemoved(screen.getByTitle('table-loading'));

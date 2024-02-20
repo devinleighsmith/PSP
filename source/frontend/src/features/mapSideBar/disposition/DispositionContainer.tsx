@@ -8,7 +8,7 @@ import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineCo
 import { useDispositionProvider } from '@/hooks/repositories/useDispositionProvider';
 import { useQuery } from '@/hooks/use-query';
 import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
-import { stripTrailingSlash } from '@/utils';
+import { exists, isValidId, stripTrailingSlash } from '@/utils';
 
 import { SideBarContext } from '../context/sidebarContext';
 import { IDispositionViewProps } from './DispositionView';
@@ -76,8 +76,8 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
 
   // Retrieve disposition file from API and save it to local state and side-bar context
   const fetchDispositionFile = useCallback(async () => {
-    var retrieved = await retrieveDispositionFile(dispositionFileId);
-    if (retrieved === undefined) {
+    const retrieved = await retrieveDispositionFile(dispositionFileId);
+    if (!exists(retrieved)) {
       return;
     }
 
@@ -93,7 +93,7 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
   ]);
 
   const fetchLastUpdatedBy = React.useCallback(async () => {
-    var retrieved = await getLastUpdatedBy(dispositionFileId);
+    const retrieved = await getLastUpdatedBy(dispositionFileId);
     if (retrieved !== undefined) {
       setLastUpdatedBy(retrieved);
     } else {
@@ -103,8 +103,8 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
 
   React.useEffect(() => {
     if (
-      lastUpdatedBy === undefined ||
-      dispositionFileId !== lastUpdatedBy?.parentId ||
+      !exists(lastUpdatedBy) ||
+      dispositionFileId !== lastUpdatedBy.parentId ||
       staleLastUpdatedBy
     ) {
       fetchLastUpdatedBy();
@@ -113,7 +113,7 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
 
   useEffect(() => {
     if (
-      dispositionFileId === undefined ||
+      !isValidId(dispositionFileId) ||
       (dispositionFileId !== dispositionFile?.id && !loadingDispositionFile) ||
       staleFile
     ) {
@@ -193,12 +193,12 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
     }
   };
 
-  const canRemove = async (propertyId: number) => {
+  const canRemove = async () => {
     return true;
   };
 
   // UI components
-  var loading =
+  const loading =
     loadingDispositionFile ||
     loadingGetLastUpdatedBy ||
     (loadingDispositionFileProperties && !isPropertySelector) ||
@@ -222,10 +222,10 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
         isFormValid={isValid}
         error={error}
         dispositionFile={
-          !loading && !!dispositionFile
+          !loading && exists(dispositionFile)
             ? {
                 ...dispositionFile,
-                fileProperties: dispositionFileProperties,
+                fileProperties: dispositionFileProperties ?? null,
                 fileChecklistItems: dispositionFileChecklist ?? [],
               }
             : undefined

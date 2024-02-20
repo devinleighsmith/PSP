@@ -27,6 +27,7 @@ import {
   getDefaultAddress,
   IEditablePersonForm,
 } from '@/interfaces/editable-contact';
+import { isValidId } from '@/utils';
 
 import PersonSubForm from '../../Person/PersonSubForm';
 import { onValidatePerson } from '../../utils/contactUtils';
@@ -52,10 +53,10 @@ export const CreatePersonForm: React.FunctionComponent<React.PropsWithChildren<u
   ) => {
     try {
       setShowDuplicateModal(false);
-      let newPerson = formPersonToApiPerson(formPerson);
+      const newPerson = formPersonToApiPerson(formPerson);
       const personResponse = await addPerson(newPerson, setShowDuplicateModal, allowDuplicate);
 
-      if (!!personResponse?.id) {
+      if (isValidId(personResponse?.id)) {
         history.push(`/contact/P${personResponse?.id}`);
       }
     } finally {

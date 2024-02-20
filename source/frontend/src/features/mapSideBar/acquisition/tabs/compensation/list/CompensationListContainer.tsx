@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
 import React, { useCallback, useContext } from 'react';
-import { toast } from 'react-toastify';
 
 import { FileTypes } from '@/constants';
 import { SideBarContext } from '@/features/mapSideBar/context/sidebarContext';
@@ -8,23 +7,26 @@ import { useAcquisitionProvider } from '@/hooks/repositories/useAcquisitionProvi
 import { useCompensationRequisitionRepository } from '@/hooks/repositories/useRequisitionCompensationRepository';
 import { getDeleteModalProps, useModalContext } from '@/hooks/useModalContext';
 import { IApiError } from '@/interfaces/IApiError';
-import { Api_AcquisitionFile } from '@/models/api/AcquisitionFile';
-import { Api_CompensationRequisition } from '@/models/api/CompensationRequisition';
+import { ApiGen_Concepts_AcquisitionFile } from '@/models/api/generated/ApiGen_Concepts_AcquisitionFile';
+import { ApiGen_Concepts_CompensationRequisition } from '@/models/api/generated/ApiGen_Concepts_CompensationRequisition';
+import { getEmptyBaseAudit } from '@/models/defaultInitializers';
 
 import { ICompensationListViewProps } from './CompensationListView';
 
 export interface ICompensationListContainerProps {
   fileId: number;
-  file: Api_AcquisitionFile;
+  file: ApiGen_Concepts_AcquisitionFile;
   View: React.FunctionComponent<React.PropsWithChildren<ICompensationListViewProps>>;
 }
 
 /**
  * Page that displays compensation list information.
  */
-export const CompensationListContainer: React.FunctionComponent<
-  React.PropsWithChildren<ICompensationListContainerProps>
-> = ({ fileId, file, View }: ICompensationListContainerProps) => {
+export const CompensationListContainer: React.FC<ICompensationListContainerProps> = ({
+  fileId,
+  file,
+  View,
+}: ICompensationListContainerProps) => {
   const {
     getAcquisitionCompensationRequisitions: {
       execute: getAcquisitionCompensationRequisitions,
@@ -48,9 +50,9 @@ export const CompensationListContainer: React.FunctionComponent<
     totalAllowableCompensation: number | null,
   ): Promise<number | null> => {
     if (file) {
-      const updatedFile = {
+      const updatedFile: ApiGen_Concepts_AcquisitionFile = {
         ...file,
-        totalAllowableCompensation: totalAllowableCompensation ?? undefined,
+        totalAllowableCompensation: totalAllowableCompensation ?? null,
       };
       try {
         const response = await putAcquisitionFile(updatedFile, []);
@@ -67,8 +69,14 @@ export const CompensationListContainer: React.FunctionComponent<
       } catch (e) {
         if (axios.isAxiosError(e)) {
           const axiosError = e as AxiosError<IApiError>;
-          toast.error(axiosError.response?.data.error, { autoClose: 20000 });
-          throw Error(axiosError.response?.data.error);
+          setModalContent({
+            variant: 'error',
+            title: 'Invalid value',
+            message: axiosError?.response?.data?.error,
+            okButtonText: 'Close',
+          });
+          setDisplayModal(true);
+          throw Error(axiosError.response?.data?.error);
         }
       }
     }
@@ -76,7 +84,7 @@ export const CompensationListContainer: React.FunctionComponent<
   };
 
   const onAddCompensationRequisition = (fileId: number) => {
-    const defaultCompensationRequisition: Api_CompensationRequisition = {
+    const defaultCompensationRequisition: ApiGen_Concepts_CompensationRequisition = {
       id: null,
       acquisitionFileId: fileId,
       alternateProjectId: null,
@@ -108,6 +116,7 @@ export const CompensationListContainer: React.FunctionComponent<
       legacyPayee: null,
       isPaymentInTrust: null,
       gstNumber: null,
+      ...getEmptyBaseAudit(),
     };
 
     postAcquisitionCompensationRequisition(fileId, defaultCompensationRequisition).then(

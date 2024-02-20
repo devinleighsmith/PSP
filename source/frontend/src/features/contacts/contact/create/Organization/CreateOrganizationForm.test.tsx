@@ -105,7 +105,7 @@ describe('CreateOrganizationForm', () => {
       });
 
       // wait for re-render upon changing country to OTHER
-      await act(async () => fillInput(container, 'mailingAddress.countryId', 4, 'select'));
+      fillInput(container, 'mailingAddress.countryId', 4, 'select');
 
       await act(async () => {
         await fillInput(container, 'mailingAddress.countryOther', mockAddress.countryOther);
@@ -134,7 +134,17 @@ const expectedFormData: IEditableOrganization = {
   comment: '',
   persons: undefined,
   addresses: [],
-  contactMethods: [{ contactMethodTypeCode: { id: 'WORKEMAIL' }, value: 'foo@bar.com' }],
+  contactMethods: [
+    {
+      contactMethodTypeCode: {
+        id: 'WORKEMAIL',
+        description: null,
+        isDisabled: false,
+        displayOrder: null,
+      },
+      value: 'foo@bar.com',
+    },
+  ],
 };
 
 const mockAddress: IEditableOrganizationAddress = {
@@ -146,5 +156,10 @@ const mockAddress: IEditableOrganizationAddress = {
   countryId: 4,
   countryOther: 'Netherlands',
   postal: '123456',
-  addressTypeId: { id: AddressTypes.Mailing },
+  addressTypeId: {
+    id: AddressTypes.Mailing,
+    description: null,
+    isDisabled: false,
+    displayOrder: null,
+  },
 };

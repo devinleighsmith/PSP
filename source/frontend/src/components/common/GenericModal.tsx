@@ -24,9 +24,9 @@ export interface ModalVisibleState {
 
 export interface ModalContent {
   /** Optional function to control behaviour of cancel button. Default is to close the modal. */
-  handleCancel?: Function;
+  handleCancel?: () => void;
   /** Optional function to control behaviour of ok button. Default is to reload the app. */
-  handleOk?: Function;
+  handleOk?: () => void;
   handleOkDisabled?: boolean;
   /** Optional text to display on the cancel button. Default is Cancel. */
   cancelButtonText?: string;
@@ -108,7 +108,7 @@ export const GenericModal = (props: Omit<BsModalProps, 'onHide'> & ModalProps) =
     cancelButtonText,
     closeButton,
     hideFooter,
-    modalSize,
+    modalSize = ModalSize.MEDIUM,
     variant,
     className,
     headerIcon,
@@ -340,7 +340,7 @@ const StyledModal = styled(Modal)`
   }
 
   .modal-m {
-    max-width: 50rem;
+    max-width: 60rem;
   }
 
   .modal-s {

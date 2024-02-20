@@ -35,7 +35,12 @@ const mockOrganization: IEditableOrganization = {
       organizationAddressRowVersion: 2,
       organizationId: 200,
       id: 1,
-      addressTypeId: { id: AddressTypes.Mailing },
+      addressTypeId: {
+        id: AddressTypes.Mailing,
+        description: null,
+        isDisabled: false,
+        displayOrder: null,
+      },
       streetAddress1: '3000 Main Ave',
       streetAddress2: '',
       streetAddress3: '',
@@ -48,7 +53,12 @@ const mockOrganization: IEditableOrganization = {
   ],
   contactMethods: [
     {
-      contactMethodTypeCode: { id: ContactMethodTypes.WorkEmail },
+      contactMethodTypeCode: {
+        id: ContactMethodTypes.WorkEmail,
+        description: null,
+        displayOrder: null,
+        isDisabled: false,
+      },
       value: 'foo@bar.com',
     },
   ],
@@ -57,6 +67,9 @@ const mockOrganization: IEditableOrganization = {
 const mockContactMethod: IEditableContactMethod = {
   contactMethodTypeCode: {
     id: 'WORKEMAIL',
+    description: null,
+    displayOrder: null,
+    isDisabled: false,
   },
   value: 'test@test.com',
 };
@@ -84,7 +97,12 @@ const mockAddress: IEditablePersonAddress = {
   countryId: 4,
   countryOther: 'Netherlands',
   postal: '123456',
-  addressTypeId: { id: AddressTypes.Mailing },
+  addressTypeId: {
+    id: AddressTypes.Mailing,
+    description: null,
+    displayOrder: null,
+    isDisabled: false,
+  },
 };
 
 // Mock API service calls
@@ -180,7 +198,12 @@ describe('UpdatePersonForm', () => {
         surname: 'UpdatedLastname',
         contactMethods: [
           {
-            contactMethodTypeCode: { id: ContactMethodTypes.PersonalEmail },
+            contactMethodTypeCode: {
+              id: ContactMethodTypes.PersonalEmail,
+              description: null,
+              displayOrder: null,
+              isDisabled: false,
+            },
             value: 'newaddress@test.com',
           },
         ],
@@ -218,7 +241,12 @@ describe('UpdatePersonForm', () => {
         surname: 'UpdatedLastname',
         contactMethods: [
           {
-            contactMethodTypeCode: { id: ContactMethodTypes.PersonalEmail },
+            contactMethodTypeCode: {
+              id: ContactMethodTypes.PersonalEmail,
+              description: null,
+              displayOrder: null,
+              isDisabled: false,
+            },
             value: 'newaddress@test.com',
           },
         ],
@@ -245,7 +273,7 @@ describe('UpdatePersonForm', () => {
       });
 
       // wait for re-render upon changing country to OTHER
-      await act(async () => fillInput(container, 'mailingAddress.countryId', 4, 'select'));
+      fillInput(container, 'mailingAddress.countryId', 4, 'select');
 
       await act(async () => {
         await fillInput(container, 'mailingAddress.countryOther', mockAddress.countryOther);
@@ -255,7 +283,7 @@ describe('UpdatePersonForm', () => {
       const save = getSaveButton();
       await act(async () => userEvent.click(save));
 
-      expect(updatePerson).toBeCalledWith(newValues);
+      expect(updatePerson).toHaveBeenCalledWith(newValues);
     });
   });
 });

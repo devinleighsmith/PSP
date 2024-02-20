@@ -5,7 +5,6 @@ import { MdTopic } from 'react-icons/md';
 import { matchPath, useHistory, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import GenericModal from '@/components/common/GenericModal';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { FileTypes } from '@/constants/fileTypes';
@@ -14,10 +13,11 @@ import MapSideBarLayout from '@/features/mapSideBar/layout/MapSideBarLayout';
 import { useResearchRepository } from '@/hooks/repositories/useResearchRepository';
 import { useQuery } from '@/hooks/use-query';
 import useApiUserOverride from '@/hooks/useApiUserOverride';
-import { Api_File } from '@/models/api/File';
-import { Api_ResearchFile } from '@/models/api/ResearchFile';
+import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
+import { ApiGen_Concepts_File } from '@/models/api/generated/ApiGen_Concepts_File';
+import { ApiGen_Concepts_ResearchFile } from '@/models/api/generated/ApiGen_Concepts_ResearchFile';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
-import { stripTrailingSlash } from '@/utils';
+import { exists, stripTrailingSlash } from '@/utils';
 import { getFilePropertyName } from '@/utils/mapPropertyUtils';
 
 import { SideBarContext } from '../context/sidebarContext';
@@ -64,12 +64,10 @@ export const ResearchContainer: React.FunctionComponent<
   } = React.useContext(SideBarContext);
 
   const [isValid, setIsValid] = useState<boolean>(true);
-
   const [isShowingPropertySelector, setIsShowingPropertySelector] = useState<boolean>(false);
+  const { setModalContent, setDisplayModal } = useModalContext();
 
   const formikRef = useRef<FormikProps<any>>(null);
-
-  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const history = useHistory();
   const match = useRouteMatch();
@@ -79,7 +77,7 @@ export const ResearchContainer: React.FunctionComponent<
 
   const { updateResearchFileProperties } = useUpdateResearchProperties();
   const wrapWithOverride = useApiUserOverride<
-    (userOverrideCodes: UserOverrideCode[]) => Promise<Api_ResearchFile | undefined>
+    (userOverrideCodes: UserOverrideCode[]) => Promise<ApiGen_Concepts_ResearchFile | undefined>
   >('Failed to update Research File');
 
   useEffect(
@@ -89,16 +87,20 @@ export const ResearchContainer: React.FunctionComponent<
   );
 
   const fetchResearchFile = React.useCallback(async () => {
-    var retrieved = await getResearchFile(props.researchFileId);
-    var researchProperties = await getResearchFileProperties(props.researchFileId);
-    retrieved?.fileProperties?.forEach(async fp => {
-      fp.property = researchProperties?.find(ap => fp.id === ap.id)?.property;
-    });
-    setFile({ ...retrieved, fileType: FileTypes.Research });
+    const retrieved = await getResearchFile(props.researchFileId);
+    if (exists(retrieved)) {
+      const researchProperties = await getResearchFileProperties(props.researchFileId);
+      retrieved.fileProperties?.forEach(async fp => {
+        fp.property = researchProperties?.find(ap => fp.id === ap.id)?.property ?? null;
+      });
+      setFile({ ...retrieved, fileType: FileTypes.Research });
+    } else {
+      setFile(undefined);
+    }
   }, [getResearchFile, getResearchFileProperties, props.researchFileId, setFile]);
 
   const fetchLastUpdatedBy = React.useCallback(async () => {
-    var retrieved = await getLastUpdatedBy(props.researchFileId);
+    const retrieved = await getLastUpdatedBy(props.researchFileId);
     if (retrieved !== undefined) {
       setLastUpdatedBy(retrieved);
     } else {
@@ -136,7 +138,7 @@ export const ResearchContainer: React.FunctionComponent<
 
   React.useEffect(() => {
     if (
-      lastUpdatedBy === undefined ||
+      !exists(lastUpdatedBy) ||
       researchFileId !== lastUpdatedBy?.parentId ||
       staleLastUpdatedBy
     ) {
@@ -185,7 +187,15 @@ export const ResearchContainer: React.FunctionComponent<
   const handleCancelClick = () => {
     if (formikRef !== undefined) {
       if (formikRef.current?.dirty) {
-        setShowConfirmModal(true);
+        setModalContent({
+          ...getCancelModalProps(),
+          handleOk: () => {
+            handleCancelConfirm();
+            setDisplayModal(false);
+          },
+          handleCancel: () => setDisplayModal(false),
+        });
+        setDisplayModal(true);
       } else {
         handleCancelConfirm();
       }
@@ -198,7 +208,6 @@ export const ResearchContainer: React.FunctionComponent<
     if (formikRef !== undefined) {
       formikRef.current?.resetForm();
     }
-    setShowConfirmModal(false);
     setIsEditing(false);
   };
 
@@ -221,9 +230,12 @@ export const ResearchContainer: React.FunctionComponent<
         file={researchFile}
         setIsShowingPropertySelector={setIsShowingPropertySelector}
         onSuccess={onSuccess}
-        updateFileProperties={(file: Api_File) =>
+        updateFileProperties={(file: ApiGen_Concepts_File) =>
           wrapWithOverride((userOverrideCodes: UserOverrideCode[]) =>
-            updateResearchFileProperties(file, userOverrideCodes).then(response => {
+            updateResearchFileProperties(
+              file as ApiGen_Concepts_ResearchFile,
+              userOverrideCodes,
+            ).then(response => {
               onSuccess();
               setIsShowingPropertySelector(false);
               return response;
@@ -239,7 +251,12 @@ export const ResearchContainer: React.FunctionComponent<
       <MapSideBarLayout
         title={isEditing ? 'Update Research File' : 'Research File'}
         icon={<MdTopic title="User Profile" size="2.5rem" className="mr-2" />}
-        header={<ResearchHeader researchFile={researchFile} lastUpdatedBy={lastUpdatedBy} />}
+        header={
+          <ResearchHeader
+            researchFile={researchFile as unknown as ApiGen_Concepts_ResearchFile}
+            lastUpdatedBy={lastUpdatedBy}
+          />
+        }
         footer={
           isEditing && (
             <SidebarFooter
@@ -266,32 +283,13 @@ export const ResearchContainer: React.FunctionComponent<
           }
           bodyComponent={
             <StyledFormWrapper>
-              <>
-                <GenericModal
-                  variant="info"
-                  display={showConfirmModal}
-                  title={'Confirm changes'}
-                  message={
-                    <>
-                      <div>If you choose to cancel now, your changes will not be saved.</div>
-                      <br />
-                      <strong>Do you want to proceed?</strong>
-                    </>
-                  }
-                  handleOk={handleCancelConfirm}
-                  handleCancel={() => setShowConfirmModal(false)}
-                  okButtonText="Yes"
-                  cancelButtonText="No"
-                  show
-                />
-                <ResearchView
-                  researchFile={researchFile}
-                  onSuccess={onSuccess}
-                  setEditMode={setIsEditing}
-                  ref={formikRef}
-                  isEditing={isEditing}
-                />
-              </>
+              <ResearchView
+                researchFile={researchFile as unknown as ApiGen_Concepts_ResearchFile}
+                onSuccess={onSuccess}
+                setEditMode={setIsEditing}
+                ref={formikRef}
+                isEditing={isEditing}
+              />
             </StyledFormWrapper>
           }
         ></FileLayout>

@@ -3,12 +3,14 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 
 import { Claims } from '@/constants/claims';
-import { IPagedItems } from '@/interfaces';
+import { IContactSearchResult, IPagedItems } from '@/interfaces';
 import {
+  getEmptyPerson,
   getMockContactOrganizationWithOnePerson,
   getMockContactPerson,
 } from '@/mocks/contacts.mock';
 import { mockLookups } from '@/mocks/index.mock';
+import { getEmptyOrganization } from '@/mocks/organization.mock';
 import { lookupCodesSlice } from '@/store/slices/lookupCodes';
 import { mockKeycloak, renderAsync, RenderOptions, userEvent } from '@/utils/test-utils';
 
@@ -159,9 +161,14 @@ describe('AddLeaseTenantForm component', () => {
   });
 
   it('displays no contacts available if organization has no contacts', async () => {
-    const organization = {
+    const organization: IContactSearchResult = {
       ...getMockContactOrganizationWithOnePerson(),
-      organization: { organizationPersons: [] },
+      organization: { ...getEmptyOrganization(), organizationPersons: [] },
+      personId: undefined,
+      person: undefined,
+      surname: undefined,
+      firstName: undefined,
+      middleNames: undefined,
     };
 
     await setup({
@@ -174,9 +181,14 @@ describe('AddLeaseTenantForm component', () => {
   });
 
   it('displays no contacts available if organization has no contacts', async () => {
-    const organization = {
+    const organization: IContactSearchResult = {
       ...getMockContactOrganizationWithOnePerson(),
-      organization: { organizationPersons: [] },
+      organization: { ...getEmptyOrganization(), organizationPersons: [] },
+      personId: undefined,
+      person: undefined,
+      surname: undefined,
+      firstName: undefined,
+      middleNames: undefined,
     };
 
     await setup({
@@ -189,9 +201,14 @@ describe('AddLeaseTenantForm component', () => {
   });
 
   it('displays no contacts available if organization has no contacts', async () => {
-    const organization = {
+    const organization: IContactSearchResult = {
       ...getMockContactOrganizationWithOnePerson(),
-      organization: { organizationPersons: [] },
+      organization: { ...getEmptyOrganization(), organizationPersons: [] },
+      personId: undefined,
+      person: undefined,
+      surname: undefined,
+      firstName: undefined,
+      middleNames: undefined,
     };
 
     await setup({
@@ -204,19 +221,24 @@ describe('AddLeaseTenantForm component', () => {
   });
 
   it('displays the primary contact if there is only one', async () => {
-    const organization = {
+    const organization: IContactSearchResult = {
       ...getMockContactOrganizationWithOnePerson(),
       organization: {
+        ...getEmptyOrganization(),
         organizationPersons: [
           {
             personId: 3,
             organizationId: 3,
-            isDisabled: false,
             rowVersion: 1,
-            person: { firstName: 'test', surname: 'testerson' },
+            person: { ...getEmptyPerson(), firstName: 'test', surname: 'testerson' },
           },
         ],
       },
+      personId: undefined,
+      person: undefined,
+      surname: undefined,
+      firstName: undefined,
+      middleNames: undefined,
     };
 
     await setup({
@@ -229,26 +251,30 @@ describe('AddLeaseTenantForm component', () => {
   });
 
   it('displays a list if there are multiple', async () => {
-    const organization = {
+    const organization: IContactSearchResult = {
       ...getMockContactOrganizationWithOnePerson(),
       organization: {
+        ...getEmptyOrganization(),
         organizationPersons: [
           {
             personId: 3,
             organizationId: 3,
-            isDisabled: false,
             rowVersion: 1,
-            person: { firstName: 'test', surname: 'testerson' },
+            person: { ...getEmptyPerson(), firstName: 'test', surname: 'testerson' },
           },
           {
             personId: 2,
             organizationId: 3,
-            isDisabled: false,
             rowVersion: 1,
-            person: { firstName: 'second', surname: 'testerson' },
+            person: { ...getEmptyPerson(), firstName: 'second', surname: 'testerson' },
           },
         ],
       },
+      personId: undefined,
+      person: undefined,
+      surname: undefined,
+      firstName: undefined,
+      middleNames: undefined,
     };
 
     await setup({

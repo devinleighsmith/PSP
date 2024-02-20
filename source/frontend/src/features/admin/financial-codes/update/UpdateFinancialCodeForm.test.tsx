@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import { FinancialCodeTypes } from '@/constants/index';
 import { mockFinancialCode } from '@/mocks/index.mock';
-import { Api_FinancialCode } from '@/models/api/FinancialCode';
+import { ApiGen_Concepts_FinancialCode } from '@/models/api/generated/ApiGen_Concepts_FinancialCode';
+import { ApiGen_Concepts_FinancialCodeTypes } from '@/models/api/generated/ApiGen_Concepts_FinancialCodeTypes';
 import {
   act,
   createAxiosError,
@@ -73,7 +73,7 @@ describe('UpdateFinancialCode form', () => {
     await act(async () => userEvent.paste(description, `another description`));
     await act(async () => userEvent.click(cancelButton));
 
-    expect(screen.getByText('Unsaved Changes')).toBeVisible();
+    expect(screen.getByText(/Confirm Changes/i)).toBeVisible();
     expect(await screen.findByDisplayValue('another description')).toBeVisible();
   });
 
@@ -85,7 +85,7 @@ describe('UpdateFinancialCode form', () => {
     await act(async () => userEvent.clear(description));
     await act(async () => userEvent.paste(description, `another description`));
     await act(async () => userEvent.click(cancelButton));
-    expect(screen.getByText('Unsaved Changes')).toBeVisible();
+    expect(screen.getByText(/Confirm Changes/i)).toBeVisible();
     const confirmButton = screen.getByText('Yes');
     await act(async () => userEvent.click(confirmButton));
 
@@ -101,7 +101,7 @@ describe('UpdateFinancialCode form', () => {
     await act(async () => userEvent.clear(description));
     await act(async () => userEvent.paste(description, `another description`));
     await act(async () => userEvent.click(cancelButton));
-    expect(screen.getByText('Unsaved Changes')).toBeVisible();
+    expect(screen.getByText(/Confirm Changes/i)).toBeVisible();
     const noButton = screen.getByText('No');
     await act(async () => userEvent.click(noButton));
 
@@ -123,8 +123,8 @@ describe('UpdateFinancialCode form', () => {
     await act(async () => userEvent.click(saveButton));
 
     expect(mockProps.onSave).toHaveBeenCalledWith(
-      expect.objectContaining<Partial<Api_FinancialCode>>({
-        type: FinancialCodeTypes.BusinessFunction,
+      expect.objectContaining<Partial<ApiGen_Concepts_FinancialCode>>({
+        type: ApiGen_Concepts_FinancialCodeTypes.BusinessFunction,
         code: 'FOO',
         description: `another description`,
       }),

@@ -32,6 +32,7 @@ import {
   getDefaultAddress,
   IEditablePersonForm,
 } from '@/interfaces/editable-contact';
+import { isValidId } from '@/utils';
 
 import PersonSubForm from '../../Person/PersonSubForm';
 import { onValidatePerson } from '../../utils/contactUtils';
@@ -55,11 +56,11 @@ export const UpdatePersonForm: React.FC<{ id: number }> = ({ id }) => {
     { setSubmitting }: FormikHelpers<IEditablePersonForm>,
   ) => {
     try {
-      let apiPerson = formPersonToApiPerson(formPerson);
+      const apiPerson = formPersonToApiPerson(formPerson);
       const personResponse = await updatePerson(apiPerson);
       const personId = personResponse?.id;
 
-      if (!!personId) {
+      if (isValidId(personId)) {
         history.push(`/contact/P${personId}`);
       }
     } finally {
@@ -71,7 +72,7 @@ export const UpdatePersonForm: React.FC<{ id: number }> = ({ id }) => {
     <Formik
       component={UpdatePersonComponent}
       initialValues={
-        !!formPerson
+        formPerson
           ? {
               ...defaultCreatePerson,
               ...formPerson,
