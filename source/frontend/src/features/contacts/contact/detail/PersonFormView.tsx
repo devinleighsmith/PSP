@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Col } from 'react-bootstrap';
-import { FaCircle, FaRegBuilding, FaRegUser } from 'react-icons/fa';
+import { FaCircle, FaRegUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import { FormSection } from '@/components/common/form/styles';
+import { Section } from '@/components/common/Section/Section';
+import { SectionField } from '@/components/common/Section/SectionField';
 import { AddressField } from '@/features/contacts/interfaces';
 import { IContactOrganization, IContactPerson } from '@/interfaces/IContact';
 
@@ -11,11 +12,11 @@ import * as Styled from '../../styles';
 import { toAddressFields } from '../utils/contactUtils';
 import ContactInfoSubForm from './ContactInfoSubForm';
 
-export interface PersonViewProps {
+export interface PersonFormViewProps {
   person: IContactPerson;
 }
 
-const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProps>> = ({
+const PersonFormView: React.FunctionComponent<React.PropsWithChildren<PersonFormViewProps>> = ({
   person,
 }) => {
   let personAddresses: AddressField[];
@@ -27,7 +28,7 @@ const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProp
 
   return (
     <>
-      <FormSection key={'contact-person-' + person.id + '-names'} className="mb-4">
+      <Section key={'contact-person-' + person.id + '-names'} className="mb-4">
         <Styled.RowAligned>
           <Col>
             <Styled.H2 data-testid="contact-person-fullname">
@@ -37,7 +38,7 @@ const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProp
           </Col>
           <Col md="auto" className="ml-auto">
             <Styled.StatusIndicators className={person.isDisabled ? 'inactive' : 'active'}>
-              <FaCircle size={7} className="mr-2" />
+              <FaCircle size={14} className="mr-2" />
               <span data-testid="contact-person-status">
                 {person.isDisabled ? 'INACTIVE' : 'ACTIVE'}
               </span>
@@ -45,24 +46,24 @@ const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProp
           </Col>
         </Styled.RowAligned>
         <Styled.RowAligned>
-          <Col md="auto">
+          <Col md="3">
             <strong>Preferred name:</strong>
           </Col>
           <Col md="auto">
             <span data-testid="contact-person-preferred">{person.preferredName}</span>
           </Col>
         </Styled.RowAligned>
-      </FormSection>
-      <FormSection key={'contact-person-' + person.id + '-organization'} className="mb-4">
+      </Section>
+      <Section
+        header="Organization(s)"
+        key={'contact-person-' + person.id + '-organization'}
+        className="mb-4"
+      >
         <Styled.RowAligned>
-          <Col md="auto">
-            <FaRegBuilding className="mr-2" />
-            <strong>Organization(s):</strong>
-          </Col>
           <Col md="auto">
             {person.organizations &&
               person.organizations.map((organization: IContactOrganization, index: number) => (
-                <span key={'person-org-' + index}>
+                <SectionField key={'person-org-' + index} label="Organization name">
                   <Link
                     to={'/contact/O' + organization.id}
                     data-testid="contact-person-organization"
@@ -70,22 +71,32 @@ const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProp
                     {organization.name}
                   </Link>
                   <br />
-                </span>
+                </SectionField>
               ))}
           </Col>
         </Styled.RowAligned>
-      </FormSection>
-      <FormSection key={'contact-person-' + person.id + '-contacts'} className="mb-4">
+      </Section>
+      <Section
+        header="Contact Info"
+        key={'contact-person-' + person.id + '-contacts'}
+        className="mb-4"
+      >
         <ContactInfoSubForm contactEntity={person} />
-      </FormSection>
-      <FormSection key={'contact-person-' + person.id + '-address'} className="mb-4">
-        <Styled.H2Primary>Address</Styled.H2Primary>
-        {personAddresses.map((field: AddressField, index: number) => (
+      </Section>
+
+      {personAddresses.map((field: AddressField, index: number) => (
+        <Section
+          header={field.label}
+          key={'contact-person-' + person.id + '-address-' + index}
+          className="mb-4"
+        >
           <Styled.RowAligned className="pb-3" key={'person-address-' + index}>
-            <Col>
+            <Col md="3">
               <div className="pb-2">
                 <strong>{field.label}</strong>
               </div>
+            </Col>
+            <Col>
               <span data-testid="contact-person-address">
                 {field.streetAddress1 && <div>{field.streetAddress1} </div>}
                 {field.streetAddress2 && <div>{field.streetAddress2} </div>}
@@ -97,20 +108,17 @@ const PersonView: React.FunctionComponent<React.PropsWithChildren<PersonViewProp
               </span>
             </Col>
           </Styled.RowAligned>
-        ))}
-      </FormSection>
-      <FormSection key={'contact-person-' + person.id + '-comments'}>
+        </Section>
+      ))}
+      <Section header="Comments" key={'contact-person-' + person.id + '-comments'}>
         <Styled.RowAligned>
           <Col>
-            <div>
-              <strong>Comments:</strong>
-            </div>
             <span data-testid="contact-person-comment">{person.comment}</span>
           </Col>
         </Styled.RowAligned>
-      </FormSection>
+      </Section>
     </>
   );
 };
 
-export default PersonView;
+export default PersonFormView;

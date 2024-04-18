@@ -11,7 +11,7 @@ import {
 import { phoneFormatter } from '@/utils/formUtils';
 import { render, RenderOptions } from '@/utils/test-utils';
 
-import OrganizationView, { OrganizationViewProps } from './Organization';
+import OrganizationView, { OrganizationViewProps } from './OrganizationFormView';
 import { fakeAddresses } from './utils';
 
 const fakeOrganization: IContactOrganization = {
