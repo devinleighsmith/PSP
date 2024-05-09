@@ -79,15 +79,17 @@ a {
   }
 }
 
+.spinner-border {
+  width: 2.5rem;
+  height: 2.5rem;
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+}
+
 #root {
   // React-bootstrap toast global styling
   .toast {
     font-size: 1.4rem;
-  }
-
-  .spinner-border {
-    width: 3.2rem;
-    height: 3.2rem;
   }
 
   .page-link {
