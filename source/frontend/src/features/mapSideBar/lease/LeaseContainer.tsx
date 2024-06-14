@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import Fence from '@/assets/images/fence.svg?react';
 import GenericModal from '@/components/common/GenericModal';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
+import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { Claims } from '@/constants';
 import { useLeaseDetail } from '@/features/leases';
 import { AddLeaseYupSchema } from '@/features/leases/add/AddLeaseYupSchema';
@@ -162,22 +163,22 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
 
   const close = useCallback(() => onClose && onClose(), [onClose]);
   const { lease, setLease, refresh, loading } = useLeaseDetail(leaseId);
-
-  const { setFullWidth, setStaleFile, staleFile, setStaleLastUpdatedBy, lastUpdatedBy } =
+  const { setStaleFile, staleFile, setStaleLastUpdatedBy, lastUpdatedBy } =
     useContext(SideBarContext);
 
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const activeTab = containerState.activeTab;
+  const { setFullWidthSideBar } = useMapStateMachine();
 
   useEffect(() => {
     if (activeTab === LeaseFileTabNames.deposit || activeTab === LeaseFileTabNames.payments) {
-      setFullWidth(true);
+      setFullWidthSideBar(true);
     } else {
-      setFullWidth(false);
+      setFullWidthSideBar(false);
     }
-    return () => setFullWidth(false);
-  }, [activeTab, setFullWidth]);
+    return () => setFullWidthSideBar(false);
+  }, [activeTab, setFullWidthSideBar]);
 
   useEffect(() => {
     const refreshLease = async () => {

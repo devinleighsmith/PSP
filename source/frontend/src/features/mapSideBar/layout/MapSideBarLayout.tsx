@@ -4,13 +4,15 @@ import { FaWindowClose } from 'react-icons/fa';
 import VisibilitySensor from 'react-visibility-sensor';
 import styled from 'styled-components';
 
+import { ExpandCollapseButton } from '@/components/common/buttons/ExpandCollapseButton';
+import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import * as Styled from '@/components/common/styles';
 import TooltipWrapper from '@/components/common/TooltipWrapper';
 
 interface IMapSideBarLayoutProps {
   title: React.ReactNode;
   header?: React.ReactNode;
-  icon: React.ReactNode | React.FunctionComponent<React.PropsWithChildren<unknown>>;
+  icon: React.ReactNode;
   footer?: React.ReactNode | React.FunctionComponent<React.PropsWithChildren<unknown>>;
   showCloseButton?: boolean;
   onClose?: () => void;
@@ -23,11 +25,39 @@ interface IMapSideBarLayoutProps {
 const MapSideBarLayout: React.FunctionComponent<
   React.PropsWithChildren<IMapSideBarLayoutProps>
 > = ({ title, header, icon, showCloseButton, ...props }) => {
+  const { mapSideBarViewState, toggleSidebarDisplay } = useMapStateMachine();
   return (
     <VisibilitySensor partialVisibility={true}>
-      {({ isVisible }: any) => (
-        <>
-          <TitleBar>
+      {({ isVisible }: any) => {
+        if (mapSideBarViewState.isCollapsed) {
+          return (
+            <>
+              <Row>
+                <Col xs={12} className="justify-content-center d-flex">
+                  {icon}
+                </Col>
+              </Row>
+              <Underline className="mb-4" />
+              <Row>
+                <StyledButtonBar xs={12} className="align-items-center d-flex flex-column-reverse">
+                  <ExpandCollapseButton
+                    expanded={mapSideBarViewState.isCollapsed}
+                    toggleExpanded={toggleSidebarDisplay}
+                  />
+                  {showCloseButton && (
+                    <TooltipWrapper tooltipId="close-sidebar-tooltip" tooltip="Close Form">
+                      <CloseIcon title="close" onClick={props.onClose} />
+                    </TooltipWrapper>
+                  )}
+                </StyledButtonBar>
+              </Row>
+
+              {props.footer && isVisible && <Footer>{props.footer as React.ReactNode}</Footer>}
+            </>
+          );
+        }
+        return (
+          <StyledSidebarWrapper>
             <Row>
               <Col>
                 <Styled.H1 className="mr-auto">
@@ -38,29 +68,50 @@ const MapSideBarLayout: React.FunctionComponent<
                 </Styled.H1>
               </Col>
 
-              {showCloseButton && (
-                <Col xs="auto">
+              <StyledButtonBar xs="auto" className="d-flex">
+                <ExpandCollapseButton
+                  expanded={mapSideBarViewState.isCollapsed}
+                  toggleExpanded={toggleSidebarDisplay}
+                />
+                <Styled.VerticalLine />
+                {showCloseButton && (
                   <TooltipWrapper tooltipId="close-sidebar-tooltip" tooltip="Close Form">
                     <CloseIcon title="close" onClick={props.onClose} />
                   </TooltipWrapper>
-                </Col>
-              )}
+                )}
+              </StyledButtonBar>
             </Row>
             <Underline />
-          </TitleBar>
 
-          {header && isVisible && <Header>{header}</Header>}
+            {header && isVisible && <Header>{header}</Header>}
 
-          <StyledBody>
-            <Content>{isVisible ? props.children : null}</Content>
-          </StyledBody>
+            <StyledBody>
+              <Content>{isVisible ? props.children : null}</Content>
+            </StyledBody>
 
-          {props.footer && isVisible && <Footer>{props.footer as React.ReactNode}</Footer>}
-        </>
-      )}
+            {props.footer && isVisible && <Footer>{props.footer as React.ReactNode}</Footer>}
+          </StyledSidebarWrapper>
+        );
+      }}
     </VisibilitySensor>
   );
 };
+
+const StyledSidebarWrapper = styled.div`
+  min-width: 90rem;
+`;
+
+const StyledButtonBar = styled(Col)`
+  .btn,
+  svg {
+    max-width: 2.6rem;
+    min-width: 2.6rem;
+    max-height: 2.6rem;
+    min-height: 2.6rem;
+  }
+  gap: 1.5rem;
+  align-items: center;
+`;
 
 const StyledBody = styled.div`
   width: 100%;
@@ -73,8 +124,6 @@ const Content = styled.div`
   height: 100%;
   width: 100%;
 `;
-
-const TitleBar = styled.div``;
 
 const Header = styled.div`
   position: relative;
