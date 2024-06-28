@@ -733,6 +733,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
                             class="form-check"
                           >
                             <input
+                              checked=""
                               class="form-check-input position-static"
                               data-testid="radio-isacquiredforinventory-yes"
                               id="input-true"

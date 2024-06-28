@@ -37,6 +37,12 @@ exports[`UpdateAcquisitionForm component > renders as expected 1`] = `
   height: 3.8rem;
 }
 
+.c9.btn .Button__value {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+
 .c9.btn:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
@@ -1701,6 +1707,7 @@ exports[`UpdateAcquisitionForm component > renders as expected 1`] = `
                         class="form-check"
                       >
                         <input
+                          checked=""
                           class="form-check-input position-static"
                           data-testid="radio-owners[0].isorganization-corporation"
                           id="input-true"
