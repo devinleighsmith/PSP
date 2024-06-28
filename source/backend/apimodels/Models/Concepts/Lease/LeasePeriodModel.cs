@@ -89,12 +89,12 @@ namespace Pims.Api.Models.Concepts.Lease
         /// <summary>
         /// get/set - Additional rent payment amount
         /// </summary>
-        public decimal AdditionalRentPaymentAmount { get; set; }
+        public decimal? AdditionalRentPaymentAmount { get; set; }
 
         /// <summary>
         /// get/set - Is the additional rent subject to GST.
         /// </summary>
-        public bool IsAdditionalRentGstEligible { get; set; }
+        public bool? IsAdditionalRentGstEligible { get; set; }
 
         /// <summary>
         /// get/set - Frequency type code for additional rent.
@@ -104,12 +104,12 @@ namespace Pims.Api.Models.Concepts.Lease
         /// <summary>
         /// get/set - Variable rent payment amount
         /// </summary>
-        public decimal VariableRentPaymentAmount { get; set; }
+        public decimal? VariableRentPaymentAmount { get; set; }
 
         /// <summary>
         /// get/set - Is the variable rent subject to GST.
         /// </summary>
-        public bool IsVariableRentGstEligible { get; set; }
+        public bool? IsVariableRentGstEligible { get; set; }
 
         /// <summary>
         /// get/set - Frequency type code for variable rent.

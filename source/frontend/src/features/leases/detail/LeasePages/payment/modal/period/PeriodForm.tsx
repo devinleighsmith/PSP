@@ -130,7 +130,7 @@ export const PeriodForm: React.FunctionComponent<React.PropsWithChildren<IPeriod
                     field="expiryDate"
                     formikProps={formikProps}
                     tooltip="End Date: The end date specified for the period."
-                    required={!formikProps.values.isFlexible}
+                    required={formikProps.values.isFlexible === 'false'}
                   />
                 </Col>
               </Row>

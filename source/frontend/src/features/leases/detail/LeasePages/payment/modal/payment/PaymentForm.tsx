@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from 'formik';
 
+import { ApiGen_CodeTypes_LeasePaymentCategoryTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeasePaymentCategoryTypes';
 import { ApiGen_Concepts_LeasePeriod } from '@/models/api/generated/ApiGen_Concepts_LeasePeriod';
 import { toTypeCodeNullable } from '@/utils/formUtils';
 
@@ -33,6 +34,7 @@ export const PaymentForm: React.FunctionComponent<React.PropsWithChildren<IPayme
     isGstEligible = isActualGstEligible(
       initialValues?.leasePeriodId,
       periods?.map(t => FormLeasePeriod.fromApi(t)) ?? [],
+      ApiGen_CodeTypes_LeasePaymentCategoryTypes[initialValues?.leasePaymentCategoryTypeCode?.id],
     );
   }
 
@@ -46,8 +48,11 @@ export const PaymentForm: React.FunctionComponent<React.PropsWithChildren<IPayme
       }}
       initialValues={{
         ...defaultFormLeasePayment,
-        ...initialValues,
         leasePaymentMethodType: toTypeCodeNullable('CHEQ'),
+        leasePaymentCategoryTypeCode: toTypeCodeNullable(
+          ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE,
+        ),
+        ...initialValues,
         amountGst: isGstEligible ? initialValues?.amountGst ?? '' : '',
       }}
     >

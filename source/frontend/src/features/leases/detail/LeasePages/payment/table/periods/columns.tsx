@@ -21,28 +21,25 @@ import { Claims } from '@/constants';
 import { LeasePeriodStatusTypes } from '@/constants/leaseStatusTypes';
 import useKeycloakWrapper from '@/hooks/useKeycloakWrapper';
 import { ApiGen_CodeTypes_LeaseLicenceTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseLicenceTypes';
+import { ApiGen_CodeTypes_LeasePaymentCategoryTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeasePaymentCategoryTypes';
 import { ISystemConstant } from '@/store/slices/systemConstants';
 import { NumberFieldValue } from '@/typings/NumberFieldValue';
 import { prettyFormatDate } from '@/utils';
 import { stringToFragment } from '@/utils/columnUtils';
 import { formatMoney } from '@/utils/numberFormatUtils';
 
-import {
-  FormLeasePeriod,
-  FormLeasePeriodCategories,
-  FormLeasePeriodWithCategory,
-} from '../../models';
+import { FormLeasePeriod, FormLeasePeriodWithCategory } from '../../models';
 
 function getPeriodName({ row: { index, original } }: CellProps<FormLeasePeriod, unknown>) {
   return (
-    <span>
-      <b>{stringToFragment(`Period ${index + 1}`)}</b>
-      {original.isVariable && (
+    <InlineFlexDiv className="align-items-center">
+      <b>{stringToFragment(`Period ${index + 1}`)}</b>&nbsp;
+      {original.isVariable === 'true' && (
         <TooltipWrapper tooltipId="variable-period-tooltip" tooltip="Variable Payments">
           <StyledRefreshIcon size={16} />
         </TooltipWrapper>
       )}
-    </span>
+    </InlineFlexDiv>
   );
 }
 
@@ -82,7 +79,9 @@ function renderGstAmount({ row: { original } }: CellProps<FormLeasePeriod, Numbe
 
 function renderActualTotal({ row: { original } }: CellProps<FormLeasePeriodWithCategory, string>) {
   const total = formatMoney(
-    (original.payments ?? []).reduce((sum: number, p) => (sum += p.amountTotal as number), 0),
+    (original.payments ?? [])
+      .filter(p => p.leasePaymentCategoryTypeCode?.id === original.category)
+      .reduce((sum: number, p) => (sum += p.amountTotal as number), 0),
   );
   return stringToFragment(original.isTermExercised ? total : '-');
 }
@@ -104,22 +103,34 @@ const renderExpectedPeriod = () =>
 
 const renderCategory = () =>
   function ({ row: { original } }: CellProps<FormLeasePeriodWithCategory, string>) {
-    let tooltipText = '';
+    let rowProps: { categoryName: string; tooltipText: string };
     switch (original.category) {
-      case FormLeasePeriodCategories.AdditionalRent:
-        tooltipText = 'Operating Expenses and Taxes Payable by the Tenant.';
+      case ApiGen_CodeTypes_LeasePaymentCategoryTypes.ADDL:
+        rowProps = {
+          categoryName: 'Additional Rent',
+          tooltipText: 'Operating Expenses and Taxes Payable by the Tenant.',
+        };
         break;
-      case FormLeasePeriodCategories.VariableRent:
-        tooltipText = 'Percentage Rent payable by Tenant.';
+      case ApiGen_CodeTypes_LeasePaymentCategoryTypes.VBL:
+        rowProps = {
+          categoryName: 'Variable Rent',
+          tooltipText: 'Percentage Rent payable by Tenant.',
+        };
         break;
-      case FormLeasePeriodCategories.BaseRent:
-        tooltipText =
-          'Fixed Amount of Rent per Payment Payment Period, excluding Operating Expenses.';
+      case ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE:
+        rowProps = {
+          categoryName: 'Base Rent',
+          tooltipText:
+            'Fixed Amount of Rent per Payment Payment Period, excluding Operating Expenses.',
+        };
     }
     return (
       <>
-        {original.category}
-        <TooltipIcon toolTipId={`variable-period-${original.category}`} toolTip={tooltipText} />
+        {rowProps.categoryName}
+        <TooltipIcon
+          toolTipId={`variable-period-${original.category}`}
+          toolTip={rowProps.tooltipText}
+        />
       </>
     );
   };

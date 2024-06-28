@@ -7,13 +7,13 @@ import { Section } from '@/components/common/Section/Section';
 import { SectionListHeader } from '@/components/common/SectionListHeader';
 import { TableProps } from '@/components/Table';
 import Claims from '@/constants/claims';
+import { ApiGen_CodeTypes_LeasePaymentCategoryTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeasePaymentCategoryTypes';
 import { SystemConstants, useSystemConstants } from '@/store/slices/systemConstants';
 
 import {
   defaultFormLeasePayment,
   FormLeasePayment,
   FormLeasePeriod,
-  FormLeasePeriodCategories,
   FormLeasePeriodWithCategory,
 } from '../../models';
 import * as PaymentStyles from '../../styles';
@@ -45,20 +45,20 @@ export const PaymentsView: React.FunctionComponent<React.PropsWithChildren<IPaym
   const gstDecimal = gstConstant !== undefined ? parseFloat(gstConstant.value) : undefined;
   const variablePaymentColumns = getLeaseVariablePeriodColumns();
   const variablePaymentData: FormLeasePeriodWithCategory[] = [
-    { category: FormLeasePeriodCategories.BaseRent, ...period },
+    { category: ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE, ...period },
     {
-      category: FormLeasePeriodCategories.AdditionalRent,
+      category: ApiGen_CodeTypes_LeasePaymentCategoryTypes.ADDL,
       ...period,
       isGstEligible: period?.isAdditionalRentGstEligible,
-      paymentAmount: period?.additionalRentPaymentAmount,
+      paymentAmount: period?.additionalRentPaymentAmount ?? 0,
       leasePmtFreqTypeCode: period?.additionalRentFreqTypeCode,
       gstAmount: round(+period?.additionalRentPaymentAmount * (gstDecimal / 100), 2),
     },
     {
-      category: FormLeasePeriodCategories.VariableRent,
+      category: ApiGen_CodeTypes_LeasePaymentCategoryTypes.VBL,
       ...period,
       isGstEligible: period?.isVariableRentGstEligible,
-      paymentAmount: period?.variableRentPaymentAmount,
+      paymentAmount: period?.variableRentPaymentAmount ?? 0,
       leasePmtFreqTypeCode: period?.variableRentFreqTypeCode,
       gstAmount: round(+period?.variableRentPaymentAmount * (gstDecimal / 100), 2),
     },
@@ -78,7 +78,7 @@ export const PaymentsView: React.FunctionComponent<React.PropsWithChildren<IPaym
 
   return (
     <>
-      {period?.isVariable && (
+      {period?.isVariable === 'true' && (
         <Section className="ml-10 p-0">
           <PaymentStyles.StyledPaymentTable<React.FC<TableProps<FormLeasePeriodWithCategory>>>
             name="variablePeriodTable"
@@ -104,7 +104,7 @@ export const PaymentsView: React.FunctionComponent<React.PropsWithChildren<IPaym
         {!!period?.payments?.length && isExercised ? (
           <>
             <PaymentStyles.StyledPaymentTable<React.FC<TableProps<FormLeasePayment>>>
-              name="securityDepositsTable"
+              name="paymentsTable"
               columns={columns}
               data={period?.payments ?? []}
               manualPagination

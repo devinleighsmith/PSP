@@ -53,6 +53,8 @@ namespace Pims.Dal.Repositories
                     .ThenInclude(p => p.LeasePaymentMethodTypeCodeNavigation)
                 .Include(t => t.PimsLeasePayments)
                     .ThenInclude(p => p.LeasePaymentStatusTypeCodeNavigation)
+                .Include(t => t.PimsLeasePayments)
+                    .ThenInclude(p => p.LeasePaymentCategoryTypeCodeNavigation)
                 .Where(t => t.LeaseId == leaseId).ToArray();
 
             periods = periods.OrderBy(t => t.PeriodStartDate).ThenBy(t => t.LeasePeriodId).Select(t =>

@@ -1,4 +1,5 @@
 import { useFormikContext } from 'formik';
+import { Col, Row } from 'react-bootstrap';
 
 import { FastCurrencyInput, FastDatePicker, Select } from '@/components/common/form';
 import { InlineFlexDiv } from '@/components/common/styles';
@@ -22,38 +23,73 @@ const PaymentFormContent: React.FunctionComponent<
   const lookups = useLookupCodeHelpers();
   useCalculateActualGst(!!isGstEligible);
   const paymentMethodOptions = lookups.getOptionsByType(API.LEASE_PAYMENT_METHOD_TYPES);
+  const categoryOptions = lookups.getOptionsByType(API.LEASE_PAYMENT_CATEGORY_TYPES);
+
   return (
     <Styled.StyledFormBody>
-      <FastDatePicker
-        required
-        label={isReceived ? 'Received date:' : 'Sent date:'}
-        field="receivedDate"
-        formikProps={formikProps}
-      />
-      <Select label="Method:" field="leasePaymentMethodType.id" options={paymentMethodOptions} />
-      <FastCurrencyInput formikProps={formikProps} label="Total received ($)" field="amountTotal" />
-      <Styled.ActualPaymentBox>
-        <Styled.FlexRight>
-          <TooltipIcon
-            toolTipId="actual-calculation-tooltip"
-            toolTip="If left blank, these values are calculated based on the total received. Enter values here only to override the system calculation."
+      <Row>
+        <Col md={6}>
+          <FastDatePicker
+            required
+            label={isReceived ? 'Received date:' : 'Sent date:'}
+            field="receivedDate"
+            formikProps={formikProps}
           />
-        </Styled.FlexRight>
-        <InlineFlexDiv>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <Select
+            label="Method:"
+            field="leasePaymentMethodType.id"
+            options={paymentMethodOptions}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <Select
+            label="Payment category:"
+            field="leasePaymentCategoryType.id"
+            options={categoryOptions}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
           <FastCurrencyInput
             formikProps={formikProps}
-            label="Expected payment ($)"
-            field="amountPreTax"
-            innerClassName="small"
+            label="Total received ($)"
+            field="amountTotal"
           />
-          <FastCurrencyInput
-            formikProps={formikProps}
-            label="GST ($)"
-            field="amountGst"
-            innerClassName="small"
-          />
-        </InlineFlexDiv>
-      </Styled.ActualPaymentBox>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Styled.ActualPaymentBox>
+            <Styled.FlexRight>
+              <TooltipIcon
+                toolTipId="actual-calculation-tooltip"
+                toolTip="If left blank, these values are calculated based on the total received. Enter values here only to override the system calculation."
+              />
+            </Styled.FlexRight>
+            <InlineFlexDiv>
+              <FastCurrencyInput
+                formikProps={formikProps}
+                label="Expected payment ($)"
+                field="amountPreTax"
+                innerClassName="small"
+              />
+              <FastCurrencyInput
+                formikProps={formikProps}
+                label="GST ($)"
+                field="amountGst"
+                innerClassName="small"
+              />
+            </InlineFlexDiv>
+          </Styled.ActualPaymentBox>
+        </Col>
+      </Row>
     </Styled.StyledFormBody>
   );
 };

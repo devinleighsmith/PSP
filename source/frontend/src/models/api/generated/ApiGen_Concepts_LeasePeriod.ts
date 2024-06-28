@@ -25,11 +25,11 @@ export interface ApiGen_Concepts_LeasePeriod extends ApiGen_Base_BaseAudit {
   isTermExercised: boolean;
   isFlexible: boolean;
   isVariable: boolean;
-  additionalRentPaymentAmount: number;
-  isAdditionalRentGstEligible: boolean;
+  additionalRentPaymentAmount: number | null;
+  isAdditionalRentGstEligible: boolean | null;
   additionalRentFreqTypeCode: ApiGen_Base_CodeType<string> | null;
-  variableRentPaymentAmount: number;
-  isVariableRentGstEligible: boolean;
+  variableRentPaymentAmount: number | null;
+  isVariableRentGstEligible: boolean | null;
   variableRentFreqTypeCode: ApiGen_Base_CodeType<string> | null;
   payments: ApiGen_Concepts_Payment[] | null;
 }
