@@ -183,8 +183,10 @@ export class FormLeasePayment {
     leasePayment.note = apiLeasePayment.note ?? undefined;
     leasePayment.leasePaymentStatusTypeCode =
       apiLeasePayment.leasePaymentStatusTypeCode ?? undefined;
-    leasePayment.leasePaymentCategoryTypeCode =
-      apiLeasePayment.leasePaymentCategoryTypeCode ?? undefined;
+    leasePayment.leasePaymentCategoryTypeCode = apiLeasePayment.leasePaymentCategoryTypeCode ?? {
+      ...defaultTypeCode(),
+      id: ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE,
+    };
     leasePayment.rowVersion = apiLeasePayment.rowVersion ?? undefined;
     return leasePayment;
   }
@@ -197,7 +199,7 @@ export class FormLeasePeriodWithCategory extends FormLeasePeriod {
 export const defaultFormLeasePayment: FormLeasePayment = {
   id: 0,
   leasePeriodId: 0,
-  leasePaymentMethodType: defaultTypeCode(),
+  leasePaymentMethodType: { ...defaultTypeCode(), id: 'CHEQ' },
   receivedDate: '',
   amountPreTax: '',
   amountPst: '',
@@ -205,5 +207,8 @@ export const defaultFormLeasePayment: FormLeasePayment = {
   amountTotal: '',
   note: '',
   leasePaymentStatusTypeCode: defaultTypeCode(),
-  leasePaymentCategoryTypeCode: defaultTypeCode(),
+  leasePaymentCategoryTypeCode: {
+    ...defaultTypeCode(),
+    id: ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE,
+  },
 };

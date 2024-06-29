@@ -1,13 +1,14 @@
 import { useFormikContext } from 'formik';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 
 import { FastCurrencyInput, FastDatePicker, Select } from '@/components/common/form';
 import { InlineFlexDiv } from '@/components/common/styles';
 import TooltipIcon from '@/components/common/TooltipIcon';
 import * as API from '@/constants/API';
 import useLookupCodeHelpers from '@/hooks/useLookupCodeHelpers';
+import { SystemConstants, useSystemConstants } from '@/store/slices/systemConstants';
+import { round } from '@/utils';
 
-import { useCalculateActualGst } from '../../hooks/useCalculateActualGst';
 import { FormLeasePayment } from '../../models';
 import * as Styled from '../../styles';
 
@@ -21,9 +22,13 @@ const PaymentFormContent: React.FunctionComponent<
 > = ({ isReceived, isGstEligible }) => {
   const formikProps = useFormikContext<FormLeasePayment>();
   const lookups = useLookupCodeHelpers();
-  useCalculateActualGst(!!isGstEligible);
   const paymentMethodOptions = lookups.getOptionsByType(API.LEASE_PAYMENT_METHOD_TYPES);
   const categoryOptions = lookups.getOptionsByType(API.LEASE_PAYMENT_CATEGORY_TYPES);
+
+  const { setFieldValue } = useFormikContext<FormLeasePayment>();
+  const { getSystemConstant } = useSystemConstants();
+  const gstConstant = getSystemConstant(SystemConstants.GST);
+  const gstDecimal = gstConstant !== undefined ? parseFloat(gstConstant.value) : undefined;
 
   return (
     <Styled.StyledFormBody>
@@ -50,7 +55,7 @@ const PaymentFormContent: React.FunctionComponent<
         <Col md={6}>
           <Select
             label="Payment category:"
-            field="leasePaymentCategoryType.id"
+            field="leasePaymentCategoryTypeCode.id"
             options={categoryOptions}
           />
         </Col>
@@ -61,6 +66,18 @@ const PaymentFormContent: React.FunctionComponent<
             formikProps={formikProps}
             label="Total received ($)"
             field="amountTotal"
+            onChange={amountTotal => {
+              if (gstDecimal && isGstEligible) {
+                const calculatedPreTax = round(+amountTotal / (gstDecimal / 100 + 1));
+                const calculatedGst = round(+amountTotal - calculatedPreTax);
+                setFieldValue('amountGst', calculatedGst);
+                setFieldValue('amountPreTax', calculatedPreTax);
+              } else {
+                setFieldValue('amountPreTax', amountTotal);
+                setFieldValue('amountGst', '');
+              }
+              setFieldValue('amountTotal', amountTotal);
+            }}
           />
         </Col>
       </Row>
@@ -88,6 +105,13 @@ const PaymentFormContent: React.FunctionComponent<
               />
             </InlineFlexDiv>
           </Styled.ActualPaymentBox>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form.Control.Feedback type="invalid">
+            {(formikProps.errors as any).form}
+          </Form.Control.Feedback>
         </Col>
       </Row>
     </Styled.StyledFormBody>

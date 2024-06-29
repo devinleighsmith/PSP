@@ -53,7 +53,7 @@ type OptionalAttributes = {
 
   onBlurChange?: React.FormEventHandler;
 
-  onChange?: React.FormEventHandler;
+  onChange?: (e: number | '') => void;
 };
 
 export type CurrencyInputProps = RequiredAttributes &
@@ -104,7 +104,7 @@ const CurrencyInput = ({
     const cleanValue = e.target.value.replace(regex, '');
     setFieldValue(field, cleanValue ? parseFloat(cleanValue) : '');
     if (typeof onChange === 'function') {
-      onChange(e);
+      onChange(cleanValue ? parseFloat(cleanValue) : '');
     }
   };
 

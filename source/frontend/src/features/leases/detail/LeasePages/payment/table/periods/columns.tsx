@@ -117,7 +117,7 @@ const renderCategory = () =>
           tooltipText: 'Percentage Rent payable by Tenant.',
         };
         break;
-      case ApiGen_CodeTypes_LeasePaymentCategoryTypes.BASE:
+      default:
         rowProps = {
           categoryName: 'Base Rent',
           tooltipText:
