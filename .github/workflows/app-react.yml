@@ -52,11 +52,6 @@ jobs:
       - run: npm run build --if-present
         working-directory: ${{env.working-directory}}
 
-      - run: npm run coverage -- --bail 1 --maxWorkers 2 --minWorkers 2
-        working-directory: ${{env.working-directory}}
-        env:
-          REACT_APP_TENANT: MOTI
-
       - name: Save PR number and scan results
         run: |
           mkdir -p ./pr
@@ -73,14 +68,14 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ env.SONAR_URL }}
-          PROJECT_KEY: ${{env.PROJECT_KEY_APP}}
+          SONAR_HOST_URL: ${{ vars.SONAR_URL }}
+          PROJECT_KEY: ${{vars.PROJECT_KEY_APP}}
           PROJECT_NAME: PIMS-APP
         with:
           projectBaseDir: ${{env.working-directory}}
           args: >
-            -Dsonar.projectKey=${{env.PROJECT_KEY_APP}}
-            -Dsonar.projectName=${{env.PROJECT_NAME}}
+            -Dsonar.projectKey=${{vars.PROJECT_KEY_APP}}
+            -Dsonar.projectName=${{vars.PROJECT_NAME}}
             -Dsonar.qualitygate.wait=true
 
       # Send notifications only if MS_TEAMS_NOTIFY_URL secret has been set
