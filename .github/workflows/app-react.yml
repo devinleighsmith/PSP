@@ -52,17 +52,6 @@ jobs:
       - run: npm run build --if-present
         working-directory: ${{env.working-directory}}
 
-      - name: Save PR number and scan results
-        run: |
-          mkdir -p ./pr
-          echo ${{ github.event.pull_request.number }} > ./pr/NR
-          cp ${{env.working-directory}}/coverage/coverage-final.json ./pr
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pr-codecov
-          path: pr/
-
       - name: SonarQube Scan
         id: scan
         uses: sonarsource/sonarqube-scan-action@master
