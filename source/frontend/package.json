@@ -10,7 +10,7 @@
     "@turf/turf": "7.0.0",
     "@types/polylabel": "1.0.5",
     "@xstate/react": "3.2.2",
-    "axios": "1.6.7",
+    "axios": "1.7.7",
     "bootstrap": "4.6.2",
     "classnames": "2.3.1",
     "convert": "4.4.2",
