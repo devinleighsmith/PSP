@@ -15,14 +15,15 @@ import { getMockApiLease } from '@/mocks/lease.mock';
 import { mockLookups } from '@/mocks/lookups.mock';
 import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
-import { EpochIsoDateTime } from '@/models/api/UtcIsoDateTime';
 import { defaultApiLease, getEmptyLease } from '@/models/defaultInitializers';
 import { lookupCodesSlice } from '@/store/slices/lookupCodes';
 import { toTypeCodeNullable } from '@/utils/formUtils';
-import { renderAsync, screen } from '@/utils/test-utils';
+import { render, screen } from '@/utils/test-utils';
 
 import UpdateLeaseContainer, { UpdateLeaseContainerProps } from './UpdateLeaseContainer';
 import { IUpdateLeaseFormProps } from './UpdateLeaseForm';
+import { ApiGen_CodeTypes_LeaseAccountTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseAccountTypes';
+import { ApiGen_CodeTypes_LeaseStatusTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseStatusTypes';
 
 const history = createMemoryHistory();
 const storeState = {
@@ -35,9 +36,11 @@ vi.mocked(useLeaseDetail).mockReturnValue({
   lease: getMockApiLease(),
   setLease: noop,
   getCompleteLease: vi.fn().mockResolvedValue(getMockApiLease()),
-  refresh: noop as any,
+  refresh: vi.fn(),
   loading: false,
 });
+
+const onEdit = vi.fn();
 
 describe('Update lease container component', () => {
   let viewProps: IUpdateLeaseFormProps;
@@ -46,13 +49,13 @@ describe('Update lease container component', () => {
     return <></>;
   });
 
-  const setup = async (renderOptions: RenderOptions & Partial<UpdateLeaseContainerProps> = {}) => {
-    // render component under test
-    const component = await renderAsync(
+  // render component under test
+  const setup = (renderOptions: RenderOptions & Partial<UpdateLeaseContainerProps> = {}) => {
+    const component = render(
       <LeaseStateContext.Provider
         value={{ lease: { ...getMockApiLease(), id: 1 }, setLease: noop }}
       >
-        <UpdateLeaseContainer View={View} formikRef={React.createRef()} onEdit={noop} />
+        <UpdateLeaseContainer View={View} formikRef={React.createRef()} onEdit={onEdit} />
       </LeaseStateContext.Provider>,
       {
         ...renderOptions,
@@ -71,43 +74,60 @@ describe('Update lease container component', () => {
     mockAxios.onGet().reply(200, { ...defaultApiLease(), id: 1 });
     mockAxios.resetHistory();
   });
-  it('renders as expected', async () => {
-    const { component } = await setup({});
+
+  it('renders as expected', () => {
+    const { component } = setup({});
     expect(component.asFragment()).toMatchSnapshot();
   });
 
   it('saves the form with minimal data', async () => {
-    await setup({});
+    setup({});
 
-    mockAxios.onPut().reply(200, {});
-    await act(async () =>
-      viewProps.onSubmit({ ...getDefaultFormLease(), purposeTypeCode: 'BCFERRIES' }),
-    );
+    mockAxios.onPut().reply(200, { ...getMockApiLease(), id: 1 });
+    await act(async () => viewProps.onSubmit({ ...getDefaultFormLease() }));
 
+    expect(JSON.parse(mockAxios.history.put[0].data)).toEqual(expectedLease);
+    expect(onEdit).toHaveBeenCalledWith(false);
+    expect(useLeaseDetail().refresh).toHaveBeenCalled();
+  });
+
+  it('triggers the popup for business rule violation', async () => {
+    setup({});
+
+    mockAxios.onPut().reply(400, {
+      error: 'Retired property can not be selected',
+      type: 'BusinessRuleViolationException',
+    });
+    await act(async () => viewProps.onSubmit({ ...getDefaultFormLease() }));
+
+    expect(await screen.findByText(/Retired property can not be selected/i)).toBeVisible();
+    expect(await screen.findByText(/Close/i)).toBeVisible();
     expect(JSON.parse(mockAxios.history.put[0].data)).toEqual(expectedLease);
   });
 
-  it('triggers the confirm popup', async () => {
-    await setup({});
-
-    mockAxios.onPut().reply(409, { error: 'test message' });
-    await act(async () =>
-      viewProps.onSubmit({ ...getDefaultFormLease(), purposeTypeCode: 'BCFERRIES' }),
-    );
-
-    expect(JSON.parse(mockAxios.history.put[0].data)).toEqual(expectedLease);
-  });
-
-  it('clicking on the save anyways popup saves the form', async () => {
-    await setup({});
+  it('triggers the user-override popup', async () => {
+    setup({});
 
     mockAxios.onPut().reply(409, {
       error: 'test message',
       errorCode: UserOverrideCode.PROPERTY_OF_INTEREST_TO_INVENTORY,
     });
-    await act(async () =>
-      viewProps.onSubmit({ ...getDefaultFormLease(), purposeTypeCode: 'BCFERRIES' }),
-    );
+    await act(async () => viewProps.onSubmit({ ...getDefaultFormLease() }));
+
+    expect(await screen.findByText(/test message/i)).toBeVisible();
+    expect(await screen.findByText(/Yes/i)).toBeVisible();
+    expect(await screen.findByText(/No/i)).toBeVisible();
+    expect(JSON.parse(mockAxios.history.put[0].data)).toEqual(expectedLease);
+  });
+
+  it('clicking on the save anyways popup saves the form', async () => {
+    setup({});
+
+    mockAxios.onPut().reply(409, {
+      error: 'test message',
+      errorCode: UserOverrideCode.PROPERTY_OF_INTEREST_TO_INVENTORY,
+    });
+    await act(async () => viewProps.onSubmit({ ...getDefaultFormLease() }));
     const button = await screen.findByText('Yes');
     await act(async () => userEvent.click(button));
 
@@ -117,11 +137,10 @@ describe('Update lease container component', () => {
 
 const expectedLease: ApiGen_Concepts_Lease = {
   ...getEmptyLease(),
-  startDate: EpochIsoDateTime,
+  startDate: null,
   amount: 0,
-  paymentReceivableType: toTypeCodeNullable('RCVBL'),
-  purposeType: toTypeCodeNullable('BCFERRIES'),
-  fileStatusTypeCode: toTypeCodeNullable('DRAFT'),
+  paymentReceivableType: toTypeCodeNullable(ApiGen_CodeTypes_LeaseAccountTypes.RCVBL),
+  fileStatusTypeCode: toTypeCodeNullable(ApiGen_CodeTypes_LeaseStatusTypes.DRAFT),
   type: null,
   region: null,
   programType: null,
@@ -132,12 +151,9 @@ const expectedLease: ApiGen_Concepts_Lease = {
   isCommercialBuilding: false,
   isOtherImprovement: false,
   responsibilityType: null,
-  categoryType: null,
   initiatorType: null,
   otherType: null,
-  otherCategoryType: null,
   otherProgramType: null,
-  otherPurposeType: null,
   tfaFileNumber: null,
   responsibilityEffectiveDate: null,
   psFileNo: null,
@@ -146,17 +162,18 @@ const expectedLease: ApiGen_Concepts_Lease = {
   description: null,
   documentationReference: null,
   expiryDate: null,
-  tenants: [],
-  terms: [],
-  consultations: [],
+  stakeholders: [],
+  periods: [],
+  consultations: null,
   programName: null,
   renewalCount: 0,
   hasPhysicalFile: false,
   hasDigitalFile: false,
   hasPhysicalLicense: null,
   hasDigitalLicense: null,
+  primaryArbitrationCity: null,
   isExpired: false,
   project: null,
   id: 0,
-  rowVersion: 0,
+  rowVersion: null,
 };

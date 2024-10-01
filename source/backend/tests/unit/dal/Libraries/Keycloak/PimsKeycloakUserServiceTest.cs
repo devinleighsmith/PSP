@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Spreadsheet;
 using FluentAssertions;
 using Moq;
 using Pims.Core.Test;
@@ -13,7 +12,6 @@ using Pims.Dal.Repositories;
 using Pims.Dal.Security;
 using Pims.Keycloak.Models;
 using Xunit;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Entity = Pims.Dal.Entities;
 
 namespace Pims.Dal.Test.Libraries.Keycloak
@@ -183,9 +181,17 @@ namespace Pims.Dal.Test.Libraries.Keycloak
             var keycloakServiceMock = helper.GetMock<Pims.Keycloak.IKeycloakRepository>();
             keycloakServiceMock.Setup(m => m.GetUserAsync(It.IsAny<Guid>())).ReturnsAsync((Pims.Keycloak.Models.UserModel)null);
 
+            var userRepository = helper.GetMock<IUserRepository>();
+            userRepository.Setup(m => m.GetTrackingById(It.IsAny<long>())).Returns(euser);
+            userRepository.Setup(m => m.UpdateOnly(It.IsAny<Pims.Dal.Entities.PimsUser>())).Returns(euser);
+
+            var user = EntityHelper.CreateUser(1, euser.GuidIdentifierValue.Value, euser.BusinessIdentifierValue, "new first name", "new last name");
+
             // Act
+            var result = await service.UpdateUserAsync(user);
+
             // Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(async () => await service.UpdateUserAsync(euser));
+            result.Should().Be(null);
         }
 
         /// <summary>
@@ -514,7 +520,7 @@ namespace Pims.Dal.Test.Libraries.Keycloak
         }
 
         [Fact]
-        public async Task UpdateAccessRequestAsync_Recieved()
+        public async Task UpdateAccessRequestAsync_Received()
         {
             // Arrange
             var helper = new TestHelper();
@@ -592,6 +598,7 @@ namespace Pims.Dal.Test.Libraries.Keycloak
                 Role = eRole,
                 RoleId = eRole.Id,
                 RegionCode = eAccessRequest.RegionCode,
+                Note = "I need access please",
             };
 
             var accessRequestRepository = helper.GetMock<IAccessRequestRepository>();
@@ -599,10 +606,11 @@ namespace Pims.Dal.Test.Libraries.Keycloak
             var roleRepository = helper.GetMock<IRoleRepository>();
 
             var values = new List<Entity.PimsAccessRequest>();
+            var userValues = new List<Entity.PimsUser>();
             accessRequestRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns(eAccessRequest);
             userRepository.Setup(m => m.GetTrackingById(It.IsAny<long>())).Returns(updatedAccessRequest.User);
             userRepository.Setup(m => m.GetById(It.IsAny<long>())).Returns(updatedAccessRequest.User);
-            userRepository.Setup(m => m.UpdateOnly(It.IsAny<Entity.PimsUser>())).Returns(updatedAccessRequest.User);
+            userRepository.Setup(m => m.UpdateOnly(Capture.In(userValues))).Returns(updatedAccessRequest.User);
             roleRepository.Setup(m => m.Find(It.IsAny<long>())).Returns(updatedAccessRequest.Role);
             accessRequestRepository.Setup(m => m.Update(Capture.In(values))).Returns(updatedAccessRequest);
 
@@ -614,6 +622,10 @@ namespace Pims.Dal.Test.Libraries.Keycloak
             updated.RegionCode.Should().Be(eAccessRequest.RegionCode);
             updated.AccessRequestStatusTypeCode.Should().Be(AccessRequestStatusTypes.APPROVED);
             updated.User.IsDisabled.Should().BeFalse();
+
+            // Note from access request should be copied over to user account note
+            var updatedUser = userValues.First();
+            updatedUser.Note.Should().Be("I need access please");
         }
 
         [Fact]

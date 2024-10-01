@@ -22,8 +22,6 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsPropertyType> GetAllPropertyTypes();
 
-        IEnumerable<PimsPropertyClassificationType> GetAllPropertyClassificationTypes();
-
         IEnumerable<PimsAreaUnitType> GetAllPropertyAreaUnitTypes();
 
         IEnumerable<PimsVolumeUnitType> GetAllPropertyVolumeUnitTypes();
@@ -42,13 +40,11 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsLeaseLicenseType> GetAllLeaseTypes();
 
-        IEnumerable<PimsLeaseCategoryType> GetAllLeaseCategoryTypes();
-
         IEnumerable<PimsLeasePurposeType> GetAllLeasePurposeTypes();
 
         IEnumerable<PimsLeaseInitiatorType> GetAllLeaseInitiatorTypes();
 
-        IEnumerable<PimsLeaseTermStatusType> GetAllLeaseTermStatusTypes();
+        IEnumerable<PimsLeasePeriodStatusType> GetAllLeasePeriodStatusTypes();
 
         IEnumerable<PimsLeasePmtFreqType> GetAllLeasePmtFreqTypes();
 
@@ -94,7 +90,7 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsAcqFlTeamProfileType> GetAllAcqFileTeamProfileTypes();
 
-        IEnumerable<PimsTenantType> GetAllTenantTypes();
+        IEnumerable<PimsLeaseStakeholderType> GetAllLeaseStakeholderTypes();
 
         IEnumerable<PimsAcquisitionFundingType> GetAllAcquisitionFundingTypes();
 
@@ -115,8 +111,6 @@ namespace Pims.Dal.Repositories
         IEnumerable<PimsTakeSiteContamType> GetAllTakeSiteContamTypes();
 
         IEnumerable<PimsAcqChklstSectionType> GetAllAcquisitionChecklistSectionTypes();
-
-        IEnumerable<PimsAcqChklstItemStatusType> GetAllAcquisitionChecklistItemStatusTypes();
 
         IEnumerable<PimsAgreementType> GetAllAgreementTypes();
 
@@ -150,7 +144,7 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsDispositionOfferStatusType> GetAllDispositionOfferStatusTypes();
 
-        IEnumerable<PimsDspChklstItemStatusType> GetAllDispositionChecklistItemStatusTypes();
+        IEnumerable<PimsChklstItemStatusType> GetAllChecklistItemStatusTypes();
 
         IEnumerable<PimsDspChklstItemType> GetAllDispositionChecklistItemTypes();
 
@@ -158,8 +152,10 @@ namespace Pims.Dal.Repositories
 
         IEnumerable<PimsHistoricalFileNumberType> GetAllHistoricalNumberTypes();
 
-        IEnumerable<PimsLeaseChklstItemStatusType> GetAllLeaseChecklistItemStatusTypes();
-
         IEnumerable<PimsLeaseChklstSectionType> GetAllLeaseChecklistSectionTypes();
+
+        IEnumerable<PimsLeasePaymentCategoryType> GetAllLeasePaymentCategoryTypes();
+
+        IEnumerable<PimsConsultationOutcomeType> GetAllConsultationOutcomeTypes();
     }
 }

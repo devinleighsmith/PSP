@@ -100,10 +100,12 @@ export const Select: React.FC<React.PropsWithChildren<SelectProps>> = ({
   };
 
   const renderPlaceholder = () => {
-    if (!placeholder) {
+    const calculatedPlaceholder =
+      !value || options.find(option => option.value === value) ? null : 'N/A'; // Render N/A in the event that the currently selected value is not in the list.
+    if (!calculatedPlaceholder && !placeholder) {
       return null;
     }
-    return <option value="">{`${placeholder}`}</option>;
+    return <option value="">{`${placeholder ?? calculatedPlaceholder}`}</option>;
   };
 
   const renderOptions = () => {
@@ -127,7 +129,7 @@ export const Select: React.FC<React.PropsWithChildren<SelectProps>> = ({
     >
       {!!label && (
         <Form.Label>
-          {label}{' '}
+          <span className="control-label">{label}</span>{' '}
           {!!tooltip && (
             <TooltipIcon
               data-testid={`${field}-tooltip`}
@@ -153,7 +155,7 @@ export const Select: React.FC<React.PropsWithChildren<SelectProps>> = ({
         custom={custom}
         isInvalid={!!touch && !!error}
         {...rest}
-        value={getIn(values, field) ?? ''}
+        value={value ?? ''}
         multiple={multiple}
         onChange={onSelectChange}
         onBlur={(e: any) => {

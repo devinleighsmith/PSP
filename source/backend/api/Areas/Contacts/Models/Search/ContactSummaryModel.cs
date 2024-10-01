@@ -1,5 +1,3 @@
-using Pims.Api.Areas.Contact.Models.Contact;
-
 namespace Pims.Api.Areas.Contact.Models.Search
 {
     public class ContactSummaryModel
@@ -16,14 +14,14 @@ namespace Pims.Api.Areas.Contact.Models.Search
         /// </summary>
         public long? PersonId { get; set; }
 
-        public PersonModel Person { get; set; }
+        public Pims.Api.Models.Concepts.Person.PersonModel Person { get; set; }
 
         /// <summary>
         /// get/set - The primary key to identify the organization.
         /// </summary>
         public long? OrganizationId { get; set; }
 
-        public OrganizationModel Organization { get; set; }
+        public Pims.Api.Models.Concepts.Organization.OrganizationModel Organization { get; set; }
 
         /// <summary>
         /// get/set - The concurrency row version.

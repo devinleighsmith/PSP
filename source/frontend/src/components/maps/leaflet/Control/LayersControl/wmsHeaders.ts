@@ -12,7 +12,7 @@ class WmsHeaders extends L.TileLayer.WMS {
     const url = this.getTileUrl(coords);
     const img = document.createElement('img');
     const axios = CustomAxios();
-    axios.get<Blob>(url, { responseType: 'blob' }).then(response => {
+    axios.get<Blob>(url, { responseType: 'blob', withCredentials: true }).then(response => {
       if (response.headers['content-type'] === 'image/png') {
         img.src = URL.createObjectURL(response.data);
       }
@@ -26,5 +26,5 @@ class WmsHeaders extends L.TileLayer.WMS {
  * @param url the target WMS url
  * @param options {L.TileLayerOptions}
  */
-export const wmsHeaders = (url: string, options: ILayerItem) =>
+export const wmsHeaders = (url: string, options: ILayerItem): L.TileLayer.WMS =>
   options.authenticated ? new WmsHeaders(url, options) : new L.TileLayer.WMS(url, options);

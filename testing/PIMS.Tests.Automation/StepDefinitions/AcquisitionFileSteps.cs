@@ -180,6 +180,7 @@ namespace PIMS.Tests.Automation.StepDefinitions
             {
                 sharedFileProperties.SelectPropertyByPID(acquisitionFile.AcquisitionSearchProperties.PID);
                 sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
             }
 
             //Search for a property by PIN
@@ -187,6 +188,7 @@ namespace PIMS.Tests.Automation.StepDefinitions
             {
                 sharedFileProperties.SelectPropertyByPIN(acquisitionFile.AcquisitionSearchProperties.PIN);
                 sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
             }
 
             //Search for a property by Plan
@@ -194,6 +196,7 @@ namespace PIMS.Tests.Automation.StepDefinitions
             {
                 sharedFileProperties.SelectPropertyByPlan(acquisitionFile.AcquisitionSearchProperties.PlanNumber);
                 sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
             }
 
             //Search for a property by Address
@@ -201,22 +204,25 @@ namespace PIMS.Tests.Automation.StepDefinitions
             {
                 sharedFileProperties.SelectPropertyByAddress(acquisitionFile.AcquisitionSearchProperties.Address);
                 sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
             }
 
             //Search for a property by Legal Description
-            //if (acquisitionFile.SearchProperties.LegalDescription != "")
-            //{
-            //    sharedSearchProperties.SelectPropertyByLegalDescription(acquisitionFile.SearchProperties.LegalDescription);
-            //    sharedSearchProperties.SelectFirstOption();
-            //}
+            if (acquisitionFile.AcquisitionSearchProperties.LegalDescription != "")
+            {
+                sharedFileProperties.SelectPropertyByLegalDescription(acquisitionFile.AcquisitionSearchProperties.LegalDescription);
+                sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
+            }
 
             //Search for Multiple PIDs
-            if(acquisitionFile.AcquisitionSearchProperties.MultiplePIDS.First() != "")
+            if (acquisitionFile.AcquisitionSearchProperties.MultiplePIDS.First() != "")
             {
                 foreach (string prop in acquisitionFile.AcquisitionSearchProperties.MultiplePIDS)
                 {
                     sharedFileProperties.SelectPropertyByPID(prop);
                     sharedFileProperties.SelectFirstOptionFromSearch();
+                    sharedFileProperties.ResetSearch();
                 }
             }
 
@@ -225,6 +231,7 @@ namespace PIMS.Tests.Automation.StepDefinitions
             {
                 sharedFileProperties.SelectPropertyByPID(acquisitionFile.AcquisitionSearchProperties.PID);
                 sharedFileProperties.SelectFirstOptionFromSearch();
+                sharedFileProperties.ResetSearch();
             }
 
             //Save Research File
@@ -247,9 +254,9 @@ namespace PIMS.Tests.Automation.StepDefinitions
             sharedFileProperties.NavigateToAddPropertiesToFile();
 
             //Search for a property by Legal Description
-            //sharedSearchProperties.NavigateToSearchTab();
-            //sharedSearchProperties.SelectPropertyByLegalDescription(acquisitionFile.SearchProperties.LegalDescription);
-            //sharedSearchProperties.SelectFirstOption();
+            sharedFileProperties.NavigateToSearchTab();
+            sharedFileProperties.SelectPropertyByLegalDescription(acquisitionFile.AcquisitionSearchProperties.LegalDescription);
+            sharedFileProperties.SelectFirstOptionFromSearch();
 
             //Save changes
             sharedFileProperties.SaveFileProperties();
@@ -662,7 +669,6 @@ namespace PIMS.Tests.Automation.StepDefinitions
 
             var compensationsAfterDelete = h120.TotalCompensationCount();
 
-
             Assert.True(compensationsBeforeDelete - compensationsAfterDelete == 1);
         }
 
@@ -783,12 +789,15 @@ namespace PIMS.Tests.Automation.StepDefinitions
             //Select Found Pin on map
             searchProperties.SelectFoundPin();
 
-            //Close Property Information Modal
-            propertyInformation.ClosePropertyInfoModal();
+            //Close Left Side Forms
+            propertyInformation.HideLeftSideForms();
 
             //Open elipsis option
             propertyInformation.OpenMoreOptionsPopUp();
             propertyInformation.ChooseCreationOptionFromPin("Acquisition File");
+
+            //Open Left Side Forms
+            propertyInformation.ShowLeftSideForms();
 
             //Validate Acquisition File Details Create Form
             acquisitionFilesDetails.VerifyAcquisitionFileCreate();
@@ -806,11 +815,14 @@ namespace PIMS.Tests.Automation.StepDefinitions
             searchProperties.SelectFoundPin();
 
             //Close Property Information Modal
-            propertyInformation.ClosePropertyInfoModal();
+            propertyInformation.HideLeftSideForms();
 
             //Open elipsis option
             propertyInformation.OpenMoreOptionsPopUp();
             propertyInformation.ChooseCreationOptionFromPin("Acquisition File");
+
+            //Open Left Side Forms
+            propertyInformation.ShowLeftSideForms();
 
             //Fill basic Acquisition File information
             acquisitionFilesDetails.CreateMinimumAcquisitionFile(acquisitionFile);
@@ -825,11 +837,14 @@ namespace PIMS.Tests.Automation.StepDefinitions
             searchProperties.SelectFoundPin();
 
             //Close Property Information Modal
-            propertyInformation.ClosePropertyInfoModal();
+            propertyInformation.HideLeftSideForms();
 
             //Open elipsis option
             propertyInformation.OpenMoreOptionsPopUp();
             propertyInformation.ChooseCreationOptionFromPin("Acquisition File");
+
+            //Open Left Side Forms
+            propertyInformation.ShowLeftSideForms();
 
             //Fill basic Acquisition File information
             acquisitionFilesDetails.CreateMinimumAcquisitionFile(acquisitionFile);
@@ -1043,7 +1058,7 @@ namespace PIMS.Tests.Automation.StepDefinitions
                 acquisitionFile.AcquisitionSearchProperties.PIN = ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "PIN");
                 acquisitionFile.AcquisitionSearchProperties.Address = ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "Address");
                 acquisitionFile.AcquisitionSearchProperties.PlanNumber = ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "PlanNumber");
-                //acquisitionFile.AcquisitionSearchProperties.LegalDescription = ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "LegalDescription");
+                acquisitionFile.AcquisitionSearchProperties.LegalDescription = ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "LegalDescription");
                 acquisitionFile.AcquisitionSearchProperties.MultiplePIDS = genericSteps.PopulateLists(ExcelDataContext.ReadData(acquisitionFile.AcquisitionSearchPropertiesIndex, "MultiplePIDS"));
             }
 

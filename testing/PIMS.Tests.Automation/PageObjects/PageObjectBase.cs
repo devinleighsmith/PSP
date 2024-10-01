@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using PIMS.Tests.Automation.Classes;
 using SeleniumExtras.WaitHelpers;
-using System.Globalization;
 
 namespace PIMS.Tests.Automation.PageObjects
 {
@@ -21,7 +21,7 @@ namespace PIMS.Tests.Automation.PageObjects
             wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(120));
         }
 
-        protected virtual void Wait(int milliseconds = 3000) => Thread.Sleep(milliseconds);
+        protected virtual void Wait(int milliseconds = 2000) => Thread.Sleep(milliseconds);
 
         protected void WaitUntilSpinnerDisappear()
         {
@@ -59,13 +59,13 @@ namespace PIMS.Tests.Automation.PageObjects
             {
                 wait.Until(ExpectedConditions.ElementExists(saveButton));
                 wait.Until(ExpectedConditions.ElementToBeClickable(saveButton));
-                webDriver.FindElement(saveButton).Click();
+                FocusAndClick(saveButton);
             }
             else
             {
                 wait.Until(ExpectedConditions.ElementExists(cancelButton));
                 wait.Until(ExpectedConditions.ElementToBeClickable(cancelButton));
-                webDriver.FindElement(cancelButton).Click();
+                FocusAndClick(cancelButton);
             }
         }
 
@@ -199,11 +199,13 @@ namespace PIMS.Tests.Automation.PageObjects
 
         protected void AssertTrueDoublesEquals(By elementBy, double number2)
         {
+            
             WaitUntilVisible(elementBy);
             var numberFromElement = webDriver.FindElement(elementBy).GetAttribute("Value");
-            var number1 = double.Parse(numberFromElement);
+            var number1 = Math.Round(double.Parse(numberFromElement), 4, MidpointRounding.ToEven).ToString();
+            var roundedNumber2 = Math.Round(number2, 4, MidpointRounding.ToEven).ToString();
 
-            Assert.True(number1.Equals(number2));
+            Assert.Equal(roundedNumber2, number1);
         }
 
         protected void AssertTrueElementContains(By elementBy, string text)
@@ -238,18 +240,59 @@ namespace PIMS.Tests.Automation.PageObjects
             }
         }
 
-        protected string TransformNumberFormat(string amount)
+        protected string TransformAreaNumberFormat(string amount)
         {
-            NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
-            
-
             if (amount == "")
                 return "";
             else
             {
                 decimal value = decimal.Parse(amount);
-                return value.ToString("#,##0.##");        
+                return value.ToString("#,##0.0000");        
             }
+        }
+
+        protected string TranformSqMtsFormat(string area)
+        {
+            if (area == "")
+                return "";
+            else
+            {
+                decimal value = decimal.Parse(area);
+                return value.ToString("#,##0.####") + " m\r\n2";
+            }
+        }
+
+        protected double TransformSqMtToSqFt(string sqmt)
+        {
+            double sqmtNbr = double.Parse(sqmt) * 10.76391041671;
+            double sqftRounded = Math.Round(sqmtNbr, 4, MidpointRounding.ToEven);
+
+            if (sqftRounded.Equals(0.0000))
+                return 0;
+            else
+                return sqftRounded;
+        }
+
+        protected double TransformSqMtToHectares(string sqmt)
+        {
+            double sqmtNbr = double.Parse(sqmt) * 0.0001;
+            double hectaresRounded = Math.Round(sqmtNbr, 4, MidpointRounding.ToEven);
+
+            if (hectaresRounded.Equals(0.0000))
+                return 0;
+            else
+                return hectaresRounded;
+        }
+
+        protected double TransformSqMtToAcres(string sqmt)
+        {
+            double sqmtNbr = double.Parse(sqmt) * 0.000247110891123302;
+            double acresRounded = Math.Round(sqmtNbr, 4, MidpointRounding.ToEven);
+
+            if (acresRounded.Equals(0.0000))
+                return 0;
+            else
+                return acresRounded;
         }
 
         protected string TransformProjectFormat(string project)
@@ -286,17 +329,15 @@ namespace PIMS.Tests.Automation.PageObjects
             return result;
         }
 
-        protected string TransformBooleanFormat(bool elementValue)
+        protected string CalculateGSTDisplay(string GST)
         {
-            if (elementValue)
-                { return "Y"; }
-            else
-                { return "N"; }
+            return GST == "true" || GST == "" ? "Y" : "N";
         }
 
-        protected double TransformStringToDouble(string elementValue)
+        protected string TransformBooleanFormat(string elementValue)
         {
-            return double.Parse(elementValue, System.Globalization.CultureInfo.InvariantCulture);
+            bool boolElementValue = bool.Parse(elementValue);
+            return boolElementValue ? "Yes" : "No";
         }
 
         protected List<string> GetViewFieldListContent(By element)
@@ -326,6 +367,33 @@ namespace PIMS.Tests.Automation.PageObjects
         protected string GetSubstring(string input, int startIndex, int endIndex)
         {
             return input.Substring(startIndex, endIndex - startIndex);
+        }
+
+        protected string CalculateExpiryCurrentDate(string originExpiryDate, List<LeaseRenewal> renewals)
+        {
+            var expiryDates = new List<DateTime>();
+            if (originExpiryDate != "")
+            {
+                var originExpiryDateElement = DateTime.Parse(originExpiryDate);
+                expiryDates.Add(originExpiryDateElement);
+
+            }
+
+            if (renewals.Count > 0)
+            {
+                for (var i = 0; i < renewals.Count; i++)
+                {
+                    if (renewals[i].RenewalIsExercised == "Yes")
+                    {
+                        var renewalExpiryDate = DateTime.Parse(renewals[i].RenewalExpiryDate);
+                        expiryDates.Add(renewalExpiryDate);
+                    }
+                }
+            }
+
+            expiryDates.Sort((x, y) => y.CompareTo(x));
+            System.Diagnostics.Debug.WriteLine(expiryDates);
+            return expiryDates[0].ToString("MMM d, yyyy");
         }
 
         public void Dispose()

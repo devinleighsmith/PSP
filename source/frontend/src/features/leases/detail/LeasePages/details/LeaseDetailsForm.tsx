@@ -3,17 +3,29 @@ import noop from 'lodash/noop';
 import React from 'react';
 import styled from 'styled-components';
 
-import { LeaseStateContext } from '@/features/leases/context/LeaseContext';
+import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
 import { defaultApiLease } from '@/models/defaultInitializers';
+import { exists } from '@/utils';
 
 import DetailAdministration from './DetailAdministration';
-import DetailConsultation from './DetailConsultation';
-import DetailDocumentation from './DetailDocumentation';
-import DetailTermInformation from './DetailTermInformation';
+import { DetailFeeDetermination } from './DetailFeeDetermination';
+import LeaseDetailView from './LeaseDetailView';
+import { LeaseRenewalsView } from './LeaseRenewalsView';
 import PropertiesInformation from './PropertiesInformation';
 
-export const LeaseDetailsForm: React.FunctionComponent<React.PropsWithChildren<unknown>> = () => {
-  const { lease } = React.useContext(LeaseStateContext);
+export interface ILeaseDetailsFormProps {
+  lease?: ApiGen_Concepts_Lease;
+  onGenerate: (lease?: ApiGen_Concepts_Lease) => void;
+}
+
+export const LeaseDetailsForm: React.FunctionComponent<ILeaseDetailsFormProps> = ({
+  lease,
+  onGenerate,
+}) => {
+  if (!exists(lease)) {
+    return <></>;
+  }
+
   return (
     <Formik
       initialValues={{ ...defaultApiLease(), ...lease }}
@@ -21,11 +33,11 @@ export const LeaseDetailsForm: React.FunctionComponent<React.PropsWithChildren<u
       onSubmit={noop}
     >
       <StyledDetails>
-        <DetailTermInformation />
+        <LeaseDetailView lease={lease} onGenerate={onGenerate} />
+        <LeaseRenewalsView renewals={lease.renewals} />
         <PropertiesInformation disabled={true} />
         <DetailAdministration disabled={true} />
-        <DetailConsultation />
-        <DetailDocumentation disabled={true} />
+        <DetailFeeDetermination disabled={true} />
       </StyledDetails>
     </Formik>
   );

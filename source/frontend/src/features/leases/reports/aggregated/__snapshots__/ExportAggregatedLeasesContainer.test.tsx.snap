@@ -43,6 +43,7 @@ exports[`PaymentsContainer component > renders as expected 1`] = `
   -webkit-align-self: center;
   -ms-flex-item-align: center;
   align-self: center;
+  color: #428bca;
 }
 
 .c3:hover {
@@ -63,7 +64,12 @@ exports[`PaymentsContainer component > renders as expected 1`] = `
             class="form-label"
             for="input-fiscalYear"
           >
-            Select fiscal year 
+            <span
+              class="control-label"
+            >
+              Select fiscal year
+            </span>
+             
           </label>
           <select
             class="form-select form-control"

@@ -71,6 +71,7 @@ describe('UpdateProperties component', () => {
 
   it('renders as expected', async () => {
     setup({});
+    await act(async () => {});
     expect(document.body).toMatchSnapshot();
   });
 
@@ -101,7 +102,6 @@ describe('UpdateProperties component', () => {
                 displayOrder: null,
               },
               dataSourceEffectiveDateOnly: '2022-10-05T00:00:00',
-              isSensitive: false,
               isRwyBeltDomPatent: false,
               address: {
                 ...getMockApiAddress(),
@@ -114,7 +114,6 @@ describe('UpdateProperties component', () => {
                 rowVersion: 2,
               },
               isOwned: false,
-              isVisibleToOtherAgencies: false,
               landArea: 0,
               isVolumetricParcel: false,
               rowVersion: 3,
@@ -123,12 +122,13 @@ describe('UpdateProperties component', () => {
             displayOrder: null,
             fileId: 1,
             propertyName: null,
+            location: null,
             file: null,
           },
         ],
       },
     });
-    expect(getByText(/45 - 904 Ho/)).toBeVisible();
+    expect(getByText(/45 - 904 Ho/, { exact: false })).toBeVisible();
   });
 
   it('save button displays modal', async () => {

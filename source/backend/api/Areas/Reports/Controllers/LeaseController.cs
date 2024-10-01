@@ -184,11 +184,19 @@ namespace Pims.Api.Areas.Reports.Controllers
 
             DateTime startDate = fiscalYearStart.ToFiscalYearDate();
             var allPayments = _leasePaymentService.GetAllByDateRange(startDate, startDate.AddYears(1).AddDays(-1)); // Add years will give you the equivalent month, except for 29th/ 28th of leap years which is not the case here.
-            var paymentItems = _mapper.Map<IEnumerable<LeasePaymentReportModel>>(allPayments);
+            var leaseIds = allPayments.Select(payment => payment.LeasePeriod.LeaseId);
+            var paymentLeases = _leaseService.GetAllByIds(leaseIds);
+
+            // Required to display the latest payment on the lease, which may not be part of the current date range filter of payments. This ensures that all payments for a lease associated to one of the payments in the date range are included.
+            allPayments.ForEach(payment =>
+            {
+                payment.LeasePeriod.Lease = paymentLeases.FirstOrDefault(lease => lease.LeaseId == payment.LeasePeriod.LeaseId);
+            });
+            var paymentItems = _mapper.Map<IEnumerable<LeasePaymentReportModel>>(allPayments.OrderBy(p => p?.LeasePeriod?.Lease?.RegionCode).ThenBy(p => p?.LeasePeriod?.Lease?.LFileNo).ThenByDescending(p => p.PaymentReceivedDate));
 
             return acceptHeader.ToString() switch
             {
-                ContentTypes.CONTENTTYPECSV => ReportHelper.GenerateCsv<LeasePaymentReportModel>(paymentItems.OrderBy(p => p.Region).ThenBy(p => p.LFileNumber).ThenByDescending(p => p.PaymentReceivedDate)),
+                ContentTypes.CONTENTTYPECSV => ReportHelper.GenerateCsv<LeasePaymentReportModel>(paymentItems),
                 _ => ReportHelper.GenerateExcel(paymentItems, $"LeaseLicense_Payments")
             };
         }
@@ -196,7 +204,7 @@ namespace Pims.Api.Areas.Reports.Controllers
         #endregion
 
         /// <summary>
-        /// Create duplicate lease rows for every unique property lease, tenant, and term.
+        /// Create duplicate lease rows for every unique property lease, tenant, and period.
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="all"></param>
@@ -204,9 +212,11 @@ namespace Pims.Api.Areas.Reports.Controllers
         public IEnumerable<LeaseModel> GetCrossJoinLeases(Lease.Models.Search.LeaseFilterModel filter, bool all = false)
         {
             var page = _leaseService.GetPage((LeaseFilter)filter, all);
-            var allLeases = page.Items.SelectMany(l => l.PimsLeaseTerms.DefaultIfEmpty(), (lease, term) => (lease, term))
-                .SelectMany(lt => lt.lease.PimsPropertyLeases.DefaultIfEmpty(), (leaseTerm, property) => (leaseTerm.term, leaseTerm.lease, property))
-                .SelectMany(ltp => ltp.lease.PimsLeaseTenants.DefaultIfEmpty(), (leaseTermProperty, tenant) => (leaseTermProperty.term, leaseTermProperty.lease, leaseTermProperty.property, tenant));
+
+            var allLeases = page.Items
+                .SelectMany(l => l.PimsLeasePeriods.DefaultIfEmpty(), (lease, period) => (lease, period))
+                .SelectMany(lt => lt.lease.PimsPropertyLeases.DefaultIfEmpty(), (leasePeriod, property) => (leasePeriod.period, leasePeriod.lease, property))
+                .SelectMany(ltp => ltp.lease.PimsLeaseStakeholders.DefaultIfEmpty(), (leasePeriodProperty, tenant) => (leasePeriodProperty.period, leasePeriodProperty.lease, leasePeriodProperty.property, tenant));
             var flatLeases = _mapper.Map<IEnumerable<LeaseModel>>(allLeases);
             return flatLeases;
         }

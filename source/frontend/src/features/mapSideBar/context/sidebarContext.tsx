@@ -2,15 +2,15 @@ import { findIndex } from 'lodash';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
-import { FileTypes } from '@/constants/fileTypes';
 import { Api_LastUpdatedBy } from '@/models/api/File';
+import { ApiGen_CodeTypes_FileTypes } from '@/models/api/generated/ApiGen_CodeTypes_FileTypes';
 import { ApiGen_Concepts_File } from '@/models/api/generated/ApiGen_Concepts_File';
 import { ApiGen_Concepts_Project } from '@/models/api/generated/ApiGen_Concepts_Project';
 import { exists } from '@/utils';
-import { getLatLng } from '@/utils/mapPropertyUtils';
+import { getLatLng, locationFromFileProperty } from '@/utils/mapPropertyUtils';
 
 export interface TypedFile extends ApiGen_Concepts_File {
-  fileType: FileTypes;
+  fileType: ApiGen_CodeTypes_FileTypes;
   projectId?: number | null;
   productId?: number | null;
 }
@@ -28,8 +28,6 @@ export interface ISideBarContext {
   setProject: (project?: ApiGen_Concepts_Project) => void;
   setProjectLoading: (loading: boolean) => void;
   getFilePropertyIndexById: (filePropertyId: number) => number;
-  fullWidth: boolean;
-  setFullWidth: (fullWidth: boolean) => void;
 
   lastUpdatedBy: Api_LastUpdatedBy | null;
   setLastUpdatedBy: (lastUpdatedBy: Api_LastUpdatedBy | null) => void;
@@ -55,10 +53,6 @@ export const SideBarContext = createContext<ISideBarContext>({
   },
   getFilePropertyIndexById: () => {
     throw Error('setStaleFile function not defined');
-  },
-  fullWidth: false,
-  setFullWidth: () => {
-    throw Error('setFullWidth function not defined');
   },
   setProject: () => {
     throw Error('setProject function not defined');
@@ -92,7 +86,6 @@ export const SideBarContextProvider = (props: {
   const [staleLastUpdatedBy, setStaleLastUpdatedBy] = useState<boolean>(false);
   const [fileLoading, setFileLoading] = useState<boolean>(false);
   const [projectLoading, setProjectLoading] = useState<boolean>(false);
-  const [fullWidth, setFullWidth] = useState<boolean>(false);
 
   const setFileAndStale = useCallback(
     (file?: TypedFile) => {
@@ -127,7 +120,8 @@ export const SideBarContextProvider = (props: {
   const resetFilePropertyLocations = useCallback(() => {
     if (exists(fileProperties)) {
       const propertyLocations = fileProperties
-        .map(x => getLatLng(x.property?.location))
+        .map(x => locationFromFileProperty(x))
+        .map(y => getLatLng(y))
         .filter(exists);
 
       setFilePropertyLocations && setFilePropertyLocations(propertyLocations);
@@ -136,6 +130,7 @@ export const SideBarContextProvider = (props: {
     }
   }, [fileProperties, setFilePropertyLocations]);
 
+  // Automatically render "draft" property markers when opening a PIMS file.
   useEffect(() => {
     resetFilePropertyLocations();
   }, [resetFilePropertyLocations]);
@@ -157,8 +152,6 @@ export const SideBarContextProvider = (props: {
         staleFile,
         setStaleFile,
         getFilePropertyIndexById,
-        fullWidth,
-        setFullWidth,
         projectLoading,
         setProject: setProjectInstance,
         setProjectLoading: setProjectLoading,

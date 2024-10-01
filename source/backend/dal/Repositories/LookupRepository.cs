@@ -77,14 +77,6 @@ namespace Pims.Dal.Repositories
         }
 
         /// <summary>
-        /// Get all property classification types sorted by DisplayOrder and Id.
-        /// </summary>
-        public IEnumerable<PimsPropertyClassificationType> GetAllPropertyClassificationTypes()
-        {
-            return this.Context.PimsPropertyClassificationTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ThenBy(a => a.PropertyClassificationTypeCode).ToArray();
-        }
-
-        /// <summary>
         /// Get all property types sorted by DisplayOrder and Id.
         /// </summary>
         public IEnumerable<PimsPropertyType> GetAllPropertyTypes()
@@ -162,14 +154,9 @@ namespace Pims.Dal.Repositories
             return this.Context.PimsLeaseLicenseTypes.AsNoTracking().OrderBy(a => a.LeaseLicenseTypeCode).ToArray();
         }
 
-        public IEnumerable<PimsLeaseCategoryType> GetAllLeaseCategoryTypes()
-        {
-            return this.Context.PimsLeaseCategoryTypes.AsNoTracking().OrderBy(a => a.LeaseCategoryTypeCode).ToArray();
-        }
-
         public IEnumerable<PimsLeasePurposeType> GetAllLeasePurposeTypes()
         {
-            return this.Context.PimsLeasePurposeTypes.AsNoTracking().OrderBy(a => a.LeasePurposeTypeCode).ToArray();
+            return Context.PimsLeasePurposeTypes.AsNoTracking().OrderBy(a => a.LeasePurposeTypeCode).ToArray();
         }
 
         public IEnumerable<PimsLeaseResponsibilityType> GetAllLeaseResponsibilityTypes()
@@ -182,9 +169,9 @@ namespace Pims.Dal.Repositories
             return this.Context.PimsLeaseInitiatorTypes.AsNoTracking().OrderBy(a => a.LeaseInitiatorTypeCode).ToArray();
         }
 
-        public IEnumerable<PimsLeaseTermStatusType> GetAllLeaseTermStatusTypes()
+        public IEnumerable<PimsLeasePeriodStatusType> GetAllLeasePeriodStatusTypes()
         {
-            return this.Context.PimsLeaseTermStatusTypes.AsNoTracking().OrderBy(a => a.LeaseTermStatusTypeCode).ToArray();
+            return this.Context.PimsLeasePeriodStatusTypes.AsNoTracking().OrderBy(a => a.LeasePeriodStatusTypeCode).ToArray();
         }
 
         public IEnumerable<PimsLeasePmtFreqType> GetAllLeasePmtFreqTypes()
@@ -292,9 +279,9 @@ namespace Pims.Dal.Repositories
             return this.Context.PimsAcqFlTeamProfileTypes.AsNoTracking().ToArray();
         }
 
-        public IEnumerable<PimsTenantType> GetAllTenantTypes()
+        public IEnumerable<PimsLeaseStakeholderType> GetAllLeaseStakeholderTypes()
         {
-            return this.Context.PimsTenantTypes.AsNoTracking().ToArray();
+            return this.Context.PimsLeaseStakeholderTypes.AsNoTracking().ToArray();
         }
 
         public IEnumerable<PimsAcquisitionFundingType> GetAllAcquisitionFundingTypes()
@@ -331,11 +318,6 @@ namespace Pims.Dal.Repositories
         public IEnumerable<PimsAcqChklstSectionType> GetAllAcquisitionChecklistSectionTypes()
         {
             return Context.PimsAcqChklstSectionTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
-        }
-
-        public IEnumerable<PimsAcqChklstItemStatusType> GetAllAcquisitionChecklistItemStatusTypes()
-        {
-            return Context.PimsAcqChklstItemStatusTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
         }
 
         public IEnumerable<PimsAgreementType> GetAllAgreementTypes()
@@ -423,9 +405,9 @@ namespace Pims.Dal.Repositories
             return Context.PimsDispositionOfferStatusTypes.AsNoTracking().ToArray();
         }
 
-        public IEnumerable<PimsDspChklstItemStatusType> GetAllDispositionChecklistItemStatusTypes()
+        public IEnumerable<PimsChklstItemStatusType> GetAllChecklistItemStatusTypes()
         {
-            return Context.PimsDspChklstItemStatusTypes.AsNoTracking().ToArray();
+            return Context.PimsChklstItemStatusTypes.AsNoTracking().ToArray();
         }
 
         public IEnumerable<PimsDspChklstItemType> GetAllDispositionChecklistItemTypes()
@@ -443,14 +425,19 @@ namespace Pims.Dal.Repositories
             return Context.PimsHistoricalFileNumberTypes.AsNoTracking().ToArray();
         }
 
-        public IEnumerable<PimsLeaseChklstItemStatusType> GetAllLeaseChecklistItemStatusTypes()
-        {
-            return Context.PimsLeaseChklstItemStatusTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
-        }
-
         public IEnumerable<PimsLeaseChklstSectionType> GetAllLeaseChecklistSectionTypes()
         {
             return Context.PimsLeaseChklstSectionTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
+        }
+
+        public IEnumerable<PimsLeasePaymentCategoryType> GetAllLeasePaymentCategoryTypes()
+        {
+            return Context.PimsLeasePaymentCategoryTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
+        }
+
+        public IEnumerable<PimsConsultationOutcomeType> GetAllConsultationOutcomeTypes()
+        {
+            return Context.PimsConsultationOutcomeTypes.AsNoTracking().OrderBy(a => a.DisplayOrder).ToArray();
         }
 
         #endregion

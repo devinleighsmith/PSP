@@ -2,7 +2,6 @@ import { createMemoryHistory } from 'history';
 import { Route } from 'react-router-dom';
 
 import { Claims } from '@/constants/claims';
-import { FileTypes } from '@/constants/index';
 import { InventoryTabNames } from '@/features/mapSideBar/property/InventoryTabs';
 import {
   mockAcquisitionFileOwnersResponse,
@@ -24,6 +23,7 @@ import { createRef } from 'react';
 import { SideBarContextProvider } from '../context/sidebarContext';
 import { FileTabType } from '../shared/detail/FileTabs';
 import AcquisitionView, { IAcquisitionViewProps } from './AcquisitionView';
+import { ApiGen_CodeTypes_FileTypes } from '@/models/api/generated/ApiGen_CodeTypes_FileTypes';
 
 // mock auth library
 
@@ -101,7 +101,7 @@ describe('AcquisitionView component', () => {
       <SideBarContextProvider
         file={{
           ...mockAcquisitionFileResponse(),
-          fileType: FileTypes.Acquisition,
+          fileType: ApiGen_CodeTypes_FileTypes.Acquisition,
         }}
         lastUpdatedBy={{
           ...mockLastUpdatedBy(1),
@@ -242,7 +242,7 @@ describe('AcquisitionView component', () => {
     expect(tab).toHaveClass('active');
   });
 
-  it.skip('should display the Property Details tab according to routing', async () => {
+  it('should display the Property Details tab according to routing', async () => {
     history.replace(`/mapview/sidebar/acquisition/1/property/1`);
     const { getByRole } = await setup();
     const tab = getByRole('tab', { name: /Property Details/i });
@@ -260,7 +260,7 @@ describe('AcquisitionView component', () => {
     expect(tab).toHaveClass('active');
   });
 
-  it.skip(`should display the Property Details tab when we are editing and the path doesn't match any route`, async () => {
+  it(`should display the Property Details tab when we are editing and the path doesn't match any route`, async () => {
     history.replace(`/mapview/sidebar/acquisition/1/property/1/unknownTabWhatIsThis?edit=true`);
     const { getByRole } = await setup();
     const tab = getByRole('tab', { name: /Property Details/i });

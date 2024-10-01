@@ -15,8 +15,8 @@ namespace PIMS.Tests.Automation.PageObjects
         private By searchContactResultsBttn = By.Id("search-button");
         private By searchContactResetBttn = By.Id("reset-button");
         private By searchContactActiveChckBox = By.Id("input-activeContactsOnly");
-        private By searchContactActiveSpan = By.XPath("//span[contains(text(),'Show active contacts only')]");
-        private By searchContactAddNewBttn = By.XPath("//span[contains(text(),'Add new contact')]/parent::div/parent::button");
+        private By searchContactActiveSpan = By.XPath("//span[contains(text(),'contacts only')]");
+        private By searchContactAddNewBttn = By.XPath("//body/div[@id='root']/div[2]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/button[1]/div[1]");
 
         private By searchContactTableSummaryColumn = By.XPath("//div[contains(text(),'Summary')]");
         private By searchContactOrderBySummaryBttn = By.CssSelector("div[data-testid='sort-column-summary']");
@@ -31,7 +31,7 @@ namespace PIMS.Tests.Automation.PageObjects
         private By searchContactTableCityColumn = By.XPath("//div[contains(text(),'City')]");
         private By searchContactOrderByCityBttn = By.CssSelector("div[data-testid='sort-column-municipalityName']");
         private By searchContactTableProvinceColumn = By.XPath("//div[contains(text(),'Prov')]");
-        private By searchContactTableUpdateViewColumn = By.XPath("//div[contains(text(),'Update/View')]");
+        private By searchContactTableUpdateViewColumn = By.XPath("//div[contains(text(),'Edit/View')]");
         private By searchContactNoResults = By.CssSelector("div[class='no-rows-message']");
 
         private By searchContactMenuItems = By.CssSelector("div[class='Menu-root']");

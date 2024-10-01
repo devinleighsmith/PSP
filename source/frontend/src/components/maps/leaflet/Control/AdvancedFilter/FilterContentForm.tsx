@@ -11,6 +11,7 @@ import PropertyOfInterestPng from '@/assets/images/pins/land-poi.png';
 import CoreInventoryPng from '@/assets/images/pins/land-reg.png';
 import OtherInterestPng from '@/assets/images/pins/other-interest.png';
 import RetiredPng from '@/assets/images/pins/retired.png';
+import { ResetButton } from '@/components/common/buttons';
 import { Check, Select, SelectOption } from '@/components/common/form';
 import { Multiselect } from '@/components/common/form/Multiselect';
 import { ProjectSelector } from '@/components/common/form/ProjectSelector/ProjectSelector';
@@ -37,11 +38,13 @@ const FormObserver: React.FC<IFormObserverProps> = ({ onChange }) => {
 
 export interface IFilterContentFormProps {
   onChange: (model: PropertyFilterFormModel) => void;
+  onReset: () => void;
   isLoading: boolean;
 }
 
 export const FilterContentForm: React.FC<React.PropsWithChildren<IFilterContentFormProps>> = ({
   onChange,
+  onReset,
   isLoading,
 }) => {
   const initialFilter = useMemo(() => {
@@ -102,89 +105,10 @@ export const FilterContentForm: React.FC<React.PropsWithChildren<IFilterContentF
       <Form>
         <FormObserver onChange={onChange} />
         <LoadingBackdrop show={isLoading} parentScreen />
-        <Section header="Project" isCollapsable initiallyExpanded>
-          <SectionField label={null} contentWidth="12">
-            <ProjectSelector field="projectPrediction" />
-          </SectionField>
-        </Section>
-        <Section header="Tenure" isCollapsable initiallyExpanded>
-          <SectionField label="Status" contentWidth="12">
-            <Multiselect
-              field="tenureStatuses"
-              displayValue="codeTypeDescription"
-              placeholder=""
-              hidePlaceholder
-              options={tenureStatusOptions}
-            />
-          </SectionField>
-          <SectionField label="Province Public Highway" labelWidth="12" contentWidth="12">
-            <Select
-              field="tenurePPH"
-              options={tenureProvincePublicHigwayTypeOptions}
-              placeholder="Select a highway"
-            />
-          </SectionField>
-
-          <SectionField label="Highway / Road Details" labelWidth="12" contentWidth="12">
-            <Multiselect
-              field="tenureRoadTypes"
-              displayValue="codeTypeDescription"
-              placeholder=""
-              hidePlaceholder
-              options={tenureRoadTypeOptions}
-            />
-          </SectionField>
-        </Section>
-        <Section header="Lease / License" isCollapsable initiallyExpanded>
-          <SectionField
-            label="Lease Transaction"
-            contentWidth="12"
-            tooltip="Selecting the Payable and Receivable lease transaction option will display properties that have both a payable and a receivable lease on them."
-          >
-            <Select
-              field="leasePayRcvblType"
-              placeholder="Select Lease Transaction"
-              options={leasePaymentRcvblOptions}
-              data-testid="leasePayRcvblType"
-            />
-          </SectionField>
-          <SectionField label="Status" contentWidth="12">
-            <Select
-              field="leaseStatus"
-              options={leaseStatusOptions}
-              placeholder="Select a Lease Status"
-            />
-          </SectionField>
-          <SectionField label="Type(s)" contentWidth="12">
-            <Multiselect
-              field="leaseTypes"
-              displayValue="codeTypeDescription"
-              placeholder=""
-              hidePlaceholder
-              options={leaseTypeOptions}
-            />
-          </SectionField>
-          <SectionField label="Purpose(s)" contentWidth="12">
-            <Multiselect
-              field="leasePurposes"
-              displayValue="codeTypeDescription"
-              placeholder=""
-              hidePlaceholder
-              options={leasePurposeOptions}
-            />
-          </SectionField>
-        </Section>
-        <Section header="Anomaly" isCollapsable initiallyExpanded>
-          <SectionField label={null} contentWidth="12">
-            <Multiselect
-              field="anomalies"
-              displayValue="codeTypeDescription"
-              placeholder=""
-              hidePlaceholder
-              options={anomalyOptions}
-            />
-          </SectionField>
-        </Section>
+        <StyledResetContainer>
+          <StyledResetButton onClick={onReset} />
+          <span>Reset to Default</span>
+        </StyledResetContainer>
         <Section header="Show Ownership" isCollapsable initiallyExpanded>
           <SectionField label={null} contentWidth="12">
             <Row>
@@ -244,6 +168,90 @@ export const FilterContentForm: React.FC<React.PropsWithChildren<IFilterContentF
             </Row>
           </SectionField>
         </Section>
+        <Section header="Project" isCollapsable initiallyExpanded>
+          <SectionField label={null} contentWidth="12">
+            <ProjectSelector field="projectPrediction" />
+          </SectionField>
+        </Section>
+        <Section header="Tenure" isCollapsable initiallyExpanded>
+          <SectionField label="Status" contentWidth="12">
+            <Multiselect
+              field="tenureStatuses"
+              displayValue="codeTypeDescription"
+              placeholder=""
+              hidePlaceholder
+              options={tenureStatusOptions}
+            />
+          </SectionField>
+          <SectionField label="Province Public Highway" labelWidth="12" contentWidth="12">
+            <Select
+              field="tenurePPH"
+              options={tenureProvincePublicHigwayTypeOptions}
+              placeholder="Select a highway"
+            />
+          </SectionField>
+
+          <SectionField label="Highway / Road Details" labelWidth="12" contentWidth="12">
+            <Multiselect
+              field="tenureRoadTypes"
+              displayValue="codeTypeDescription"
+              placeholder=""
+              hidePlaceholder
+              options={tenureRoadTypeOptions}
+            />
+          </SectionField>
+        </Section>
+        <Section header="Lease / Licence" isCollapsable initiallyExpanded>
+          <SectionField
+            label="Lease Transaction"
+            labelWidth="12"
+            contentWidth="12"
+            tooltip="Selecting the Payable and Receivable lease transaction option will display properties that have both a payable and a receivable lease on them"
+          >
+            <Select
+              field="leasePayRcvblType"
+              placeholder="Select Lease Transaction"
+              options={leasePaymentRcvblOptions}
+              data-testid="leasePayRcvblType"
+            />
+          </SectionField>
+          <SectionField label="Status" contentWidth="12">
+            <Select
+              field="leaseStatus"
+              options={leaseStatusOptions}
+              placeholder="Select a Lease Status"
+            />
+          </SectionField>
+          <SectionField label="Type(s)" contentWidth="12">
+            <Multiselect
+              field="leaseTypes"
+              displayValue="codeTypeDescription"
+              placeholder=""
+              hidePlaceholder
+              options={leaseTypeOptions}
+            />
+          </SectionField>
+          <SectionField label="Purpose(s)" contentWidth="12">
+            <Multiselect
+              field="leasePurposes"
+              displayValue="codeTypeDescription"
+              placeholder=""
+              hidePlaceholder
+              options={leasePurposeOptions}
+            />
+          </SectionField>
+        </Section>
+        <Section header="Anomaly" isCollapsable initiallyExpanded>
+          <SectionField label={null} contentWidth="12">
+            <Multiselect
+              field="anomalies"
+              displayValue="codeTypeDescription"
+              placeholder=""
+              hidePlaceholder
+              options={anomalyOptions}
+            />
+          </SectionField>
+        </Section>
       </Form>
     </Formik>
   );
@@ -251,4 +259,25 @@ export const FilterContentForm: React.FC<React.PropsWithChildren<IFilterContentF
 
 const StyledSpan = styled.span`
   color: ${props => props.theme.bcTokens.typographyColorSecondary};
+`;
+
+const StyledResetContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 6.5rem;
+  margin: 0;
+  padding: 0 3.2rem;
+  box-sizing: border-box;
+  background-color: ${props => props.theme.css.pimsWhite};
+`;
+
+const StyledResetButton = styled(ResetButton)`
+  &&.btn {
+    &.btn-info {
+      color: ${({ theme }) => theme.bcTokens.surfaceColorPrimaryButtonDefault};
+    }
+  }
 `;

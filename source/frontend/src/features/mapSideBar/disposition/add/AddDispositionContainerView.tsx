@@ -1,6 +1,9 @@
 import { FormikHelpers, FormikProps } from 'formik';
+import { useCallback } from 'react';
 import { MdAirlineStops } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 
+import ConfirmNavigation from '@/components/common/ConfirmNavigation';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 
 import MapSideBarLayout from '../../layout/MapSideBarLayout';
@@ -34,19 +37,17 @@ const AddDispositionContainerView: React.FunctionComponent<IAddDispositionContai
   onCancel,
   confirmBeforeAdd,
 }) => {
+  const history = useHistory();
+
+  const checkState = useCallback(() => {
+    return formikRef?.current?.dirty && !formikRef?.current?.isSubmitting;
+  }, [formikRef]);
+
   return (
     <MapSideBarLayout
       showCloseButton
       title="Create Disposition File"
-      icon={
-        <MdAirlineStops
-          title="Disposition file Icon"
-          width="2.6rem"
-          height="2.6rem"
-          fill="currentColor"
-          className="mr-2"
-        />
-      }
+      icon={<MdAirlineStops title="Disposition file Icon" size={26} fill="currentColor" />}
       onClose={onCancel}
       footer={
         <SidebarFooter
@@ -64,8 +65,9 @@ const AddDispositionContainerView: React.FunctionComponent<IAddDispositionContai
           initialValues={dispositionInitialValues}
           onSubmit={onSubmit}
           confirmBeforeAdd={confirmBeforeAdd}
-        ></DispositionForm>
+        />
       </StyledFormWrapper>
+      <ConfirmNavigation navigate={history.push} shouldBlockNavigation={checkState} />
     </MapSideBarLayout>
   );
 };

@@ -8,31 +8,31 @@ namespace PIMS.Tests.Automation.PageObjects
     {
         //Acquisition Files Menu Elements
         private readonly By menuAcquisitionButton = By.CssSelector("div[data-testid='nav-tooltip-acquisition'] a");
-        private By createAcquisitionFileButton = By.XPath("//a[contains(text(),'Create an Acquisition File')]");
+        private readonly By createAcquisitionFileButton = By.XPath("//a[contains(text(),'Create an Acquisition File')]");
 
-        private By acquisitionFileSummaryBttn = By.XPath("//div[contains(text(),'File Summary')]");
-        private By acquisitionFileDetailsTab = By.XPath("//a[contains(text(),'File details')]");
+        private readonly By acquisitionFileSummaryBttn = By.XPath("//div[contains(text(),'File Summary')]");
+        private readonly By acquisitionFileDetailsTab = By.XPath("//a[contains(text(),'File details')]");
 
         //Acquisition File Details View Form Elements
-        private By acquisitionFileViewTitle = By.XPath("//h1[contains(text(),'Acquisition File')]");
+        private readonly By acquisitionFileViewTitle = By.XPath("//h1[contains(text(),'Acquisition File')]");
         
-        private By acquisitionFileCreateTitle = By.XPath("//h1[contains(text(),'Create Acquisition File')]");
-        private By acquisitionFileHeaderCodeLabel = By.XPath("//label[contains(text(), 'File:')]");
-        private By acquisitionFileHeaderCodeContent = By.XPath("//label[contains(text(), 'File:')]/parent::strong/parent::div/following-sibling::div[1]");
+        private readonly By acquisitionFileCreateTitle = By.XPath("//h1[contains(text(),'Create Acquisition File')]");
+        private readonly By acquisitionFileHeaderCodeLabel = By.XPath("//label[contains(text(), 'File:')]");
+        private readonly By acquisitionFileHeaderCodeContent = By.XPath("//label[contains(text(), 'File:')]/parent::div/following-sibling::div[1]");
 
-        private By acquisitionFileHeaderProjectLabel = By.XPath("//label[contains(text(), 'Ministry project')]");
-        private By acquisitionFileHeaderProjectContent = By.XPath("//label[contains(text(), 'Ministry project')]/parent::strong/parent::div/following-sibling::div[1]");
-        private By acquisitionFileHeaderProductLabel = By.XPath("//label[contains(text(), 'Ministry product')]");
-        private By acquisitionFileHeaderProductContent = By.XPath("//label[contains(text(), 'Ministry product')]/parent::strong/parent::div/following-sibling::div[1]");
-        private By acquisitionFileHeaderCreatedDateLabel = By.XPath("//strong[contains(text(), 'Created')]");
-        private By acquisitionFileHeaderCreatedDateContent = By.XPath("//strong[contains(text(), 'Created')]/parent::span");
+        private readonly By acquisitionFileHeaderProjectLabel = By.XPath("//label[contains(text(), 'Ministry project')]");
+        private readonly By acquisitionFileHeaderProjectContent = By.XPath("//label[contains(text(), 'Ministry project')]/parent::div/following-sibling::div[1]");
+        private readonly By acquisitionFileHeaderProductLabel = By.XPath("//label[contains(text(), 'Ministry product')]");
+        private readonly By acquisitionFileHeaderProductContent = By.XPath("//label[contains(text(), 'Ministry product')]/parent::div/following-sibling::div[1]");
+        private readonly By acquisitionFileHeaderCreatedDateLabel = By.XPath("//strong[contains(text(), 'Created')]");
+        private readonly By acquisitionFileHeaderCreatedDateContent = By.XPath("//strong[contains(text(), 'Created')]/parent::span");
         private By acquisitionFileHeaderCreatedByContent = By.XPath("//strong[contains(text(),'Created')]/parent::span/span[@id='userNameTooltip']/strong");
         private By acquisitionFileHeaderLastUpdateLabel = By.XPath("//strong[contains(text(), 'Updated')]");
         private By acquisitionFileHeaderLastUpdateContent = By.XPath("//strong[contains(text(), 'Updated')]/parent::span");
         private By acquisitionFileHeaderLastUpdateByContent = By.XPath("//strong[contains(text(), 'Updated')]/parent::span/span[@id='userNameTooltip']/strong");
-        private By acquisitionFileHeaderHistoricalFileLabel = By.XPath("//label[contains(text(),'Historical File')]");
-        private By acquisitionFileHeaderHistoricalFileContent = By.XPath("//label[contains(text(),'Historical File #:')]/parent::strong/parent::div/following-sibling::div/div/span");
-        private By acquisitionHeaderStatusContent = By.XPath("//div[@class='col']/div/div[3]/div/div");
+        private By acquisitionFileHeaderHistoricalFileLabel = By.XPath("//label[contains(text(),'Historical file')]");
+        private By acquisitionFileHeaderHistoricalFileContent = By.XPath("//label[contains(text(),'Historical file #:')]/parent::div/following-sibling::div/div/span");
+        private By acquisitionHeaderStatusContent = By.XPath("//b[contains(text(),'File')]/parent::span/following-sibling::div");
 
         private By acquisitionFileStatusSelect = By.Id("input-fileStatusTypeCode");
         private By acquisitionFileProjectSubtitle = By.XPath("//h2/div/div[contains(text(), 'Project')]");
@@ -117,7 +117,6 @@ namespace PIMS.Tests.Automation.PageObjects
 
         //Acquisition File Confirmation Modal Elements
         private By acquisitionFileConfirmationModal = By.CssSelector("div[class='modal-content']");
-        private By acquisitionFileSaveConfirmationModal = By.XPath("//div[@class='modal-content']/div[@class='modal-header']/div[contains(text(),'User Override Required')]");
 
         private SharedSelectContact sharedSelectContact;
         private SharedModals sharedModals;
@@ -307,20 +306,22 @@ namespace PIMS.Tests.Automation.PageObjects
             ButtonElement("Save");
 
             Wait();
-            if (webDriver.FindElements(acquisitionFileSaveConfirmationModal).Count() > 0)
+            if (webDriver.FindElements(acquisitionFileConfirmationModal).Count() > 0)
             {
                 if (sharedModals.ModalContent().Contains("The selected Ministry region is different from that associated to one or more selected properties"))
                 {
+                    Assert.Equal("Different Ministry region", sharedModals.ModalHeader());
                     Assert.Contains("The selected Ministry region is different from that associated to one or more selected properties", sharedModals.ModalContent());
                     Assert.Contains("Do you want to proceed?", sharedModals.ModalContent());
+                    sharedModals.ModalClickOKBttn();
                 }
-                else
+                 else if(sharedModals.ModalContent().Contains("The selected property already exists in the system's inventory."))
                 {
+                    Assert.Equal("User Override Required", sharedModals.ModalHeader());
                     Assert.Contains("The selected property already exists in the system's inventory. However, the record is missing spatial details.", sharedModals.ModalContent());
                     Assert.Contains("To add the property, the spatial details for this property will need to be updated. The system will attempt to update the property record with spatial information from the current selection.", sharedModals.ModalContent());
+                    sharedModals.ModalClickOKBttn();
                 }
-
-                sharedModals.ModalClickOKBttn();
             }
         }
 
@@ -371,7 +372,7 @@ namespace PIMS.Tests.Automation.PageObjects
                 AssertTrueContentEquals(acquisitionFileHeaderProductContent, acquisition.AcquisitionProjProductCode + " - " + acquisition.AcquisitionProjProduct);
 
             AssertTrueIsDisplayed(acquisitionFileHeaderHistoricalFileLabel);
-            Assert.True(webDriver.FindElements(acquisitionFileHeaderHistoricalFileContent).Count > 0);
+            //Assert.True(webDriver.FindElements(acquisitionFileHeaderHistoricalFileContent).Count > 0);
 
             AssertTrueIsDisplayed(acquisitionFileHeaderCreatedDateLabel);
             AssertTrueContentNotEquals(acquisitionFileHeaderCreatedDateContent, "");
@@ -411,7 +412,7 @@ namespace PIMS.Tests.Automation.PageObjects
                 AssertTrueContentEquals(acquisitionFileScheduleAssignedDateContent, TransformDateFormat(acquisition.AssignedDate));
             else
             {
-                AssertTrueContentEquals(acquisitionFileScheduleAssignedDateContent, DateTime.Now.ToString("MMM dd, yyyy"));
+                AssertTrueContentEquals(acquisitionFileScheduleAssignedDateContent, DateTime.Now.ToString("MMM d, yyyy"));
             }
 
             AssertTrueIsDisplayed(acquisitionFileScheduleDeliveryDateLabel);

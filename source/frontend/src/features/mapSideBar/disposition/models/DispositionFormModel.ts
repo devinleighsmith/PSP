@@ -66,6 +66,7 @@ export class DispositionFormModel implements WithDispositionTeam {
       dispositionStatusTypeCode: toTypeCodeNullable(this.dispositionStatusTypeCode),
       initiatingBranchTypeCode: toTypeCodeNullable(this.initiatingBranchTypeCode),
       physicalFileStatusTypeCode: toTypeCodeNullable(this.physicalFileStatusTypeCode),
+      totalAllowableCompensation: null,
       project: null,
       projectId: this.project?.id !== undefined && this.project?.id !== 0 ? this.project?.id : null,
       product: null,
@@ -83,22 +84,20 @@ export class DispositionFormModel implements WithDispositionTeam {
         .filter(x => !!x.contact && !!x.teamProfileTypeCode)
         .map(x => x.toApi(this.id || 0))
         .filter(exists),
-      fileProperties: this.fileProperties.map<ApiGen_Concepts_DispositionFileProperty>(ap => ({
-        id: ap.id ?? 0,
-        propertyName: ap.name ?? null,
-        displayOrder: ap.displayOrder ?? null,
-        rowVersion: ap.rowVersion ?? null,
-        property: ap.toApi(),
-        propertyId: ap.apiId ?? 0,
-        file: null,
-        fileId: 0,
-      })),
-
+      fileProperties: this.fileProperties.map(x => this.toPropertyApi(x)),
       dispositionOffers: this.offers.map(x => x.toApi()),
       dispositionSale: this.sale ? this.sale.toApi() : null,
       dispositionAppraisal: this.appraisal ? this.appraisal.toApi() : null,
       fileChecklistItems: this.fileChecklist.map(x => x.toApi()),
       ...getEmptyBaseAudit(this.rowVersion),
+    };
+  }
+
+  private toPropertyApi(x: PropertyForm): ApiGen_Concepts_DispositionFileProperty {
+    const apiFileProperty = x.toFilePropertyApi(this.id);
+    return {
+      ...apiFileProperty,
+      file: null,
     };
   }
 

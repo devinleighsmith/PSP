@@ -62,10 +62,10 @@ const TakeSubForm: React.FunctionComponent<ITakeSubFormProps> = ({ take }) => {
         setDisplayModal(true);
       } else if (isLeasePayable) {
         setModalContent({
-          variant: 'info',
-          title: 'Follow-up required',
+          variant: 'warning',
+          title: 'Acknowledgement',
           message:
-            'You have created a Lease (Payable) Take. You also need to create a Lease/License File.',
+            'You have created a Lease (Payable) Take. You also need to create a Lease/Licence File.',
           okButtonText: 'Close',
           cancelButtonText: null,
           handleOk: () => {
@@ -138,7 +138,7 @@ const TakeSubForm: React.FunctionComponent<ITakeSubFormProps> = ({ take }) => {
           <SectionField
             label="Is there a new highway dedication? *"
             labelWidth="8"
-            tooltip="The term new highway dedication includes municipal road or provincial public highway."
+            tooltip="The term new highway dedication includes municipal road or provincial public highway"
           >
             <RadioGroup
               field="isNewHighwayDedication"
@@ -173,7 +173,7 @@ const TakeSubForm: React.FunctionComponent<ITakeSubFormProps> = ({ take }) => {
           <SectionField
             label="Is this being acquired for MoTI inventory? *"
             labelWidth="8"
-            tooltip="Selecting Yes for this option will result in the property being added to inventory."
+            tooltip="Selecting Yes for this option will result in the property being added to inventory"
             className="pt-4"
           >
             <RadioGroup
@@ -290,7 +290,7 @@ const TakeSubForm: React.FunctionComponent<ITakeSubFormProps> = ({ take }) => {
         </StyledBorderSection>
         <StyledBorderSection>
           <SectionField
-            label="Is there a new License for Construction Access (TLCA/LTC)? *"
+            label="Is there a new Licence for Construction Access (TLCA/LTC)? *"
             labelWidth="8"
           >
             <RadioGroup

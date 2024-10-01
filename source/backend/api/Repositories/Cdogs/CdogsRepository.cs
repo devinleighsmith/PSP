@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Pims.Api.Models.Cdogs;
 using Pims.Api.Models.CodeTypes;
-
 using Pims.Api.Models.Requests.Http;
 
 namespace Pims.Api.Repositories.Cdogs
@@ -41,14 +40,27 @@ namespace Pims.Api.Repositories.Cdogs
             _authRepository = authRepository;
         }
 
-        public async Task<ExternalResponse<FileTypes>> TryGetFileTypesAsync()
+        public async Task<HttpResponseMessage> TryGetHealthAsync()
+        {
+            _logger.LogDebug("Checking health of cdogs service");
+            string authenticationToken = await _authRepository.GetTokenAsync();
+
+            Uri endpoint = new(this._config.CDogsHost, "/api/v2/health");
+
+            Task<HttpResponseMessage> result = GetRawAsync(endpoint, authenticationToken);
+
+            _logger.LogDebug($"Finished checking health of cdogs service");
+            return await result;
+        }
+
+        public async Task<ExternalResponse<CdogsFileTypes>> TryGetFileTypesAsync()
         {
             _logger.LogDebug("Retrieving supported file types...");
             string authenticationToken = await _authRepository.GetTokenAsync();
 
             Uri endpoint = new(this._config.CDogsHost, "/api/v2/fileTypes");
 
-            ExternalResponse<FileTypes> result = await GetAsync<FileTypes>(endpoint, authenticationToken);
+            ExternalResponse<CdogsFileTypes> result = await GetAsync<CdogsFileTypes>(endpoint, authenticationToken);
 
             _logger.LogDebug($"Finished retrieving suported file types");
             return result;

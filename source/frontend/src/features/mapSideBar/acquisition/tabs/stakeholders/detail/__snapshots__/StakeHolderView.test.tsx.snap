@@ -9,9 +9,11 @@ exports[`StakeHolderView component > renders as expected 1`] = `
   .c3 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -21,7 +23,8 @@ exports[`StakeHolderView component > renders as expected 1`] = `
 
 .c2 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -51,7 +54,7 @@ exports[`StakeHolderView component > renders as expected 1`] = `
             Interests
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c3"
@@ -317,9 +320,11 @@ exports[`StakeHolderView component > renders as expected 1`] = `
   .c3 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -329,7 +334,8 @@ exports[`StakeHolderView component > renders as expected 1`] = `
 
 .c2 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -359,7 +365,7 @@ exports[`StakeHolderView component > renders as expected 1`] = `
             Non-interest Payees
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c3"

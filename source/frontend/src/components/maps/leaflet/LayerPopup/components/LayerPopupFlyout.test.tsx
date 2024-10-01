@@ -55,14 +55,14 @@ describe('LayerPopupFlyout component', () => {
   it('renders property view link by default', async () => {
     const { getByText, getAllByRole } = setup();
 
-    expect(getByText('View Property info')).toBeVisible();
+    expect(getByText('View Property Info')).toBeVisible();
     expect(getAllByRole('button')).toHaveLength(1);
   });
 
   it('calls onViewPropertyInfo when link clicked', async () => {
     const { getByText } = setup();
 
-    const link = getByText('View Property info');
+    const link = getByText('View Property Info');
     await act(async () => userEvent.click(link));
     expect(onViewPropertyInfo).toHaveBeenCalled();
   });
@@ -146,7 +146,7 @@ describe('LayerPopupFlyout component', () => {
     expect(queryByText('Research File')).toBeInTheDocument();
 
     expect(queryByText('Acquisition File')).not.toBeInTheDocument();
-    expect(queryByText('Lease/License')).not.toBeInTheDocument();
+    expect(queryByText('Lease/Licence')).not.toBeInTheDocument();
     expect(queryByText('Disposition File')).not.toBeInTheDocument();
     expect(queryByText('Create Subdivision')).not.toBeInTheDocument();
     expect(queryByText('Create Consolidation')).not.toBeInTheDocument();

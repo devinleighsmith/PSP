@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Pims.Api.Services;
 using Pims.Core.Test;
@@ -12,10 +11,7 @@ using Pims.Dal.Entities.Models;
 using Pims.Dal.Exceptions;
 using Pims.Dal.Repositories;
 using Pims.Dal.Security;
-using Pims.Dal.Services;
 using Xunit;
-using static Pims.Dal.Entities.PimsLeasePaymentStatusType;
-using Entity = Pims.Dal.Entities;
 
 namespace Pims.Api.Test.Services
 {
@@ -58,7 +54,7 @@ namespace Pims.Api.Test.Services
 
             var lease = EntityHelper.CreateLease(1);
             this.helper.CreatePimsContext(user, true).AddAndSaveChanges(lease);
-            var term = new PimsLeaseTerm() { TermStartDate = DateTime.Now, TermExpiryDate = DateTime.Now.AddDays(10) };
+            var period = new PimsLeasePeriod() { PeriodStartDate = DateTime.Now, PeriodExpiryDate = DateTime.Now.AddDays(10) };
 
             this.MockCommonServices();
             this.leaseRepository.Setup(x => x.GetAllByFilter(It.IsAny<LeaseFilter>(), It.IsAny<HashSet<short>>(), true)).Returns(new List<PimsLease>() { lease });
@@ -77,7 +73,7 @@ namespace Pims.Api.Test.Services
             var lease = EntityHelper.CreateLease(1);
             lease.OrigExpiryDate = new DateTime(2022, 4, 1);
             this.helper.CreatePimsContext(user, true).AddAndSaveChanges(lease);
-            var term = new PimsLeaseTerm() { TermStartDate = DateTime.Now, TermExpiryDate = DateTime.Now.AddDays(10) };
+            var period = new PimsLeasePeriod() { PeriodStartDate = DateTime.Now, PeriodExpiryDate = DateTime.Now.AddDays(10) };
 
             this.MockCommonServices();
             this.leaseRepository.Setup(x => x.GetAllByFilter(It.IsAny<LeaseFilter>(), It.IsAny<HashSet<short>>(), true)).Returns(new List<PimsLease>() { lease });

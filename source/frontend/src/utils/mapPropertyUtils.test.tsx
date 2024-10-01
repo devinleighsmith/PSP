@@ -1,12 +1,22 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { polygon } from '@turf/turf';
+import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { LatLngLiteral } from 'leaflet';
 
 import { LocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { IMapProperty } from '@/components/propertySelector/models';
+import { AreaUnitTypes } from '@/constants';
 import {
   mockFAParcelLayerResponse,
   mockFAParcelLayerResponseMultiPolygon,
 } from '@/mocks/faParcelLayerResponse.mock';
 import { getMockLocationFeatureDataset } from '@/mocks/featureset.mock';
+import { getEmptyFileProperty } from '@/mocks/fileProperty.mock';
+import { getMockLocation } from '@/mocks/geometries.mock';
+import { ApiGen_Concepts_FileProperty } from '@/models/api/generated/ApiGen_Concepts_FileProperty';
+import { ApiGen_Concepts_Geometry } from '@/models/api/generated/ApiGen_Concepts_Geometry';
+import { getEmptyProperty } from '@/models/defaultInitializers';
+import { PMBC_FullyAttributed_Feature_Properties } from '@/models/layers/parcelMapBC';
+import { PIMS_Property_Location_View } from '@/models/layers/pimsPropertyLocationView';
 
 import {
   featuresetToMapProperty,
@@ -15,13 +25,15 @@ import {
   getLatLng,
   getPrettyLatLng,
   getPropertyName,
+  isLatLngInFeatureSetBoundary,
+  latLngFromMapProperty,
+  latLngToApiLocation,
+  locationFromFileProperty,
   NameSourceType,
+  pidFromFeatureSet,
+  pinFromFeatureSet,
   PropertyName,
 } from './mapPropertyUtils';
-import { ApiGen_Concepts_FileProperty } from '@/models/api/generated/ApiGen_Concepts_FileProperty';
-import { getEmptyFileProperty } from '@/mocks/fileProperty.mock';
-import { getEmptyProperty } from '@/models/defaultInitializers';
-import { AreaUnitTypes } from '@/constants';
 
 const expectedMapProperty = {
   address: '',
@@ -31,6 +43,7 @@ const expectedMapProperty = {
   landArea: 647.4646,
   latitude: 48.432802005,
   longitude: -123.310041775,
+  legalDescription: undefined,
   name: undefined,
   pid: '000002500',
   pin: undefined,
@@ -38,6 +51,10 @@ const expectedMapProperty = {
   polygon: {
     coordinates: [[[-123.31014591, 48.43274258]]],
     type: 'Polygon',
+  },
+  fileLocation: {
+    lat: 48.432802005,
+    lng: -123.310041775,
   },
   propertyId: undefined,
   region: 1,
@@ -90,7 +107,7 @@ describe('mapPropertyUtils', () => {
     [{ address: '' }, { label: NameSourceType.NONE, value: '' }],
     [{ address: '1234 fake st' }, { label: NameSourceType.ADDRESS, value: '1234 fake st' }],
   ])(
-    'getPropertyName test with source %p expecting %p',
+    'getPropertyName test with source %o expecting %o',
     (mapProperty: IMapProperty, expectedName: PropertyName) => {
       const actualName = getPropertyName(mapProperty);
       expect(actualName.label).toEqual(expectedName.label);
@@ -98,24 +115,20 @@ describe('mapPropertyUtils', () => {
     },
   );
 
-  it('getPrettyLatLng, empty', () => {
-    const prettyLatLng = getPrettyLatLng(undefined);
-    expect(prettyLatLng).toEqual('');
+  it.each([
+    ['empty', undefined, ''],
+    ['valued', { coordinate: { x: 1, y: 2 } }, '1.000000, 2.000000'],
+  ])('getPrettyLatLng - %s', (_, value, expected) => {
+    const prettyLatLng = getPrettyLatLng(value);
+    expect(prettyLatLng).toEqual(expected);
   });
 
-  it('getPrettyLatLng, valued', () => {
-    const prettyLatLng = getPrettyLatLng({ coordinate: { x: 1, y: 2 } });
-    expect(prettyLatLng).toEqual('1.000000, 2.000000');
-  });
-
-  it('getLatLng, empty', () => {
-    const latLng = getLatLng(undefined);
-    expect(latLng).toEqual(null);
-  });
-
-  it('getLatLng, valued', () => {
-    const latLng = getLatLng({ coordinate: { x: 1, y: 2 } });
-    expect(latLng).toEqual({ lat: 2, lng: 1 });
+  it.each([
+    ['empty', undefined, null],
+    ['valued', { coordinate: { x: 1, y: 2 } }, { lat: 2, lng: 1 }],
+  ])('getLatLng - %s', (_, value, expected) => {
+    const latLng = getLatLng(value);
+    expect(latLng).toEqual(expected);
   });
 
   it.each([
@@ -152,7 +165,7 @@ describe('mapPropertyUtils', () => {
       { ...getEmptyFileProperty(), property: { ...getEmptyProperty(), pid: 1 } },
     ],
   ])(
-    'getFilePropertyName test with ignore name flag %p expecting %p source %p',
+    'getFilePropertyName test with ignore name flag %o expecting %s source %o',
     (skipName: boolean, expectedName: PropertyName, mapProperty?: ApiGen_Concepts_FileProperty) => {
       const fileName = getFilePropertyName(mapProperty, skipName);
       expect(fileName.label).toEqual(expectedName.label);
@@ -183,6 +196,10 @@ describe('mapPropertyUtils', () => {
           propertyId: undefined,
           region: undefined,
           regionName: undefined,
+          fileLocation: {
+            lat: 48.76613749999999,
+            lng: -123.46163749999998,
+          },
         },
       ],
     ],
@@ -207,11 +224,15 @@ describe('mapPropertyUtils', () => {
           propertyId: undefined,
           region: undefined,
           regionName: undefined,
+          fileLocation: {
+            lat: 48.76613749999999,
+            lng: -123.46163749999998,
+          },
         },
       ],
     ],
   ])(
-    'featuresToIdentifiedMapProperty test with feature values %p and address %p and expected map properties %p',
+    'featuresToIdentifiedMapProperty test with feature values %o and address %o and expected map properties %o',
     (
       values: FeatureCollection<Geometry, GeoJsonProperties> | undefined,
       address?: string,
@@ -242,7 +263,7 @@ describe('mapPropertyUtils', () => {
       { ...expectedMapProperty, address: 'address' },
     ],
   ])(
-    'featuresetToMapProperty test with feature set %p address %p expectedPropertyFile %p',
+    'featuresetToMapProperty test with feature set %o address %o expectedPropertyFile %o',
     (
       featureSet: LocationFeatureDataset,
       address: string = 'unknown',
@@ -250,6 +271,202 @@ describe('mapPropertyUtils', () => {
     ) => {
       const mapProperty = featuresetToMapProperty(featureSet, address);
       expect(mapProperty).toEqual(expectedPropertyFile);
+    },
+  );
+
+  it.each([
+    [
+      { ...getMockLocationFeatureDataset(), pimsFeature: { properties: { PID: '1234' } } as any },
+      '1234',
+    ],
+    [
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: {} as any,
+        parcelFeature: { properties: { PID: '9999' } } as any,
+      },
+      '9999',
+    ],
+    [
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: {} as any,
+        parcelFeature: {} as any,
+      },
+      null,
+    ],
+  ])(
+    'pidFromFeatureSet test with feature set %o - expected %s',
+    (featureSet: LocationFeatureDataset, expectedValue: string | null) => {
+      const pid = pidFromFeatureSet(featureSet);
+      expect(pid).toEqual(expectedValue);
+    },
+  );
+
+  it.each([
+    [
+      { ...getMockLocationFeatureDataset(), pimsFeature: { properties: { PIN: 1234 } } as any },
+      '1234',
+    ],
+    [
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: {} as any,
+        parcelFeature: { properties: { PIN: 9999 } } as any,
+      },
+      '9999',
+    ],
+    [
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: {} as any,
+        parcelFeature: {} as any,
+      },
+      null,
+    ],
+  ])(
+    'pinFromFeatureSet test with feature set %o - expected %s',
+    (featureSet: LocationFeatureDataset, expectedValue: string | null) => {
+      const pid = pinFromFeatureSet(featureSet);
+      expect(pid).toEqual(expectedValue);
+    },
+  );
+
+  it.each([
+    [{ ...getEmptyFileProperty(), location: { ...getMockLocation() } }, { ...getMockLocation() }],
+    [
+      {
+        ...getEmptyFileProperty(),
+        location: null,
+        property: { ...getEmptyProperty(), location: { ...getMockLocation() } },
+      },
+      { ...getMockLocation() },
+    ],
+    [{ ...getEmptyFileProperty(), location: null }, null],
+  ])(
+    'locationFromFileProperty test with file property %o - expected %o',
+    (
+      fileProperty: ApiGen_Concepts_FileProperty | undefined | null,
+      expectedValue: ApiGen_Concepts_Geometry | null,
+    ) => {
+      const location = locationFromFileProperty(fileProperty);
+      expect(location).toEqual(expectedValue);
+    },
+  );
+
+  it.each([
+    [4, 5, { ...getMockLocation(4, 5) }],
+    [null, null, null],
+  ])(
+    'latLngToApiLocation test with latitude %s, longitude %s - expected %o',
+    (
+      latitude: number | null,
+      longitude: number | null,
+      expectedValue: ApiGen_Concepts_Geometry | null,
+    ) => {
+      const apiGeometry = latLngToApiLocation(latitude, longitude);
+      expect(apiGeometry).toEqual(expectedValue);
+    },
+  );
+
+  it.each([
+    [{ fileLocation: { lat: 4, lng: 5 } }, { lat: 4, lng: 5 }],
+    [
+      { latitude: 4, longitude: 5 },
+      { lat: 4, lng: 5 },
+    ],
+    [undefined, { lat: 0, lng: 0 }],
+  ])(
+    'latLngFromMapProperty test with file property %o - expected %o',
+    (mapProperty: IMapProperty | undefined | null, expectedValue: LatLngLiteral | null) => {
+      const latLng = latLngFromMapProperty(mapProperty);
+      expect(latLng).toEqual(expectedValue);
+    },
+  );
+
+  it.each([
+    [
+      { lat: 44, lng: -77 },
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: polygon([
+          [
+            [-81, 41],
+            [-81, 47],
+            [-72, 47],
+            [-72, 41],
+            [-81, 41],
+          ],
+        ]) as Feature<Geometry, PIMS_Property_Location_View> | null,
+      },
+      true,
+    ],
+    [
+      { lat: 44, lng: 80 },
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: polygon([
+          [
+            [-81, 41],
+            [-81, 47],
+            [-72, 47],
+            [-72, 41],
+            [-81, 41],
+          ],
+        ]) as Feature<Geometry, PIMS_Property_Location_View> | null,
+      },
+      false,
+    ],
+    [
+      { lat: 44, lng: -77 },
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: null,
+        parcelFeature: polygon([
+          [
+            [-81, 41],
+            [-81, 47],
+            [-72, 47],
+            [-72, 41],
+            [-81, 41],
+          ],
+        ]) as Feature<Geometry, PMBC_FullyAttributed_Feature_Properties> | null,
+      },
+      true,
+    ],
+    [
+      { lat: 44, lng: 80 },
+      {
+        ...getMockLocationFeatureDataset(),
+        pimsFeature: null,
+        parcelFeature: polygon([
+          [
+            [-81, 41],
+            [-81, 47],
+            [-72, 47],
+            [-72, 41],
+            [-81, 41],
+          ],
+        ]) as Feature<Geometry, PMBC_FullyAttributed_Feature_Properties> | null,
+      },
+      false,
+    ],
+    [
+      { lat: 44, lng: -77 },
+      {
+        ...getMockLocationFeatureDataset(),
+        location: null,
+        fileLocation: null,
+        pimsFeature: null,
+        parcelFeature: null,
+      },
+      false,
+    ],
+  ])(
+    'isLatLngInFeatureSetBoundary test with lat/long %o, feature set %o - expected %o',
+    (latLng: LatLngLiteral, featureset: LocationFeatureDataset, expectedValue: boolean) => {
+      const result = isLatLngInFeatureSetBoundary(latLng, featureset);
+      expect(result).toEqual(expectedValue);
     },
   );
 });

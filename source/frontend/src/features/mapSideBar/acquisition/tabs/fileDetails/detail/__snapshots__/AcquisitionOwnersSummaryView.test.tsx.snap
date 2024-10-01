@@ -7,6 +7,7 @@ exports[`Acquisition File Owners View component > Renders Component as expected 
   />
   <div />
   .c0 {
+  color: #474543;
   font-size: 1.6rem;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -93,9 +94,7 @@ exports[`Acquisition File Owners View component > Renders Component as expected 
           class="c1"
         >
           Other name:
-          <span
-            class="ml-2"
-          >
+          <span>
             <span
               class="tooltip-icon"
               data-testid="tooltip-icon-section-field-tooltip"
@@ -264,9 +263,7 @@ Canada
           class="c1"
         >
           Other name:
-          <span
-            class="ml-2"
-          >
+          <span>
             <span
               class="tooltip-icon"
               data-testid="tooltip-icon-section-field-tooltip"

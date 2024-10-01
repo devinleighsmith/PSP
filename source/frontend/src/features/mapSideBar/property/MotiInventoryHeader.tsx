@@ -2,10 +2,15 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import { FaSearchPlus } from 'react-icons/fa';
+import { HiCube } from 'react-icons/hi2';
 import styled from 'styled-components';
 
 import { StyledIconButton } from '@/components/common/buttons';
-import { HeaderField } from '@/components/common/HeaderField/HeaderField';
+import {
+  HeaderContentCol,
+  HeaderField,
+  HeaderLabelCol,
+} from '@/components/common/HeaderField/HeaderField';
 import { StyledFiller } from '@/components/common/HeaderField/styles';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { InlineFlexDiv } from '@/components/common/styles';
@@ -26,14 +31,17 @@ export interface IMotiInventoryHeaderProps {
 
 export const MotiInventoryHeader: React.FunctionComponent<IMotiInventoryHeaderProps> = props => {
   const pid = pidFormatter(props.composedProperty.pid);
+
   const parcelMapData = props.composedProperty.parcelMapFeatureCollection;
   const geoserverMapData = props.composedProperty.geoserverFeatureCollection;
   const apiProperty = props.composedProperty.pimsProperty;
+
   let property: IMapProperty | null = null;
 
   if (parcelMapData?.features[0]) {
     property = mapFeatureToProperty(parcelMapData?.features[0]);
   }
+  const pin = props.composedProperty?.pin ?? apiProperty?.pin ?? property?.pin ?? '-';
 
   const isLoading = props.isLoading;
 
@@ -88,18 +96,22 @@ export const MotiInventoryHeader: React.FunctionComponent<IMotiInventoryHeaderPr
         </Col>
         <Col className="text-right">
           <StyledFiller>
-            <HeaderField className="justify-content-end" label="PID:">
-              {pid}
-            </HeaderField>
+            <Row className="justify-content-end">
+              <HeaderLabelCol label="PID:" />
+              <HeaderContentCol>{pid}</HeaderContentCol>
+              <HeaderLabelCol label={'PIN:'} />
+              <HeaderContentCol>{pin}</HeaderContentCol>
+            </Row>
             <HeaderField label="Land parcel type:" className="justify-content-end">
               {apiProperty?.propertyType?.description}
             </HeaderField>
             {(isRetired || isDisposed) && (
               <HeaderField label="" className="justify-content-end align-items-end mt-auto">
-                <RetiredWarning>
-                  <AiOutlineExclamationCircle size={16} />
+                <PropertyStyleStatus className={isRetired ? 'retired' : 'disposed'}>
+                  {isRetired && <AiOutlineExclamationCircle size={16} />}
+                  {isDisposed && <HiCube size={16} />}
                   {isRetired ? 'RETIRED' : isDisposed ? 'DISPOSED' : 'UNKNOWN STATUS'}
-                </RetiredWarning>
+                </PropertyStyleStatus>
               </HeaderField>
             )}
           </StyledFiller>
@@ -131,7 +143,7 @@ const StyledDivider = styled.div`
   border-bottom-width: 0.1rem;
 `;
 
-export const RetiredWarning = styled(InlineFlexDiv)`
+export const PropertyStyleStatus = styled(InlineFlexDiv)`
   text-transform: uppercase;
   color: ${props => props.theme.css.textWarningColor};
   background-color: ${props => props.theme.css.warningBackgroundColor};
@@ -143,4 +155,8 @@ export const RetiredWarning = styled(InlineFlexDiv)`
   font-size: 1.4rem;
   align-items: center;
   width: fit-content;
+  &.disposed {
+    color: ${props => props.theme.css.fileStatusGreyColor};
+    background-color: ${props => props.theme.css.fileStatusGreyBackgroundColor};
+  }
 `;

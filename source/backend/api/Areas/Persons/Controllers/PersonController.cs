@@ -87,18 +87,21 @@ namespace Pims.Api.Areas.Persons.Controllers
         [HttpPost]
         [HasPermission(Permissions.ContactAdd)]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(Areas.Contact.Models.Contact.ContactModel), 201)]
+        [ProducesResponseType(typeof(PersonModel), 201)]
         [ProducesResponseType(typeof(Api.Models.ErrorResponseModel), 400)]
         [SwaggerOperation(Tags = new[] { "person" })]
         public IActionResult AddPerson([FromBody] PersonModel model, bool userOverride = false)
         {
             // Business rule - support country free-form value if country code is "Other". Ignore field otherwise.
             var otherCountry = _lookupRepository.GetAllCountries().FirstOrDefault(x => x.Code == Dal.Entities.CountryCodes.Other);
-            foreach (var personAddress in model?.PersonAddresses)
+            if (model?.PersonAddresses != null)
             {
-                if (otherCountry != null && personAddress != null && personAddress.Address.CountryId != otherCountry.CountryId)
+                foreach (var personAddress in model?.PersonAddresses)
                 {
-                    personAddress.Address.CountryOther = null;
+                    if (otherCountry != null && personAddress != null && personAddress.Address.CountryId != otherCountry.CountryId)
+                    {
+                        personAddress.Address.CountryOther = null;
+                    }
                 }
             }
 
@@ -107,7 +110,7 @@ namespace Pims.Api.Areas.Persons.Controllers
             try
             {
                 var created = _personService.AddPerson(entity, userOverride);
-                var response = _mapper.Map<Areas.Contact.Models.Contact.PersonModel>(created);
+                var response = _mapper.Map<PersonModel>(created);
 
                 return new JsonResult(response);
             }

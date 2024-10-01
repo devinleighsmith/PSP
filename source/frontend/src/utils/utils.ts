@@ -61,6 +61,7 @@ type FormikMemoProps = {
   field: string;
   disabled?: boolean;
   options?: SelectOption[];
+  required?: boolean;
 } & any;
 /**
  * Common use memo function prevents renders unless associated field data has been changed.
@@ -75,18 +76,21 @@ export const formikFieldMemo = (
     field: currField,
     disabled: currentDisabled,
     options: currentOptions,
+    required: currentRequired,
   }: FormikMemoProps,
   {
     formikProps: prevProps,
     field: prevField,
     disabled: prevDisabled,
     options: prevOptions,
+    required: prevRequired,
   }: FormikMemoProps,
 ) => {
   return !(
     currField !== prevField ||
     currentDisabled !== prevDisabled ||
     currentOptions !== prevOptions ||
+    currentRequired !== prevRequired ||
     getIn(currentProps.values, prevField) !== getIn(prevProps.values, prevField) ||
     getIn(currentProps.errors, prevField) !== getIn(prevProps.errors, prevField) ||
     getIn(currentProps.touched, prevField) !== getIn(prevProps.touched, prevField) ||
@@ -191,6 +195,14 @@ export function isValidString(value: string | null | undefined): value is string
 
 export function isValidIsoDateTime(value: string | null | undefined): value is string {
   return isValidString(value) && value !== EpochIsoDateTime;
+}
+
+export function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+export function isNumber(value: unknown): value is number {
+  return typeof value === 'number';
 }
 
 /**

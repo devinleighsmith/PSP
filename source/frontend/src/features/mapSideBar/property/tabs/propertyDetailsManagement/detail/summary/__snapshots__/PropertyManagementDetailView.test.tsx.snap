@@ -9,6 +9,7 @@ exports[`PropertyManagementDetailView component > renders as expected when provi
   .c2 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c3 {
@@ -17,7 +18,8 @@ exports[`PropertyManagementDetailView component > renders as expected when provi
 
 .c1 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -55,7 +57,7 @@ exports[`PropertyManagementDetailView component > renders as expected when provi
           Summary
         </div>
         <div
-          class="pl-8 col-auto"
+          class="pl-8 d-flex align-items-end col-auto"
         >
           <svg
             class="c2"
@@ -155,11 +157,12 @@ exports[`PropertyManagementDetailView component > renders as expected when provi
           <label
             class="c4"
           >
-            Lease/Licensed:
+            Active Lease/License:
           </label>
         </div>
         <div
           class="c5 text-left col"
+          data-testid="active-lease-information"
         >
           No
         </div>
@@ -210,9 +213,7 @@ exports[`PropertyManagementDetailView component > renders as expected when provi
             class="c4"
           >
             Additional details:
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"

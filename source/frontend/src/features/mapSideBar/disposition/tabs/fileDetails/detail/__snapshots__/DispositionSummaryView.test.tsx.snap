@@ -7,6 +7,7 @@ exports[`DispositionSummaryView component > matches snapshot 1`] = `
   />
   <div />
   .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -16,7 +17,8 @@ exports[`DispositionSummaryView component > matches snapshot 1`] = `
 
 .c5 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -255,9 +257,7 @@ exports[`DispositionSummaryView component > matches snapshot 1`] = `
               class="c3"
             >
               Reference number:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -331,9 +331,7 @@ exports[`DispositionSummaryView component > matches snapshot 1`] = `
               class="c3"
             >
               Initiating document:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -373,9 +371,7 @@ exports[`DispositionSummaryView component > matches snapshot 1`] = `
               class="c3"
             >
               Initiating document date:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"

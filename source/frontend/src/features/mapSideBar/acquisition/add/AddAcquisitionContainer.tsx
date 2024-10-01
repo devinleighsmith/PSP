@@ -1,17 +1,18 @@
 import { FormikProps } from 'formik/dist/types';
+import { Location } from 'history';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import RealEstateAgent from '@/assets/images/real-estate-agent.svg?react';
+import AcquisitionFileIcon from '@/assets/images/acquisition-icon.svg?react';
+import ConfirmNavigation from '@/components/common/ConfirmNavigation';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import MapSideBarLayout from '@/features/mapSideBar/layout/MapSideBarLayout';
-import { usePimsPropertyRepository } from '@/hooks/repositories/usePimsPropertyRepository';
 import { usePropertyAssociations } from '@/hooks/repositories/usePropertyAssociations';
-import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
+import { useModalContext } from '@/hooks/useModalContext';
 import { ApiGen_Concepts_AcquisitionFile } from '@/models/api/generated/ApiGen_Concepts_AcquisitionFile';
-import { exists, isValidId, isValidString } from '@/utils';
+import { exists, isValidId } from '@/utils';
 import { featuresetToMapProperty } from '@/utils/mapPropertyUtils';
 
 import { PropertyForm } from '../../shared/models';
@@ -23,6 +24,7 @@ import { AcquisitionForm } from './models';
 
 export interface IAddAcquisitionContainerProps {
   onClose: () => void;
+  onSuccess: (newAcquisitionId: number) => void;
 }
 
 export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = props => {
@@ -36,32 +38,13 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
   const selectedFeatureDataset = mapMachine.selectedFeatureDataset;
 
   const { execute: getPropertyAssociations } = usePropertyAssociations();
-  const {
-    getPropertyByPidWrapper: { execute: getPropertyByPid },
-    getPropertyByPinWrapper: { execute: getPropertyByPin },
-  } = usePimsPropertyRepository();
   const [needsUserConfirmation, setNeedsUserConfirmation] = useState<boolean>(true);
 
   // Warn user that property is part of an existing acquisition file
   const confirmBeforeAdd = useCallback(
     async (propertyForm: PropertyForm) => {
-      let apiId;
-      try {
-        if (isValidId(propertyForm.apiId)) {
-          apiId = propertyForm.apiId;
-        } else if (isValidString(propertyForm.pid)) {
-          const result = await getPropertyByPid(propertyForm.pid);
-          apiId = result?.id;
-        } else if (isValidString(propertyForm.pin)) {
-          const result = await getPropertyByPin(Number(propertyForm.pin));
-          apiId = result?.id;
-        }
-      } catch (e) {
-        apiId = 0;
-      }
-
-      if (isValidId(apiId)) {
-        const response = await getPropertyAssociations(apiId);
+      if (isValidId(propertyForm.apiId)) {
+        const response = await getPropertyAssociations(propertyForm.apiId);
         const acquisitionAssociations = response?.acquisitionAssociations ?? [];
         const otherAcqFiles = acquisitionAssociations.filter(a => exists(a.id));
         return otherAcqFiles.length > 0;
@@ -70,7 +53,7 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
         return false;
       }
     },
-    [getPropertyAssociations, getPropertyByPid, getPropertyByPin],
+    [getPropertyAssociations],
   );
 
   const initialForm = useMemo(() => {
@@ -109,7 +92,7 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
     }
 
     mapMachine.refreshMapProperties();
-    history.replace(`/mapview/sidebar/acquisition/${acqFile.id}`);
+    props.onSuccess(acqFile.id);
   };
 
   const helper = useAddAcquisitionFormManagement({
@@ -119,21 +102,8 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
     formikRef,
   });
 
-  const cancelFunc = () => {
-    if (!formikRef.current?.dirty) {
-      formikRef.current?.resetForm();
-      onClose();
-    } else {
-      setModalContent({
-        ...getCancelModalProps(),
-        handleOk: () => {
-          formikRef.current?.resetForm();
-          setDisplayModal(false);
-          onClose();
-        },
-      });
-      setDisplayModal(true);
-    }
+  const handleCancel = () => {
+    onClose();
   };
 
   const { initialValues } = helper;
@@ -190,25 +160,35 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
     setModalContent,
   ]);
 
+  const checkState = useCallback(
+    (location: Location) => {
+      return (
+        !location.pathname.startsWith('/mapview/sidebar/acquisition/') &&
+        formikRef?.current?.dirty &&
+        !formikRef?.current?.isSubmitting
+      );
+    },
+    [formikRef],
+  );
+
   return (
     <MapSideBarLayout
       showCloseButton
       title="Create Acquisition File"
       icon={
-        <RealEstateAgent
+        <AcquisitionFileIcon
           title="Acquisition file Icon"
           width="2.6rem"
           height="2.6rem"
           fill="currentColor"
-          className="mr-2"
         />
       }
-      onClose={cancelFunc}
+      onClose={handleCancel}
       footer={
         <SidebarFooter
           isOkDisabled={helper.loading}
           onSave={handleSave}
-          onCancel={cancelFunc}
+          onCancel={handleCancel}
           displayRequiredFieldError={isValid === false}
         />
       }
@@ -223,6 +203,7 @@ export const AddAcquisitionContainer: React.FC<IAddAcquisitionContainerProps> = 
           confirmBeforeAdd={confirmBeforeAdd}
         />
       </StyledFormWrapper>
+      <ConfirmNavigation navigate={history.push} shouldBlockNavigation={checkState} />
     </MapSideBarLayout>
   );
 };

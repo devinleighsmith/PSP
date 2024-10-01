@@ -1,8 +1,14 @@
 import { LocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 
+import getMockISSResult from './mockISSResult';
+
 export const getMockLocationFeatureDataset = (): LocationFeatureDataset =>
   ({
     location: {
+      lat: 48.432802005,
+      lng: -123.310041775,
+    },
+    fileLocation: {
       lat: 48.432802005,
       lng: -123.310041775,
     },
@@ -109,4 +115,5 @@ export const getMockLocationFeatureDataset = (): LocationFeatureDataset =>
         SE_ANNO_CAD_DATA: null,
       },
     },
+    highwayFeature: getMockISSResult(),
   } as unknown as LocationFeatureDataset);

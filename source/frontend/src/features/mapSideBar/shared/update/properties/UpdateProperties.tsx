@@ -1,14 +1,16 @@
 import axios, { AxiosError } from 'axios';
 import { FieldArray, Formik, FormikProps } from 'formik';
+import { LatLngLiteral } from 'leaflet';
+import isNumber from 'lodash/isNumber';
 import { useContext, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import GenericModal from '@/components/common/GenericModal';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
+import { LocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { Section } from '@/components/common/Section/Section';
 import MapSelectorContainer from '@/components/propertySelector/MapSelectorContainer';
-import { IMapProperty } from '@/components/propertySelector/models';
 import SelectedPropertyHeaderRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyHeaderRow';
 import SelectedPropertyRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyRow';
 import { SideBarContext } from '@/features/mapSideBar/context/sidebarContext';
@@ -17,7 +19,7 @@ import { useBcaAddress } from '@/features/properties/map/hooks/useBcaAddress';
 import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
 import { ApiGen_Concepts_File } from '@/models/api/generated/ApiGen_Concepts_File';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
-import { isValidId } from '@/utils';
+import { isLatLngInFeatureSetBoundary, isValidId } from '@/utils';
 
 import { AddressForm, FileForm, PropertyForm } from '../../models';
 import SidebarFooter from '../../SidebarFooter';
@@ -150,18 +152,18 @@ export const UpdateProperties: React.FunctionComponent<IUpdatePropertiesProps> =
         >
           {formikProps => (
             <FieldArray name="properties">
-              {({ push, remove }) => (
+              {({ push, remove, replace }) => (
                 <>
                   <Row className="py-3 no-gutters">
                     <Col>
                       <MapSelectorContainer
-                        addSelectedProperties={(newProperties: IMapProperty[]) => {
+                        addSelectedProperties={(newProperties: LocationFeatureDataset[]) => {
                           newProperties.reduce(async (promise, property) => {
                             return promise.then(async () => {
-                              const formProperty = PropertyForm.fromMapProperty(property);
-                              if (property.pid) {
+                              const formProperty = PropertyForm.fromFeatureDataset(property);
+                              if (formProperty.pid) {
                                 const bcaSummary = await getPrimaryAddressByPid(
-                                  property.pid,
+                                  formProperty.pid,
                                   30000,
                                 );
                                 formProperty.address = bcaSummary?.address
@@ -192,7 +194,28 @@ export const UpdateProperties: React.FunctionComponent<IUpdatePropertiesProps> =
                             });
                           }, Promise.resolve());
                         }}
-                        modifiedProperties={formikProps.values.properties}
+                        repositionSelectedProperty={(
+                          featureset: LocationFeatureDataset,
+                          latLng: LatLngLiteral,
+                          index: number | null,
+                        ) => {
+                          // As long as the marker is repositioned within the boundary of the originally selected property simply reposition the marker without further notification.
+                          if (
+                            isNumber(index) &&
+                            index >= 0 &&
+                            isLatLngInFeatureSetBoundary(latLng, featureset)
+                          ) {
+                            const formProperty = formikProps.values.properties[index];
+                            const updatedFormProperty = new PropertyForm(formProperty);
+                            updatedFormProperty.fileLocation = latLng;
+
+                            // Find property within formik values and reposition it based on incoming file marker position
+                            replace(index, updatedFormProperty);
+                          }
+                        }}
+                        modifiedProperties={formikProps.values.properties.map(p =>
+                          p.toFeatureDataset(),
+                        )}
                       />
                     </Col>
                   </Row>
@@ -210,7 +233,7 @@ export const UpdateProperties: React.FunctionComponent<IUpdatePropertiesProps> =
                         }}
                         nameSpace={`properties.${index}`}
                         index={index}
-                        property={property.toMapProperty()}
+                        property={property.toFeatureDataset()}
                       />
                     ))}
                     {formikProps.values.properties.length === 0 && (

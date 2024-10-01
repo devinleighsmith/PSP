@@ -7,6 +7,8 @@ namespace Pims.Dal.Repositories
     {
         IList<PimsCompensationRequisition> GetAllByAcquisitionFileId(long acquisitionFileId);
 
+        IList<PimsCompensationRequisition> GetAllByLeaseFileId(long leaseFileId);
+
         PimsCompensationRequisition GetById(long compensationRequisitionId);
 
         PimsCompensationRequisition Add(PimsCompensationRequisition compensationRequisition);
@@ -14,5 +16,11 @@ namespace Pims.Dal.Repositories
         PimsCompensationRequisition Update(PimsCompensationRequisition compensationRequisition);
 
         bool TryDelete(long compensationId);
+
+        List<PimsPropertyAcquisitionFile> GetAcquisitionCompReqPropertiesById(long compensationRequisitionId);
+
+        List<PimsPropertyLease> GetLeaseCompReqPropertiesById(long compensationRequisitionId);
+
+        IEnumerable<PimsCompReqFinancial> GetCompensationRequisitionFinancials(long id);
     }
 }

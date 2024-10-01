@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Pims.Api.Models.Base;
 using Pims.Api.Models.Concepts.File;
+using Pims.Api.Models.Concepts.Product;
 using Pims.Api.Models.Concepts.Project;
 
 namespace Pims.Api.Models.Concepts.Lease
@@ -59,19 +60,9 @@ namespace Pims.Api.Models.Concepts.Lease
         public string PsFileNo { get; set; }
 
         /// <summary>
-        /// get/set - The text description if the lease category type is set to "other".
-        /// </summary>
-        public string OtherCategoryType { get; set; }
-
-        /// <summary>
         /// get/set - The text description if the lease program type is set to "other".
         /// </summary>
         public string OtherProgramType { get; set; }
-
-        /// <summary>
-        /// get/set - The text description if the lease purpose type is set to "other".
-        /// </summary>
-        public string OtherPurposeType { get; set; }
 
         /// <summary>
         /// get/set - The text description if the lease type is set to "other".
@@ -79,14 +70,19 @@ namespace Pims.Api.Models.Concepts.Lease
         public string OtherType { get; set; }
 
         /// <summary>
+        /// get/set - The original start date of the lease.
+        /// </summary>
+        public DateOnly? StartDate { get; set; }
+
+        /// <summary>
         /// get/set - The calculated expiry date of the lease.
         /// </summary>
         public DateOnly? ExpiryDate { get; set; }
 
         /// <summary>
-        /// get/set - The original start date of the lease.
+        /// get/set - Date that the lease was terminated.
         /// </summary>
-        public DateOnly StartDate { get; set; }
+        public DateOnly? TerminationDate { get; set; }
 
         /// <summary>
         /// get/set - The lease renewal count.
@@ -114,14 +110,9 @@ namespace Pims.Api.Models.Concepts.Lease
         public CodeTypeModel<string> ResponsibilityType { get; set; }
 
         /// <summary>
-        /// get/set - The entity responsible for this lease.
+        /// get/set - The list of purposes for this lease.
         /// </summary>
-        public CodeTypeModel<string> CategoryType { get; set; }
-
-        /// <summary>
-        /// get/set - The entity responsible for this lease.
-        /// </summary>
-        public CodeTypeModel<string> PurposeType { get; set; }
+        public IList<LeasePurposeModel> LeasePurposes { get; set; }
 
         /// <summary>
         /// get/set - The region of this lease within PIMS.
@@ -154,14 +145,19 @@ namespace Pims.Api.Models.Concepts.Lease
         public IEnumerable<ConsultationLeaseModel> Consultations { get; set; }
 
         /// <summary>
-        /// get/set - A collection of the tenants for this lease.
+        /// get/set - A collection of the stakeholders for this lease.
         /// </summary>
-        public IEnumerable<LeaseTenantModel> Tenants { get; set; }
+        public IEnumerable<LeaseStakeholderModel> Stakeholders { get; set; }
 
-         /// <summary>
-        /// get/set - A collection of the terms for this lease.
+        /// <summary>
+        /// get/set - A collection of the periods for this lease.
         /// </summary>
-        public IEnumerable<LeaseTermModel> Terms { get; set; }
+        public IEnumerable<LeasePeriodModel> Periods { get; set; }
+
+        /// <summary>
+        /// get/set - A collection of the renewals for this lease.
+        /// </summary>
+        public IEnumerable<LeaseRenewalModel> Renewals { get; set; }
 
         /// <summary>
         /// get/set - Whether this improvement contains a building that is subject to RTA (Residential Tenancy Act).
@@ -190,12 +186,42 @@ namespace Pims.Api.Models.Concepts.Lease
 
         public string TerminationReason { get; set; }
 
+        /// <summary>
+        /// get/set - Track arbitration cities.
+        /// </summary>
+        public string PrimaryArbitrationCity { get; set; }
+
         public bool IsExpired { get; set; }
 
         /// <summary>
         /// get/set - The project associated with this lease.
         /// </summary>
         public ProjectModel Project { get; set; }
+
+        /// <summary>
+        /// get/set - The Lease product's id.
+        /// </summary>
+        public long? ProductId { get; set; }
+
+        /// <summary>
+        /// get/set - The Lease product.
+        /// </summary>
+        public ProductModel Product { get; set; }
+
+        /// <summary>
+        /// get/set - is public benefit.
+        /// </summary>
+        public bool? IsPublicBenefit { get; set; }
+
+        /// <summary>
+        /// get/set is financial gain.
+        /// </summary>
+        public bool? IsFinancialGain { get; set; }
+
+        /// <summary>
+        /// get/set - fee determination notes.
+        /// </summary>
+        public string FeeDeterminationNote { get; set; }
         #endregion
     }
 }

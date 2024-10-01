@@ -1,14 +1,10 @@
 import { ContactMethodTypes } from '@/constants/contactMethodType';
 import {
   AccessRequestStatus,
-  OrganizationIdentifierTypes,
-  OrganizationTypes,
-  PropertyClassificationTypes,
   PropertyDataSourceTypes,
   PropertyStatusTypes,
   PropertyTenureTypes,
 } from '@/constants/index';
-import { IAddress, IOrganization, IPerson } from '@/interfaces';
 import { BillingInfo, LtsaOrders, OrderParent } from '@/interfaces/ltsaModels';
 import { ApiGen_Concepts_AccessRequest } from '@/models/api/generated/ApiGen_Concepts_AccessRequest';
 import { ApiGen_Concepts_Address } from '@/models/api/generated/ApiGen_Concepts_Address';
@@ -83,28 +79,6 @@ export const mockOrganizationLookups = [
   },
 ] as ILookupCode[];
 
-export const mockAddress: IAddress = {
-  id: 1,
-  streetAddress1: '1234 mock Street',
-  streetAddress2: 'N/A',
-  municipality: 'Victoria',
-  provinceId: 1,
-  province: 'BC',
-  postal: 'V1V1V1',
-};
-
-export const mockOrganization: IOrganization = {
-  id: 1,
-  name: 'Ministry of Transportation & Infrastructure',
-  organizationTypeId: OrganizationTypes.BCMinistry,
-  identifierTypeId: OrganizationIdentifierTypes.Government,
-  identifier: 'I have no idea what this is',
-  addressId: mockAddress.id ?? 0,
-  address: mockAddress,
-  landline: '2223334444',
-  mobile: '5556667777',
-};
-
 export const mockApiOrganization: ApiGen_Concepts_Organization = {
   id: 1,
   name: 'Ministry of Transportation & Infrastructure',
@@ -142,11 +116,6 @@ export const mockUser: ApiGen_Concepts_User = {
   person: null,
   ...getEmptyBaseAudit(1),
   appCreateTimestamp: '2021-05-04T19:07:09.6920606',
-};
-
-export const mockPerson: IPerson = {
-  landline: '222-333-4444',
-  mobile: '555-666-7777',
 };
 
 export const mockApiPerson: ApiGen_Concepts_Person = {
@@ -665,7 +634,6 @@ export const mockApiProperty: ApiGen_Concepts_Property = {
   status: toTypeCode(PropertyStatusTypes.UnderAdmin),
   dataSource: toTypeCode(PropertyDataSourceTypes.PAIMS),
   dataSourceEffectiveDateOnly: '2021-08-30T17:28:17.655Z',
-  propertyType: toTypeCode(PropertyClassificationTypes.CoreOperational),
   tenures: [
     {
       id: 1,
@@ -674,13 +642,8 @@ export const mockApiProperty: ApiGen_Concepts_Property = {
       ...getEmptyBaseAudit(),
     },
   ],
-  zoning: '',
-  zoningPotential: '',
-  isSensitive: false,
   latitude: 48,
   longitude: 123,
-  name: 'test name',
-  description: 'test',
   address: mockApiAddress,
   landArea: 123,
   landLegalDescription: 'test description',
@@ -691,11 +654,6 @@ export const mockApiPropertyView = (): ApiGen_Concepts_PropertyView => ({
   id: 1,
   pid: 0,
   pin: null,
-  zoning: '',
-  zoningPotential: '',
-  isSensitive: false,
-  name: 'test name',
-  description: 'test',
   streetAddress1: mockApiAddress.streetAddress1,
   streetAddress2: mockApiAddress.streetAddress2,
   streetAddress3: mockApiAddress.streetAddress3,

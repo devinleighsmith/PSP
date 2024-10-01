@@ -1,15 +1,8 @@
-using System;
-using System.Security.Claims;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Xunit;
 using Pims.Dal.Entities;
 using Pims.Dal.Repositories;
 using System.Diagnostics.CodeAnalysis;
-using k8s.KubeConfigModels;
 using Pims.Core.Test;
-using Pims.Dal.Security;
-using System.Collections.Generic;
 
 namespace Pims.Dal.Tests.Repositories
 {
@@ -118,23 +111,6 @@ namespace Pims.Dal.Tests.Repositories
 
             // Assert
             Assert.IsType<PimsDistrict[]>(result);
-        }
-
-        [Fact]
-        public void LookupRepository_GetAllPropertyClassificationTypes_ReturnsCorrectType()
-        {
-            // Arrange
-            var helper = new TestHelper();
-            var user = PrincipalHelper.CreateForPermission();
-            var context = helper.CreatePimsContext(user, true);
-
-            var lookupRepository = helper.CreateRepository<LookupRepository>(user);
-
-            // Act
-            var result = lookupRepository.GetAllPropertyClassificationTypes();
-
-            // Assert
-            Assert.IsType<PimsPropertyClassificationType[]>(result);
         }
 
         [Fact]
@@ -325,23 +301,6 @@ namespace Pims.Dal.Tests.Repositories
         }
 
         [Fact]
-        public void LookupRepository_GetAllLeaseCategoryTypes_ReturnsCorrectType()
-        {
-            // Arrange
-            var helper = new TestHelper();
-            var user = PrincipalHelper.CreateForPermission();
-            var context = helper.CreatePimsContext(user, true);
-
-            var lookupRepository = helper.CreateRepository<LookupRepository>(user);
-
-            // Act
-            var result = lookupRepository.GetAllLeaseCategoryTypes();
-
-            // Assert
-            Assert.IsType<PimsLeaseCategoryType[]>(result);
-        }
-
-        [Fact]
         public void LookupRepository_GetAllLeasePurposeTypes_ReturnsCorrectType()
         {
             // Arrange
@@ -393,7 +352,7 @@ namespace Pims.Dal.Tests.Repositories
         }
 
         [Fact]
-        public void LookupRepository_GetAllLeaseTermStatusTypes_ReturnsCorrectType()
+        public void LookupRepository_GetAllLeasePeriodStatusTypes_ReturnsCorrectType()
         {
             // Arrange
             var helper = new TestHelper();
@@ -403,10 +362,10 @@ namespace Pims.Dal.Tests.Repositories
             var lookupRepository = helper.CreateRepository<LookupRepository>(user);
 
             // Act
-            var result = lookupRepository.GetAllLeaseTermStatusTypes();
+            var result = lookupRepository.GetAllLeasePeriodStatusTypes();
 
             // Assert
-            Assert.IsType<PimsLeaseTermStatusType[]>(result);
+            Assert.IsType<PimsLeasePeriodStatusType[]>(result);
         }
 
         [Fact]
@@ -767,7 +726,7 @@ namespace Pims.Dal.Tests.Repositories
         }
 
         [Fact]
-        public void LookupRepository_GetAllTenantTypes_ReturnsCorrectType()
+        public void LookupRepository_GetAllLeaseStakeholderTypes_ReturnsCorrectType()
         {
             // Arrange
             var helper = new TestHelper();
@@ -777,10 +736,10 @@ namespace Pims.Dal.Tests.Repositories
             var lookupRepository = helper.CreateRepository<LookupRepository>(user);
 
             // Act
-            var result = lookupRepository.GetAllTenantTypes();
+            var result = lookupRepository.GetAllLeaseStakeholderTypes();
 
             // Assert
-            Assert.IsType<PimsTenantType[]>(result);
+            Assert.IsType<PimsLeaseStakeholderType[]>(result);
         }
 
         [Fact]
@@ -896,10 +855,10 @@ namespace Pims.Dal.Tests.Repositories
             var lookupRepository = helper.CreateRepository<LookupRepository>(user);
 
             // Act
-            var result = lookupRepository.GetAllAcquisitionChecklistItemStatusTypes();
+            var result = lookupRepository.GetAllChecklistItemStatusTypes();
 
             // Assert
-            Assert.IsType<PimsAcqChklstItemStatusType[]>(result);
+            Assert.IsType<PimsChklstItemStatusType[]>(result);
         }
 
         [Fact]

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,20 +46,6 @@ namespace Pims.Api.Controllers
         #region Endpoints
 
         /// <summary>
-        /// Get all of the role code values.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("roles")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<Model.RoleModel>), 200)]
-        [SwaggerOperation(Tags = new[] { "lookup" })]
-        public IActionResult GetRoles()
-        {
-            var roleCodes = _mapper.Map<Model.RoleModel[]>(_lookupRepository.GetAllRoles());
-            return new JsonResult(roleCodes.ToArray());
-        }
-
-        /// <summary>
         /// Get all of the code values.
         /// </summary>
         /// <returns></returns>
@@ -75,12 +60,10 @@ namespace Pims.Api.Controllers
             if (!_memoryCache.TryGetValue(CacheKeys.Lookup, out JsonResult cachedLookupResponse))
             {
                 var areaUnitTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllPropertyAreaUnitTypes());
-                var classificationTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllPropertyClassificationTypes());
                 var contactMethodTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllContactMethodTypes());
                 var countries = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllCountries());
                 var districts = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDistricts());
                 var insuranceTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllInsuranceTypes());
-                var leaseCategoryTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseCategoryTypes());
                 var leaseInitiatorTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseInitiatorTypes());
                 var leasePaymentFrequencyTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeasePmtFreqTypes());
                 var leasePaymentMethodTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeasePaymentMethodTypes());
@@ -90,7 +73,7 @@ namespace Pims.Api.Controllers
                 var leasePurposeTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeasePurposeTypes());
                 var leaseResponsibilityTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseResponsibilityTypes());
                 var leaseStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseStatusTypes());
-                var leaseTermStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseTermStatusTypes());
+                var leasePeriodStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeasePeriodStatusTypes());
                 var leaseTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseTypes());
                 var organizationTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllOrganizationTypes());
                 var propertyImprovementTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllPropertyImprovementTypes());
@@ -115,7 +98,7 @@ namespace Pims.Api.Controllers
                 var acquisitionPhysFileStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionPhysFileStatusTypes());
                 var acquisitionTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionTypes());
                 var acqFilePersonProfileTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcqFileTeamProfileTypes());
-                var tenantTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllTenantTypes());
+                var leaseStakeholderTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseStakeholderTypes());
                 var acqFundingTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionFundingTypes());
                 var projectStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllProjectStatusTypes());
                 var formTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllFormTypes());
@@ -126,7 +109,7 @@ namespace Pims.Api.Controllers
                 var takeSiteContamTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllTakeSiteContamTypes());
                 var landActTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLandActTypes());
                 var acqChecklistSectionTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionChecklistSectionTypes());
-                var acqChecklistItemStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAcquisitionChecklistItemStatusTypes());
+                var checklistItemStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllChecklistItemStatusTypes());
                 var agreementTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAgreementTypes());
                 var agreementStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllAgreementStatusTypes());
                 var interestHolderInterestTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllInterestHolderInterestTypes());
@@ -143,21 +126,19 @@ namespace Pims.Api.Controllers
                 var dispositionInitiatingDocTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionInitiatingDocTypes());
                 var dispositionTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionTypes());
                 var dispositionOfferStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionOfferStatusTypes());
-                var dispositionChecklistItemStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionChecklistItemStatusTypes());
                 var dispositionChecklistItemTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionChecklistItemTypes());
                 var dispositionChecklistSectionTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllDispositionChecklistSectionTypes());
                 var historicalNumberTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllHistoricalNumberTypes());
-                var leaseChecklistStatusTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseChecklistItemStatusTypes());
                 var leaseChecklistSectionTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeaseChecklistSectionTypes());
+                var leasePaymentCategoryTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllLeasePaymentCategoryTypes());
+                var consultationOutcomeTypes = _mapper.Map<Model.LookupModel[]>(_lookupRepository.GetAllConsultationOutcomeTypes());
 
                 var codes = new List<object>();
                 codes.AddRange(areaUnitTypes);
-                codes.AddRange(classificationTypes);
                 codes.AddRange(contactMethodTypes);
                 codes.AddRange(countries);
                 codes.AddRange(districts);
                 codes.AddRange(insuranceTypes);
-                codes.AddRange(leaseCategoryTypes);
                 codes.AddRange(leaseInitiatorTypes);
                 codes.AddRange(leasePaymentFrequencyTypes);
                 codes.AddRange(leasePaymentMethodTypes);
@@ -167,7 +148,7 @@ namespace Pims.Api.Controllers
                 codes.AddRange(leasePurposeTypes);
                 codes.AddRange(leaseResponsibilityTypes);
                 codes.AddRange(leaseStatusTypes);
-                codes.AddRange(leaseTermStatusTypes);
+                codes.AddRange(leasePeriodStatusTypes);
                 codes.AddRange(leaseTypes);
                 codes.AddRange(organizationTypes);
                 codes.AddRange(propertyImprovementTypes);
@@ -192,7 +173,7 @@ namespace Pims.Api.Controllers
                 codes.AddRange(acquisitionPhysFileStatusTypes);
                 codes.AddRange(acquisitionTypes);
                 codes.AddRange(acqFilePersonProfileTypes);
-                codes.AddRange(tenantTypes);
+                codes.AddRange(leaseStakeholderTypes);
                 codes.AddRange(acqFundingTypes);
                 codes.AddRange(projectStatusTypes);
                 codes.AddRange(formTypes);
@@ -203,7 +184,7 @@ namespace Pims.Api.Controllers
                 codes.AddRange(takeSiteContamTypes);
                 codes.AddRange(landActTypes);
                 codes.AddRange(acqChecklistSectionTypes);
-                codes.AddRange(acqChecklistItemStatusTypes);
+                codes.AddRange(checklistItemStatusTypes);
                 codes.AddRange(agreementTypes);
                 codes.AddRange(agreementStatusTypes);
                 codes.AddRange(interestHolderInterestTypes);
@@ -220,12 +201,12 @@ namespace Pims.Api.Controllers
                 codes.AddRange(dispositionTypes);
                 codes.AddRange(dispositionStatusTypes);
                 codes.AddRange(dispositionOfferStatusTypes);
-                codes.AddRange(dispositionChecklistItemStatusTypes);
                 codes.AddRange(dispositionChecklistItemTypes);
                 codes.AddRange(dispositionChecklistSectionTypes);
                 codes.AddRange(historicalNumberTypes);
-                codes.AddRange(leaseChecklistStatusTypes);
                 codes.AddRange(leaseChecklistSectionTypes);
+                codes.AddRange(leasePaymentCategoryTypes);
+                codes.AddRange(consultationOutcomeTypes);
 
                 var response = new JsonResult(codes);
 

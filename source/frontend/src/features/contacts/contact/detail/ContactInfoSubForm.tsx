@@ -1,16 +1,18 @@
+import * as React from 'react';
 import { Col } from 'react-bootstrap';
 
 import { ContactMethodTypes } from '@/constants/contactMethodType';
 import { ContactInfoField } from '@/features/contacts/interfaces';
 import { Dictionary } from '@/interfaces/Dictionary';
-import { IContactEntity } from '@/interfaces/IContact';
+import { ApiGen_Concepts_Organization } from '@/models/api/generated/ApiGen_Concepts_Organization';
+import { ApiGen_Concepts_Person } from '@/models/api/generated/ApiGen_Concepts_Person';
 import { phoneFormatter } from '@/utils/formUtils';
 
 import * as Styled from '../../styles';
 import { getContactInfo } from './utils';
 
 interface IContactInfoSubFormProps {
-  contactEntity: IContactEntity;
+  contactEntity: ApiGen_Concepts_Person | ApiGen_Concepts_Organization;
 }
 
 const phoneTypes: Dictionary<string> = {};
@@ -35,12 +37,11 @@ const ContactInfoSubForm: React.FunctionComponent<
 
   return (
     <>
-      <Styled.H2Primary>Contact info</Styled.H2Primary>
       <Styled.RowAligned className="pb-4">
-        <Col md="2">
+        <Col md="3">
           <strong>Email:</strong>
         </Col>
-        <Col md="10">
+        <Col md="9">
           {emails.length === 0 && <span>N.A</span>}
           {emails.map((field: ContactInfoField, index: number) => (
             <Styled.RowAligned key={'contact-email-' + index}>
@@ -53,10 +54,10 @@ const ContactInfoSubForm: React.FunctionComponent<
         </Col>
       </Styled.RowAligned>
       <Styled.RowAligned>
-        <Col md="2">
+        <Col md="3">
           <strong>Phone:</strong>
         </Col>
-        <Col md="10">
+        <Col md="9">
           {phoneNumbers.length === 0 && <span>N.A</span>}
           {phoneNumbers.map((field: ContactInfoField, index: number) => (
             <Styled.RowAligned key={'contact-phone-' + index}>

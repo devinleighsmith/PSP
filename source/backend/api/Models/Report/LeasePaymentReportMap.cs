@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using Mapster;
+using Pims.Api.Services;
 using Pims.Core.Helpers;
 using Pims.Dal.Entities;
 using Pims.Dal.Helpers.Extensions;
@@ -12,29 +14,29 @@ namespace Pims.Api.Models.Report.Lease
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<Entity.PimsLeasePayment, LeasePaymentReportModel>()
-                .Map(dest => dest.Region, src => src.LeaseTerm.Lease.RegionCodeNavigation != null ? src.LeaseTerm.Lease.RegionCodeNavigation.Description : string.Empty)
-                .Map(dest => dest.LFileNumber, src => src.LeaseTerm.Lease.LFileNo)
-                .Map(dest => dest.LisNumber, src => src.LeaseTerm.Lease.TfaFileNumber)
-                .Map(dest => dest.PsFileNumber, src => src.LeaseTerm.Lease.PsFileNo)
-                .Map(dest => dest.LeaseStatus, src => src.LeaseTerm.Lease.LeaseStatusTypeCodeNavigation.Description)
-                .Map(dest => dest.PropertyList, src => string.Join(",", src.LeaseTerm.Lease.PimsPropertyLeases.Select(x => GetFallbackPropertyIdentifier(x))))
-                .Map(dest => dest.TenantList, src => string.Join(",", src.LeaseTerm.Lease.PimsLeaseTenants.Where(t => t != null && t.TenantTypeCode == "TEN").Select(x => x != null && x.Person != null ? x.Person.GetFullName(false) : x != null && x.Organization != null ? x.Organization.OrganizationName : string.Empty)))
-                .Map(dest => dest.PayableOrReceivable, src => src.LeaseTerm.Lease.LeasePayRvblTypeCodeNavigation.Description)
-                .Map(dest => dest.Program, src => src.LeaseTerm.Lease.LeaseProgramTypeCode.ToUpper() == "OTHER" && !string.IsNullOrEmpty(src.LeaseTerm.Lease.OtherLeaseProgramType) ? $"{src.LeaseTerm.Lease.LeaseProgramTypeCodeNavigation.Description} - {src.LeaseTerm.Lease.OtherLeaseProgramType}" : src.LeaseTerm.Lease.LeaseProgramTypeCodeNavigation.Description)
-                .Map(dest => dest.Purpose, src => src.LeaseTerm.Lease.LeasePurposeTypeCode.ToUpper() == "OTHER" && !string.IsNullOrEmpty(src.LeaseTerm.Lease.OtherLeasePurposeType) ? $"{src.LeaseTerm.Lease.LeasePurposeTypeCodeNavigation.Description} - {src.LeaseTerm.Lease.OtherLeasePurposeType}" : src.LeaseTerm.Lease.LeasePurposeTypeCodeNavigation.Description)
-                .Map(dest => dest.TermStart, src => src.LeaseTerm.TermStartDate.ToString("MMMM dd, yyyy"))
-                .Map(dest => dest.TermExpiry, src => src.LeaseTerm.TermExpiryDate.HasValue ? src.LeaseTerm.TermExpiryDate.Value.ToString("MMMM dd, yyyy") : string.Empty)
-                .Map(dest => dest.IsTermExercised, src => src.LeaseTerm.LeaseTermStatusTypeCode == "EXER" ? "Yes" : "No")
-                .Map(dest => dest.PaymentFrequency, src => src.LeaseTerm.LeasePmtFreqTypeCodeNavigation != null ? src.LeaseTerm.LeasePmtFreqTypeCodeNavigation.Description : string.Empty)
-                .Map(dest => dest.PaymentDueString, src => src.LeaseTerm.PaymentDueDate)
-                .Map(dest => dest.ExpectedPayment, src => src.LeaseTerm.PaymentAmount)
+                .Map(dest => dest.Region, src => src.LeasePeriod.Lease.RegionCodeNavigation != null ? src.LeasePeriod.Lease.RegionCodeNavigation.Description : string.Empty)
+                .Map(dest => dest.LFileNumber, src => src.LeasePeriod.Lease.LFileNo)
+                .Map(dest => dest.HistoricalFiles, src => GetHistoricalFileNumbers(src.LeasePeriod.Lease))
+                .Map(dest => dest.LeaseStatus, src => src.LeasePeriod.Lease.LeaseStatusTypeCodeNavigation.Description)
+                .Map(dest => dest.PropertyList, src => string.Join(",", src.LeasePeriod.Lease.PimsPropertyLeases.Select(x => GetFallbackPropertyIdentifier(x))))
+                .Map(dest => dest.TenantList, src => string.Join(",", src.LeasePeriod.Lease.PimsLeaseStakeholders.Where(t => t != null && t.LeaseStakeholderTypeCode == "TEN").Select(x => x != null && x.Person != null ? x.Person.GetFullName(false) : x != null && x.Organization != null ? x.Organization.OrganizationName : string.Empty)))
+                .Map(dest => dest.PayableOrReceivable, src => src.LeasePeriod.Lease.LeasePayRvblTypeCodeNavigation.Description)
+                .Map(dest => dest.Program, src => src.LeasePeriod.Lease.LeaseProgramTypeCode.ToUpper() == "OTHER" && !string.IsNullOrEmpty(src.LeasePeriod.Lease.OtherLeaseProgramType) ? $"{src.LeasePeriod.Lease.LeaseProgramTypeCodeNavigation.Description} - {src.LeasePeriod.Lease.OtherLeaseProgramType}" : src.LeasePeriod.Lease.LeaseProgramTypeCodeNavigation.Description)
+                .Map(dest => dest.PeriodStart, src => src.LeasePeriod.PeriodStartDate.ToString("MMMM dd, yyyy"))
+                .Map(dest => dest.PeriodExpiry, src => src.LeasePeriod.PeriodExpiryDate.HasValue ? src.LeasePeriod.PeriodExpiryDate.Value.ToString("MMMM dd, yyyy") : string.Empty)
+                .Map(dest => dest.IsPeriodExercised, src => src.LeasePeriod.LeasePeriodStatusTypeCode == "EXER" ? "Yes" : "No")
+                .Map(dest => dest.PaymentFrequency, src => src.LeasePeriod.LeasePmtFreqTypeCodeNavigation != null ? src.LeasePeriod.LeasePmtFreqTypeCodeNavigation.Description : string.Empty)
+                .Map(dest => dest.PaymentDueString, src => src.LeasePeriod.PaymentDueDate)
+                .Map(dest => dest.PaymentType, src => src.LeasePeriod.IsVariablePayment ? "Variable" : "Predeterminded")
+                .Map(dest => dest.RentCategory, src => src.LeasePaymentCategoryTypeCodeNavigation.Description)
+                .Map(dest => dest.ExpectedPayment, src => src.LeasePeriod.PaymentAmount)
                 .Map(dest => dest.PaymentTotal, src => src.PaymentAmountTotal)
-                .Map(dest => dest.PaymentStatus, src => src.LeasePaymentStatusTypeCodeNavigation != null ? src.LeasePaymentStatusTypeCodeNavigation.Description : string.Empty)
+                .Map(dest => dest.PaymentStatus, src => src.LeasePaymentStatusTypeCodeNavigation != null ? src.LeasePaymentStatusTypeCodeNavigation.Description : LeasePaymentService.GetPaymentStatus(src, src.LeasePeriod))
                 .Map(dest => dest.PaymentAmount, src => src.PaymentAmountPreTax)
                 .Map(dest => dest.PaymentGst, src => src.PaymentAmountGst)
                 .Map(dest => dest.PaymentReceivedDate, src => src.PaymentReceivedDate.ToString("MMMM dd, yyyy"))
-                .Map(dest => dest.LatestPaymentDate, src => src.LeaseTerm.PimsLeasePayments.OrderByDescending(lp => lp.PaymentReceivedDate).FirstOrDefault() != null ?
-                    src.LeaseTerm.PimsLeasePayments.OrderByDescending(lp => lp.PaymentReceivedDate).FirstOrDefault().PaymentReceivedDate.ToString("MMMM dd, yyyy") : string.Empty);
+                .Map(dest => dest.LatestPaymentDate, src => src.LeasePeriod.Lease.PimsLeasePeriods.SelectMany(lp => lp.PimsLeasePayments).OrderByDescending(lp => lp.PaymentReceivedDate).FirstOrDefault() != null ?
+                    src.LeasePeriod.Lease.PimsLeasePeriods.SelectMany(lp => lp.PimsLeasePayments).OrderByDescending(lp => lp.PaymentReceivedDate).FirstOrDefault().PaymentReceivedDate.ToString("MMMM dd, yyyy") : string.Empty);
         }
 
         private static string GetFallbackPropertyIdentifier(PimsPropertyLease propertyLease)
@@ -65,6 +67,30 @@ namespace Pims.Api.Models.Report.Lease
             {
                 return "No Property Identifier";
             }
+        }
+
+        private static string GetHistoricalFileNumbers(PimsLease lease)
+        {
+            var properties = lease.PimsPropertyLeases.Select(pl => pl.Property).Where(p => p != null);
+            var historicalDictionary = new Dictionary<string, PimsHistoricalFileNumberType>();
+            foreach (var property in properties)
+            {
+                foreach (var historical in property.PimsHistoricalFileNumbers)
+                {
+                    var historicalType = historical.HistoricalFileNumberTypeCodeNavigation.Description;
+                    if (historical.HistoricalFileNumberTypeCodeNavigation.HistoricalFileNumberTypeCode == "OTHER")
+                    {
+                        historicalType = historical.OtherHistFileNumberTypeCode;
+                    }
+
+                    var identifier = $"{historicalType}: {historical.HistoricalFileNumber}";
+                    historicalDictionary[identifier] = historical.HistoricalFileNumberTypeCodeNavigation;
+                }
+            }
+
+            var historicalList = historicalDictionary.ToList();
+            historicalList.Sort((a, b) => a.Value.DisplayOrder.GetValueOrDefault() - b.Value.DisplayOrder.GetValueOrDefault());
+            return string.Join("; ", historicalList.Select(a => a.Key));
         }
     }
 }

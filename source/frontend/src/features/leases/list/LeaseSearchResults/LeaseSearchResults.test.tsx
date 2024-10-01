@@ -1,6 +1,6 @@
 import { getEmptyAddress } from '@/mocks/address.mock';
 import { getEmptyPerson } from '@/mocks/contacts.mock';
-import { getEmptyLeaseTenant } from '@/mocks/lease.mock';
+import { getEmptyLeaseStakeholder } from '@/mocks/lease.mock';
 import { getEmptyPropertyLease } from '@/mocks/properties.mock';
 import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
 import { getEmptyLease, getEmptyProperty } from '@/models/defaultInitializers';
@@ -36,9 +36,9 @@ const mockResults: ApiGen_Concepts_Lease[] = [
     id: 1,
     lFileNo: 'L-123-456',
     programName: 'TRAN-IT',
-    tenants: [
+    stakeholders: [
       {
-        ...getEmptyLeaseTenant(),
+        ...getEmptyLeaseStakeholder(),
         person: { ...getEmptyPerson(), firstName: 'Chester', surname: 'Tester' },
       },
     ],
@@ -59,9 +59,9 @@ const mockResults: ApiGen_Concepts_Lease[] = [
     id: 2,
     lFileNo: 'L-999-888',
     programName: 'TRAN-IT',
-    tenants: [
+    stakeholders: [
       {
-        ...getEmptyLeaseTenant(),
+        ...getEmptyLeaseStakeholder(),
         person: { ...getEmptyPerson(), firstName: 'Chester', surname: 'Tester' },
       },
     ],
@@ -94,7 +94,7 @@ describe('Lease Search Results Table', () => {
     const { tableRows, findAllByText } = setup({ results: [] });
 
     expect(tableRows.length).toBe(0);
-    const toasts = await findAllByText('Lease / License details do not exist in PIMS inventory');
+    const toasts = await findAllByText('Lease / Licence details do not exist in PIMS inventory');
     expect(toasts[0]).toBeVisible();
   });
 });

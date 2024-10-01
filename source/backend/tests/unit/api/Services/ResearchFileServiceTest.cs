@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using FluentAssertions;
-using FluentAssertions.Extensions;
 using Moq;
 using NetTopologySuite.Geometries;
 using Pims.Api.Models.CodeTypes;
@@ -71,6 +70,78 @@ namespace Pims.Api.Test.Services
 
         #endregion
 
+        #region Properties
+        [Fact]
+        public void GetProperties_ByFileId_NoPermission()
+        {
+            // Arrange
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileView);
+
+            var researchFile = EntityHelper.CreateResearchFile(1);
+
+            var repository = this._helper.GetService<Mock<IResearchFilePropertyRepository>>();
+            repository.Setup(x => x.GetAllByResearchFileId(It.IsAny<long>())).Returns(new List<PimsPropertyResearchFile>());
+
+            // Act
+            Action act = () => service.GetProperties(1);
+
+            // Assert
+            act.Should().Throw<NotAuthorizedException>();
+        }
+
+        [Fact]
+        public void GetProperties_ByFileId_Success()
+        {
+            // Arrange
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileView, Permissions.PropertyView);
+
+            var researchFile = EntityHelper.CreateResearchFile(1);
+
+            var repository = this._helper.GetService<Mock<IResearchFileRepository>>();
+            repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.GetById(It.IsAny<long>())).Returns(researchFile);
+
+            var propertyRepository = this._helper.GetService<Mock<IResearchFilePropertyRepository>>();
+            propertyRepository.Setup(x => x.GetAllByResearchFileId(It.IsAny<long>())).Returns(new List<PimsPropertyResearchFile>());
+
+            // Act
+            var properties = service.GetProperties(1);
+
+            // Assert
+            propertyRepository.Verify(x => x.GetAllByResearchFileId(It.IsAny<long>()), Times.Once);
+        }
+
+        [Fact]
+        public void GetProperties_ByFileId_Success_Reproject()
+        {
+            // Arrange
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileView, Permissions.PropertyView);
+
+            var researchFile = EntityHelper.CreateResearchFile(1);
+
+            var repository = this._helper.GetService<Mock<IResearchFileRepository>>();
+            repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
+            repository.Setup(x => x.GetById(It.IsAny<long>())).Returns(researchFile);
+
+            var propertyRepository = this._helper.GetService<Mock<IResearchFilePropertyRepository>>();
+            propertyRepository.Setup(x => x.GetAllByResearchFileId(It.IsAny<long>()))
+                .Returns(new List<PimsPropertyResearchFile>() { new() { Property = new() { Location = new Point(1, 1) } } });
+
+            var propertyService = this._helper.GetService<Mock<IPropertyService>>();
+            propertyService.Setup(x => x.TransformAllPropertiesToLatLong(It.IsAny<List<PimsPropertyResearchFile>>()))
+                .Returns<List<PimsPropertyResearchFile>>(x => x);
+
+            // Act
+            var properties = service.GetProperties(1);
+
+            // Assert
+            propertyRepository.Verify(x => x.GetAllByResearchFileId(It.IsAny<long>()), Times.Once);
+            propertyService.Verify(x => x.TransformAllPropertiesToLatLong(It.IsAny<List<PimsPropertyResearchFile>>()), Times.Once);
+            properties.FirstOrDefault().Property.Location.Coordinates.Should().BeEquivalentTo(new Coordinate[] { new Coordinate(1, 1) });
+        }
+
+        #endregion
+
         #region UpdateProperties
         [Fact]
         public void UpdateProperties_Delete()
@@ -81,7 +152,7 @@ namespace Pims.Api.Test.Services
             pimsPropertyResearchFile.PimsPrfPropResearchPurposeTypes = new List<PimsPrfPropResearchPurposeType>() { new PimsPrfPropResearchPurposeType() { } };
             researchFile.PimsPropertyResearchFiles.Add(pimsPropertyResearchFile);
 
-            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit);
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit, Permissions.PropertyView, Permissions.PropertyAdd);
             var researchRepository = this._helper.GetService<Mock<IResearchFileRepository>>();
             researchRepository.Setup(x => x.GetPage(It.IsAny<ResearchFilter>()));
             researchRepository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(2);
@@ -103,13 +174,13 @@ namespace Pims.Api.Test.Services
         public void UpdateProperties_MatchProperties_PID_Success()
         {
             // Arrange
-            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit);
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit, Permissions.PropertyView, Permissions.PropertyAdd);
 
             var researchFile = EntityHelper.CreateResearchFile();
             researchFile.ConcurrencyControlNumber = 1;
 
             var property = EntityHelper.CreateProperty(12345);
-            researchFile.PimsPropertyResearchFiles = new List<PimsPropertyResearchFile>() { new PimsPropertyResearchFile() { Property = property } };
+            researchFile.PimsPropertyResearchFiles = new List<PimsPropertyResearchFile>() { new PimsPropertyResearchFile() { Internal_Id = 1, Property = property } };
 
             var repository = this._helper.GetService<Mock<IResearchFileRepository>>();
             repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
@@ -121,25 +192,31 @@ namespace Pims.Api.Test.Services
             var filePropertyRepository = this._helper.GetService<Mock<IResearchFilePropertyRepository>>();
             filePropertyRepository.Setup(x => x.GetAllByResearchFileId(It.IsAny<long>())).Returns(researchFile.PimsPropertyResearchFiles.ToList());
 
+            var propertyService = this._helper.GetService<Mock<IPropertyService>>();
+            propertyService.Setup(x => x.UpdateLocation(It.IsAny<PimsProperty>(), ref It.Ref<PimsProperty>.IsAny, It.IsAny<IEnumerable<UserOverrideCode>>()));
+            propertyService.Setup(x => x.UpdateFilePropertyLocation<PimsPropertyResearchFile>(It.IsAny<PimsPropertyResearchFile>(), It.IsAny<PimsPropertyResearchFile>()));
+
             // Act
             service.UpdateProperties(researchFile, new List<UserOverrideCode>() { UserOverrideCode.AddLocationToProperty });
 
             // Assert
-            filePropertyRepository.Verify(x => x.Add(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
+            filePropertyRepository.Verify(x => x.Update(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
+            propertyService.Verify(x => x.UpdateLocation(It.IsAny<PimsProperty>(), ref It.Ref<PimsProperty>.IsAny, It.IsAny<IEnumerable<UserOverrideCode>>()), Times.Once);
+            propertyService.Verify(x => x.UpdateFilePropertyLocation<PimsPropertyResearchFile>(It.IsAny<PimsPropertyResearchFile>(), It.IsAny<PimsPropertyResearchFile>()), Times.Once);
         }
 
         [Fact]
         public void UpdateProperties_MatchProperties_PIN_Success()
         {
             // Arrange
-            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit);
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit, Permissions.PropertyView, Permissions.PropertyAdd);
 
             var researchFile = EntityHelper.CreateResearchFile();
             researchFile.ConcurrencyControlNumber = 1;
 
             var property = EntityHelper.CreateProperty(12345, 54321);
             property.Pid = null;
-            researchFile.PimsPropertyResearchFiles = new List<PimsPropertyResearchFile>() { new PimsPropertyResearchFile() { Property = property } };
+            researchFile.PimsPropertyResearchFiles = new List<PimsPropertyResearchFile>() { new PimsPropertyResearchFile() { Internal_Id = 1, Property = property } };
 
             var repository = this._helper.GetService<Mock<IResearchFileRepository>>();
             repository.Setup(x => x.GetRowVersion(It.IsAny<long>())).Returns(1);
@@ -151,18 +228,24 @@ namespace Pims.Api.Test.Services
             var filePropertyRepository = this._helper.GetService<Mock<IResearchFilePropertyRepository>>();
             filePropertyRepository.Setup(x => x.GetAllByResearchFileId(It.IsAny<long>())).Returns(researchFile.PimsPropertyResearchFiles.ToList());
 
+            var propertyService = this._helper.GetService<Mock<IPropertyService>>();
+            propertyService.Setup(x => x.UpdateLocation(It.IsAny<PimsProperty>(), ref It.Ref<PimsProperty>.IsAny, It.IsAny<IEnumerable<UserOverrideCode>>()));
+            propertyService.Setup(x => x.UpdateFilePropertyLocation<PimsPropertyResearchFile>(It.IsAny<PimsPropertyResearchFile>(), It.IsAny<PimsPropertyResearchFile>()));
+
             // Act
             service.UpdateProperties(researchFile, new List<UserOverrideCode>() { UserOverrideCode.AddLocationToProperty });
 
             // Assert
-            filePropertyRepository.Verify(x => x.Add(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
+            filePropertyRepository.Verify(x => x.Update(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
+            propertyService.Verify(x => x.UpdateLocation(It.IsAny<PimsProperty>(), ref It.Ref<PimsProperty>.IsAny, It.IsAny<IEnumerable<UserOverrideCode>>()), Times.Once);
+            propertyService.Verify(x => x.UpdateFilePropertyLocation<PimsPropertyResearchFile>(It.IsAny<PimsPropertyResearchFile>(), It.IsAny<PimsPropertyResearchFile>()), Times.Once);
         }
 
         [Fact]
         public void UpdateProperties_MatchProperties_PID_NewProperty_Success()
         {
             // Arrange
-            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit);
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit, Permissions.PropertyView, Permissions.PropertyAdd);
 
             var researchFile = EntityHelper.CreateResearchFile();
             researchFile.ConcurrencyControlNumber = 1;
@@ -184,7 +267,6 @@ namespace Pims.Api.Test.Services
             var propertyService = this._helper.GetService<Mock<IPropertyService>>();
             propertyService.Setup(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new PimsProperty()
             {
-                PropertyClassificationTypeCode = "UNKNOWN",
                 PropertyDataSourceEffectiveDate = DateOnly.FromDateTime(System.DateTime.Now),
                 PropertyDataSourceTypeCode = "PMBC",
                 PropertyTypeCode = "UNKNOWN",
@@ -192,12 +274,10 @@ namespace Pims.Api.Test.Services
                 SurplusDeclarationTypeCode = "UNKNOWN",
                 RegionCode = 1
             });
-            
+            propertyService.Setup(x => x.PopulateNewFileProperty(It.IsAny<PimsPropertyResearchFile>())).Returns<PimsPropertyResearchFile>(x => x);
+
             var propertyRepository = this._helper.GetService<Mock<IPropertyRepository>>();
             propertyRepository.Setup(x => x.GetByPid(It.IsAny<int>(), true)).Throws<KeyNotFoundException>();
-
-            var coordinateService = this._helper.GetService<Mock<ICoordinateTransformService>>();
-            coordinateService.Setup(x => x.TransformCoordinates(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Coordinate>())).Returns(new Coordinate(924046.3314288399, 1088892.9140135897));
 
             // Act
             service.UpdateProperties(researchFile, new List<UserOverrideCode>());
@@ -205,7 +285,6 @@ namespace Pims.Api.Test.Services
             // Assert
             // since this is a new property, the following default fields should be set.
             var updatedProperty = updatedResearchFileProperty.Property;
-            updatedProperty.PropertyClassificationTypeCode.Should().Be("UNKNOWN");
             updatedProperty.PropertyTypeCode.Should().Be("UNKNOWN");
             updatedProperty.PropertyStatusTypeCode.Should().Be("UNKNOWN");
             updatedProperty.SurplusDeclarationTypeCode.Should().Be("UNKNOWN");
@@ -213,14 +292,15 @@ namespace Pims.Api.Test.Services
             updatedProperty.PropertyDataSourceTypeCode.Should().Be("PMBC");
             updatedProperty.IsOwned.Should().Be(false);
 
-            propertyService.Verify(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>()));
+            propertyService.Verify(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>()), Times.Once);
+            propertyService.Verify(x => x.PopulateNewFileProperty(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
         }
 
         [Fact]
         public void UpdateProperties_MatchProperties_PIN_NewProperty_Success()
         {
             // Arrange
-            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit);
+            var service = this.CreateResearchFileServiceWithPermissions(Permissions.ResearchFileEdit, Permissions.PropertyView, Permissions.PropertyAdd);
 
             var researchFile = EntityHelper.CreateResearchFile();
             researchFile.ConcurrencyControlNumber = 1;
@@ -241,11 +321,10 @@ namespace Pims.Api.Test.Services
 
             var propertyRepository = this._helper.GetService<Mock<IPropertyRepository>>();
             propertyRepository.Setup(x => x.GetByPin(It.IsAny<int>(), true)).Throws<KeyNotFoundException>();
-            
+
             var propertyService = this._helper.GetService<Mock<IPropertyService>>();
             propertyService.Setup(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>())).Returns(new PimsProperty()
             {
-                PropertyClassificationTypeCode = "UNKNOWN",
                 PropertyDataSourceEffectiveDate = DateOnly.FromDateTime(System.DateTime.Now),
                 PropertyDataSourceTypeCode = "PMBC",
                 PropertyTypeCode = "UNKNOWN",
@@ -253,9 +332,7 @@ namespace Pims.Api.Test.Services
                 SurplusDeclarationTypeCode = "UNKNOWN",
                 RegionCode = 1
             });
-
-            var coordinateService = this._helper.GetService<Mock<ICoordinateTransformService>>();
-            coordinateService.Setup(x => x.TransformCoordinates(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Coordinate>())).Returns(new Coordinate(924046.3314288399, 1088892.9140135897));
+            propertyService.Setup(x => x.PopulateNewFileProperty(It.IsAny<PimsPropertyResearchFile>())).Returns<PimsPropertyResearchFile>(x => x);
 
             // Act
             service.UpdateProperties(researchFile, new List<UserOverrideCode>());
@@ -263,7 +340,6 @@ namespace Pims.Api.Test.Services
             // Assert
             // since this is a new property, the following default fields should be set.
             var updatedProperty = updatedResearchFileProperty.Property;
-            updatedProperty.PropertyClassificationTypeCode.Should().Be("UNKNOWN");
             updatedProperty.PropertyTypeCode.Should().Be("UNKNOWN");
             updatedProperty.PropertyStatusTypeCode.Should().Be("UNKNOWN");
             updatedProperty.SurplusDeclarationTypeCode.Should().Be("UNKNOWN");
@@ -271,7 +347,8 @@ namespace Pims.Api.Test.Services
             updatedProperty.PropertyDataSourceTypeCode.Should().Be("PMBC");
             updatedProperty.IsOwned.Should().Be(false);
 
-            propertyService.Verify(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>()));
+            propertyService.Verify(x => x.PopulateNewProperty(It.IsAny<PimsProperty>(), It.IsAny<Boolean>(), It.IsAny<Boolean>()), Times.Once);
+            propertyService.Verify(x => x.PopulateNewFileProperty(It.IsAny<PimsPropertyResearchFile>()), Times.Once);
         }
         #endregion
 

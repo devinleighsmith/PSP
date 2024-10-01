@@ -6,16 +6,16 @@ import { matchPath, useHistory, useLocation, useRouteMatch } from 'react-router-
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { useDispositionProvider } from '@/hooks/repositories/useDispositionProvider';
-import { usePimsPropertyRepository } from '@/hooks/repositories/usePimsPropertyRepository';
 import { usePropertyAssociations } from '@/hooks/repositories/usePropertyAssociations';
 import { useQuery } from '@/hooks/use-query';
 import useApiUserOverride from '@/hooks/useApiUserOverride';
 import { getCancelModalProps, useModalContext } from '@/hooks/useModalContext';
 import { IApiError } from '@/interfaces/IApiError';
+import { ApiGen_CodeTypes_FileTypes } from '@/models/api/generated/ApiGen_CodeTypes_FileTypes';
 import { ApiGen_Concepts_DispositionFile } from '@/models/api/generated/ApiGen_Concepts_DispositionFile';
 import { ApiGen_Concepts_File } from '@/models/api/generated/ApiGen_Concepts_File';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
-import { exists, isValidId, isValidString, stripTrailingSlash } from '@/utils';
+import { exists, isValidId, stripTrailingSlash } from '@/utils';
 
 import { SideBarContext } from '../context/sidebarContext';
 import { PropertyForm } from '../shared/models';
@@ -30,7 +30,7 @@ export interface IDispositionContainerProps {
 export const DispositionContainer: React.FunctionComponent<IDispositionContainerProps> = props => {
   // Load state from props and side-bar context
   const { dispositionFileId, onClose, View } = props;
-  const { setLastUpdatedBy, lastUpdatedBy, staleLastUpdatedBy, staleFile } =
+  const { setLastUpdatedBy, lastUpdatedBy, staleLastUpdatedBy, staleFile, setFile } =
     useContext(SideBarContext);
   const [isValid, setIsValid] = useState<boolean>(true);
   const withUserOverride = useApiUserOverride<
@@ -58,10 +58,6 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
     getLastUpdatedBy: { execute: getLastUpdatedBy, loading: loadingGetLastUpdatedBy },
   } = useDispositionProvider();
   const { execute: getPropertyAssociations } = usePropertyAssociations();
-  const {
-    getPropertyByPidWrapper: { execute: getPropertyByPid },
-    getPropertyByPinWrapper: { execute: getPropertyByPin },
-  } = usePimsPropertyRepository();
 
   const { setModalContent, setDisplayModal } = useModalContext();
 
@@ -95,19 +91,27 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
   // Retrieve disposition file from API and save it to local state and side-bar context
   const fetchDispositionFile = useCallback(async () => {
     const retrieved = await retrieveDispositionFile(dispositionFileId);
-    if (!exists(retrieved)) {
-      return;
-    }
+    if (exists(retrieved)) {
+      // retrieve related entities (ie properties items) in parallel
+      const dispositionPropertiesTask = retrieveDispositionFileProperties(dispositionFileId);
+      const dispositionChecklistTask = retrieveDispositionFileChecklist(dispositionFileId);
+      const [fileProperties, dispositionChecklist] = await Promise.all([
+        dispositionPropertiesTask,
+        dispositionChecklistTask,
+      ]);
 
-    // retrieve related entities (ie properties items) in parallel
-    const dispositionPropertiesTask = retrieveDispositionFileProperties(dispositionFileId);
-    const dispositionChecklistTask = retrieveDispositionFileChecklist(dispositionFileId);
-    await Promise.all([dispositionPropertiesTask, dispositionChecklistTask]);
+      retrieved.fileProperties = fileProperties ?? null;
+      retrieved.fileChecklistItems = dispositionChecklist ?? [];
+      setFile({ ...retrieved, fileType: ApiGen_CodeTypes_FileTypes.Disposition });
+    } else {
+      setFile(undefined);
+    }
   }, [
+    retrieveDispositionFile,
     dispositionFileId,
     retrieveDispositionFileProperties,
-    retrieveDispositionFile,
     retrieveDispositionFileChecklist,
+    setFile,
   ]);
 
   const fetchLastUpdatedBy = React.useCallback(async () => {
@@ -280,23 +284,8 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
   // Warn user that property is part of an existing disposition file
   const confirmBeforeAdd = useCallback(
     async (propertyForm: PropertyForm): Promise<boolean> => {
-      let apiId;
-      try {
-        if (isValidId(propertyForm.apiId)) {
-          apiId = propertyForm.apiId;
-        } else if (isValidString(propertyForm.pid)) {
-          const result = await getPropertyByPid(propertyForm.pid);
-          apiId = result?.id;
-        } else if (isValidString(propertyForm.pin)) {
-          const result = await getPropertyByPin(Number(propertyForm.pin));
-          apiId = result?.id;
-        }
-      } catch (e) {
-        apiId = 0;
-      }
-
-      if (isValidId(apiId)) {
-        const response = await getPropertyAssociations(apiId);
+      if (isValidId(propertyForm.apiId)) {
+        const response = await getPropertyAssociations(propertyForm.apiId);
         const fileAssociations = response?.dispositionAssociations ?? [];
         const otherFiles = fileAssociations.filter(a => exists(a.id) && a.id !== dispositionFileId);
         return otherFiles.length > 0;
@@ -305,7 +294,7 @@ export const DispositionContainer: React.FunctionComponent<IDispositionContainer
         return false;
       }
     },
-    [dispositionFileId, getPropertyAssociations, getPropertyByPid, getPropertyByPin],
+    [dispositionFileId, getPropertyAssociations],
   );
 
   // UI components

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Pims.Api.Models.Concepts.Property;
 using Pims.Api.Policies;
 using Pims.Api.Services;
+using Pims.Core.Exceptions;
 using Pims.Core.Extensions;
 using Pims.Core.Json;
 using Pims.Dal.Security;
@@ -38,6 +39,7 @@ namespace Pims.Api.Areas.HistoricalNumber.Controllers
         /// </summary>
         /// <param name="propertyService"></param>
         /// <param name="mapper"></param>
+        /// <param name="logger"></param>
         ///
         public HistoricalNumberController(IPropertyService propertyService, IMapper mapper, ILogger<HistoricalNumberController> logger)
         {
@@ -86,10 +88,17 @@ namespace Pims.Api.Areas.HistoricalNumber.Controllers
                 User.GetUsername(),
                 DateTime.Now);
 
-            var historicalEntities = _mapper.Map<IEnumerable<Dal.Entities.PimsHistoricalFileNumber>>(historicalNumbers);
-            var updatedEntities = _propertyService.UpdateHistoricalFileNumbers(propertyId, historicalEntities);
+            try
+            {
+                var historicalEntities = _mapper.Map<IEnumerable<Dal.Entities.PimsHistoricalFileNumber>>(historicalNumbers);
+                var updatedEntities = _propertyService.UpdateHistoricalFileNumbers(propertyId, historicalEntities);
 
-            return new JsonResult(_mapper.Map<IEnumerable<HistoricalFileNumberModel>>(updatedEntities));
+                return new JsonResult(_mapper.Map<IEnumerable<HistoricalFileNumberModel>>(updatedEntities));
+            }
+            catch (DuplicateEntityException e)
+            {
+                return Conflict(e.Message);
+            }
         }
         #endregion
     }

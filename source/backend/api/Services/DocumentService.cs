@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Pims.Api.Helpers.Exceptions;
+using Pims.Api.Models;
 using Pims.Api.Models.CodeTypes;
 using Pims.Api.Models.Concepts.Document;
 using Pims.Api.Models.Config;
@@ -154,6 +154,7 @@ namespace Pims.Api.Services
                 {
                     var retryPolicy = Policy<ExternalResponse<DocumentDetailModel>>
                         .HandleResult(result => result.HttpStatusCode != HttpStatusCode.OK || result.Payload.FileLatest == null)
+                        .Or<System.Text.Json.JsonException>()
                         .WaitAndRetryAsync(_config.UploadRetries, (int retry) => TimeSpan.FromSeconds(Math.Pow(2, retry)));
                     var detail = await retryPolicy.ExecuteAsync(async () => await GetStorageDocumentDetail(externalDocument.Id));
                     if(detail?.Payload?.FileLatest == null)
@@ -405,6 +406,30 @@ namespace Pims.Api.Services
             }
         }
 
+        public async Task<ExternalResponse<FileStreamResponse>> StreamFileAsync(long mayanDocumentId, long mayanFileId)
+        {
+            this.Logger.LogInformation("Streaming storage document {mayanDocumentId} {mayanFileId}", mayanDocumentId, mayanFileId);
+            this.User.ThrowIfNotAuthorized(Permissions.DocumentView);
+
+            ExternalResponse<FileStreamResponse> downloadResult = await documentStorageRepository.TryStreamFileAsync(mayanDocumentId, mayanFileId);
+            if (IsValidDocumentExtension(downloadResult.Payload.FileName))
+            {
+                if (downloadResult.Status != ExternalResponseStatus.Success)
+                {
+                    throw GetMayanResponseError(downloadResult.Message);
+                }
+                return downloadResult;
+            }
+            else
+            {
+                return new ExternalResponse<FileStreamResponse>()
+                {
+                    Status = ExternalResponseStatus.Error,
+                    Message = $"Document with id ${mayanDocumentId} has an invalid extension",
+                };
+            }
+        }
+
         public async Task<ExternalResponse<FileDownloadResponse>> DownloadFileLatestAsync(long mayanDocumentId)
         {
             this.Logger.LogInformation("Downloading storage document latest {mayanDocumentId}", mayanDocumentId);
@@ -431,6 +456,44 @@ namespace Pims.Api.Services
                 else
                 {
                     return new ExternalResponse<FileDownloadResponse>()
+                    {
+                        Status = ExternalResponseStatus.Error,
+                        Message = $"No document with id ${mayanDocumentId} found in the storage",
+                    };
+                }
+            }
+            else
+            {
+                throw GetMayanResponseError(documentResult.Message);
+            }
+        }
+
+        public async Task<ExternalResponse<FileStreamResponse>> StreamFileLatestAsync(long mayanDocumentId)
+        {
+            this.Logger.LogInformation("Streaming storage document latest {mayanDocumentId}", mayanDocumentId);
+
+            ExternalResponse<DocumentDetailModel> documentResult = await documentStorageRepository.TryGetDocumentAsync(mayanDocumentId);
+            if (documentResult.Status == ExternalResponseStatus.Success)
+            {
+                if (documentResult.Payload != null)
+                {
+                    if (IsValidDocumentExtension(documentResult.Payload.FileLatest.FileName))
+                    {
+                        ExternalResponse<FileStreamResponse> downloadResult = await documentStorageRepository.TryStreamFileAsync(documentResult.Payload.Id, documentResult.Payload.FileLatest.Id);
+                        return downloadResult;
+                    }
+                    else
+                    {
+                        return new ExternalResponse<FileStreamResponse>()
+                        {
+                            Status = ExternalResponseStatus.Error,
+                            Message = $"Document with id ${mayanDocumentId} has an invalid extension",
+                        };
+                    }
+                }
+                else
+                {
+                    return new ExternalResponse<FileStreamResponse>()
                     {
                         Status = ExternalResponseStatus.Error,
                         Message = $"No document with id ${mayanDocumentId} found in the storage",

@@ -12,6 +12,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
   margin-top: 0.5rem;
   margin-right: 1.2rem;
   right: 0;
+  fill: var(--surface-color-primary-button-default);
   pointer-events: none;
 }
 
@@ -44,9 +45,11 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
 .c3 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -100,7 +103,8 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
 
 .c2 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -126,14 +130,16 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
 .c12 {
   max-width: 25rem;
   padding: 1rem;
-  border: 1px solid;
+  background-color: #f2f2f2;
+  border: 1px solid #42814A;
   border-radius: 0.5rem;
 }
 
 .c14 {
   max-width: 25rem;
   padding: 1rem;
-  border: 1px solid;
+  background-color: #f2f2f2;
+  border: 1px solid #053662;
   border-radius: 0.5rem;
 }
 
@@ -171,7 +177,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
             Update Take
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c3"
@@ -304,9 +310,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
               class="c4"
             >
               Completion date:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -476,9 +480,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
                       class="c4"
                     >
                       Is there a new highway dedication? *:
-                      <span
-                        class="ml-2"
-                      >
+                      <span>
                         <span
                           class="tooltip-icon"
                           data-testid="tooltip-icon-section-field-tooltip"
@@ -691,9 +693,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
                       class="c4"
                     >
                       Is this being acquired for MoTI inventory? *:
-                      <span
-                        class="ml-2"
-                      >
+                      <span>
                         <span
                           class="tooltip-icon"
                           data-testid="tooltip-icon-section-field-tooltip"
@@ -1358,7 +1358,7 @@ exports[`TakeUpdateForm component > renders as expected 1`] = `
                     <label
                       class="c4"
                     >
-                      Is there a new License for Construction Access (TLCA/LTC)? *:
+                      Is there a new Licence for Construction Access (TLCA/LTC)? *:
                     </label>
                   </div>
                   <div

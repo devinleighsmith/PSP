@@ -2,9 +2,10 @@ import { FormikProps } from 'formik';
 import React, { useCallback, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import * as Yup from 'yup';
 
-import Fence from '@/assets/images/fence.svg?react';
+import LeaseIcon from '@/assets/images/lease-icon.svg?react';
 import GenericModal from '@/components/common/GenericModal';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
+import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { Claims } from '@/constants';
 import { useLeaseDetail } from '@/features/leases';
 import { AddLeaseYupSchema } from '@/features/leases/add/AddLeaseYupSchema';
@@ -14,11 +15,15 @@ import DetailContainer from '@/features/leases/detail/LeasePages/details/DetailC
 import DocumentsPage from '@/features/leases/detail/LeasePages/documents/DocumentsPage';
 import { ImprovementsContainer } from '@/features/leases/detail/LeasePages/improvements/ImprovementsContainer';
 import InsuranceContainer from '@/features/leases/detail/LeasePages/insurance/InsuranceContainer';
-import TermPaymentsContainer from '@/features/leases/detail/LeasePages/payment/TermPaymentsContainer';
-import { TermPaymentsYupSchema } from '@/features/leases/detail/LeasePages/payment/TermPaymentsYupSchema';
+import PeriodPaymentsContainer from '@/features/leases/detail/LeasePages/payment/PeriodPaymentsContainer';
+import { PeriodPaymentsYupSchema } from '@/features/leases/detail/LeasePages/payment/PeriodPaymentsYupSchema';
+import PeriodPaymentsView, {
+  IPeriodPaymentsViewProps,
+} from '@/features/leases/detail/LeasePages/payment/table/periods/PaymentPeriodsView';
+import LeaseStakeholderContainer from '@/features/leases/detail/LeasePages/stakeholders/LeaseStakeholderContainer';
 import Surplus from '@/features/leases/detail/LeasePages/surplus/Surplus';
-import TenantContainer from '@/features/leases/detail/LeasePages/tenant/TenantContainer';
 import { LeaseFormModel } from '@/features/leases/models';
+import { useLeaseRepository } from '@/hooks/repositories/useLeaseRepository';
 
 import { SideBarContext } from '../context/sidebarContext';
 import MapSideBarLayout from '../layout/MapSideBarLayout';
@@ -26,6 +31,7 @@ import SidebarFooter from '../shared/SidebarFooter';
 import { StyledFormWrapper } from '../shared/styles';
 import LeaseHeader from './common/LeaseHeader';
 import { LeaseFileTabNames } from './detail/LeaseFileTabs';
+import LeaseRouter from './tabs/LeaseRouter';
 import ViewSelector from './ViewSelector';
 
 export interface ILeaseContainerProps {
@@ -48,16 +54,18 @@ const initialState: LeaseContainerState = {
   showConfirmModal: false,
 };
 
-export interface LeasePageProps {
+export interface LeasePageProps<T> {
   isEditing: boolean;
   onEdit?: (isEditing: boolean) => void;
   formikRef: React.RefObject<FormikProps<LeaseFormModel>>;
   onSuccess: () => void;
+  componentView: React.FunctionComponent<React.PropsWithChildren<T>>;
 }
 
-export interface ILeasePage {
+export interface ILeasePage<T> {
   pageName: LeasePageNames;
-  component: React.FunctionComponent<React.PropsWithChildren<LeasePageProps>>;
+  component: React.FunctionComponent<React.PropsWithChildren<LeasePageProps<T>>>;
+  componentView?: React.FunctionComponent<React.PropsWithChildren<T>>;
   title: string;
   description?: string;
   validation?: Yup.ObjectSchema<any>;
@@ -69,6 +77,8 @@ export enum LeasePageNames {
   DETAILS = 'details',
   TENANT = 'tenant',
   EDIT_TENANT = 'edit-tenant',
+  PAYEE = 'payee',
+  EDIT_PAYEE = 'edit-payee',
   PAYMENTS = 'payments',
   IMPROVEMENTS = 'improvements',
   INSURANCE = 'insurance',
@@ -76,9 +86,13 @@ export enum LeasePageNames {
   SURPLUS = 'surplus',
   CHECKLIST = 'checklist',
   DOCUMENTS = 'documents',
+  CONSULTATIONS = 'consultations',
 }
 
-export const leasePages: Map<LeasePageNames, ILeasePage> = new Map<LeasePageNames, ILeasePage>([
+export const leasePages: Map<LeasePageNames, ILeasePage<any>> = new Map<
+  LeasePageNames,
+  ILeasePage<any>
+>([
   [
     LeasePageNames.DETAILS,
     {
@@ -92,18 +106,27 @@ export const leasePages: Map<LeasePageNames, ILeasePage> = new Map<LeasePageName
     LeasePageNames.TENANT,
     {
       pageName: LeasePageNames.TENANT,
-      component: TenantContainer,
+      component: LeaseStakeholderContainer,
       title: 'Tenant',
+    },
+  ],
+  [
+    LeasePageNames.PAYEE,
+    {
+      pageName: LeasePageNames.PAYEE,
+      component: LeaseStakeholderContainer,
+      title: 'Payee',
     },
   ],
   [
     LeasePageNames.PAYMENTS,
     {
       pageName: LeasePageNames.PAYMENTS,
-      component: TermPaymentsContainer,
+      component: PeriodPaymentsContainer,
       title: 'Payments',
-      validation: TermPaymentsYupSchema,
-    },
+      validation: PeriodPaymentsYupSchema,
+      componentView: PeriodPaymentsView,
+    } as ILeasePage<IPeriodPaymentsViewProps>,
   ],
   [
     LeasePageNames.IMPROVEMENTS,
@@ -146,6 +169,15 @@ export const leasePages: Map<LeasePageNames, ILeasePage> = new Map<LeasePageName
       claims: Claims.DOCUMENT_VIEW,
     },
   ],
+  [
+    LeasePageNames.CONSULTATIONS,
+    {
+      pageName: LeasePageNames.CONSULTATIONS,
+      component: LeaseRouter,
+      title: 'Approval/Consultations',
+      claims: Claims.LEASE_VIEW,
+    },
+  ],
 ]);
 
 export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClose }) => {
@@ -162,34 +194,25 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
 
   const close = useCallback(() => onClose && onClose(), [onClose]);
   const { lease, setLease, refresh, loading } = useLeaseDetail(leaseId);
-
-  const { setFullWidth, setStaleFile, staleFile, setStaleLastUpdatedBy, lastUpdatedBy } =
-    useContext(SideBarContext);
+  const {
+    setStaleFile,
+    staleFile,
+    setStaleLastUpdatedBy,
+    setLastUpdatedBy,
+    staleLastUpdatedBy,
+    lastUpdatedBy,
+  } = useContext(SideBarContext);
 
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const activeTab = containerState.activeTab;
+  const { setFullWidthSideBar } = useMapStateMachine();
 
-  useEffect(() => {
-    if (activeTab === LeaseFileTabNames.deposit || activeTab === LeaseFileTabNames.payments) {
-      setFullWidth(true);
-    } else {
-      setFullWidth(false);
-    }
-    return () => setFullWidth(false);
-  }, [activeTab, setFullWidth]);
+  const {
+    getLastUpdatedBy: { execute: getLastUpdatedBy, loading: getLastUpdatedByLoading },
+  } = useLeaseRepository();
 
-  useEffect(() => {
-    const refreshLease = async () => {
-      await refresh();
-      setStaleFile(false);
-    };
-    if (staleFile) {
-      refreshLease();
-    }
-  }, [staleFile, refresh, setStaleFile]);
-
-  const onChildSucess = useCallback(() => {
+  const onChildSuccess = useCallback(() => {
     setStaleLastUpdatedBy(true);
   }, [setStaleLastUpdatedBy]);
 
@@ -197,6 +220,7 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
     if (formikRef !== undefined) {
       formikRef.current?.resetForm();
     }
+    setIsValid(true);
     setContainerState({
       showConfirmModal: false,
       isEditing: false,
@@ -230,13 +254,55 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
     }
   };
 
+  const fetchLastUpdatedBy = useCallback(async () => {
+    if (leaseId) {
+      const retrieved = await getLastUpdatedBy(leaseId);
+      if (retrieved !== undefined) {
+        setLastUpdatedBy(retrieved);
+      } else {
+        setLastUpdatedBy(null);
+      }
+    }
+  }, [leaseId, getLastUpdatedBy, setLastUpdatedBy]);
+
+  useEffect(() => {
+    if (
+      activeTab === LeaseFileTabNames.deposit ||
+      activeTab === LeaseFileTabNames.payments ||
+      activeTab === LeaseFileTabNames.notes ||
+      activeTab === LeaseFileTabNames.documents
+    ) {
+      setFullWidthSideBar(true);
+    } else {
+      setFullWidthSideBar(false);
+    }
+    return () => setFullWidthSideBar(false);
+  }, [activeTab, setFullWidthSideBar]);
+
+  useEffect(() => {
+    const refreshLease = async () => {
+      await refresh();
+    };
+
+    if (staleFile) {
+      refreshLease();
+      setStaleFile(false);
+    }
+  }, [staleFile, refresh, setStaleFile]);
+
+  useEffect(() => {
+    if (lastUpdatedBy === undefined || leaseId !== lastUpdatedBy?.parentId || staleLastUpdatedBy) {
+      fetchLastUpdatedBy();
+    }
+  }, [fetchLastUpdatedBy, lastUpdatedBy, leaseId, staleLastUpdatedBy]);
+
   return (
     <MapSideBarLayout
       showCloseButton
       onClose={close}
-      title={containerState.isEditing ? 'Update Lease / License' : 'Lease / License'}
+      title={containerState.isEditing ? 'Update Lease / Licence' : 'Lease / Licence'}
       icon={
-        <Fence
+        <LeaseIcon
           title="Lease file icon"
           width="2.6rem"
           height="2.6rem"
@@ -251,7 +317,7 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
             isOkDisabled={formikRef?.current?.isSubmitting}
             onSave={handleSaveClick}
             onCancel={handleCancelClick}
-            displayRequiredFieldError={isValid === false && !!formikRef.current?.submitCount}
+            displayRequiredFieldError={isValid === false}
           />
         )
       }
@@ -273,7 +339,7 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
         show
       />
       <StyledFormWrapper>
-        <LoadingBackdrop show={loading} />
+        <LoadingBackdrop show={loading || getLastUpdatedByLoading} />
         <ViewSelector
           formikRef={formikRef}
           lease={lease}
@@ -283,7 +349,7 @@ export const LeaseContainer: React.FC<ILeaseContainerProps> = ({ leaseId, onClos
           activeEditForm={containerState.activeEditForm}
           activeTab={containerState.activeTab}
           setContainerState={setContainerState}
-          onSuccess={onChildSucess}
+          onSuccess={onChildSuccess}
         />
       </StyledFormWrapper>
     </MapSideBarLayout>

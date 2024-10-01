@@ -9,9 +9,11 @@ exports[`ChecklistView component > renders as expected 1`] = `
   .c5 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -21,7 +23,8 @@ exports[`ChecklistView component > renders as expected 1`] = `
 
 .c4 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -55,6 +58,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
 }
 
 .c11 {
+  color: #474543;
   min-width: 11rem;
 }
 
@@ -68,6 +72,11 @@ exports[`ChecklistView component > renders as expected 1`] = `
   font-size: 1.1rem;
   font-style: italic;
   text-align: right;
+  color: #428bca;
+}
+
+.c8 .tooltip-icon {
+  color: #428bca;
 }
 
 .c10 {
@@ -116,7 +125,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             File Initiation
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -455,9 +464,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Property Acquisition (PA) Plan:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -555,7 +562,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             Active File Management
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -732,9 +739,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Other reports:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -963,9 +968,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Spending Authority Approval(s) - SAA:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -1069,9 +1072,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Final agreements with owner(s):
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -1507,9 +1508,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Registered Plan:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -1600,9 +1599,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Copy of new title:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -1769,7 +1766,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             Crown Land
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -1814,7 +1811,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             Section 3 - Agreement
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -1853,9 +1850,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Notice of Advanced Payment (Form 8):
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2291,9 +2286,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               ALC order:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2391,7 +2384,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             Section 6 - Expropriation
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -2430,9 +2423,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Copy of expropriation approval packages:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2523,9 +2514,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Notice of Expropriation (Form 1):
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2616,9 +2605,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Approval of Expropriation (Form 5):
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2709,9 +2696,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               Vesting Notice (Form 9):
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"
@@ -2947,7 +2932,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
             Acquisition Completion
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c5"
@@ -2986,9 +2971,7 @@ exports[`ChecklistView component > renders as expected 1`] = `
               class="c6"
             >
               File data entered into PIMS:
-              <span
-                class="ml-2"
-              >
+              <span>
                 <span
                   class="tooltip-icon"
                   data-testid="tooltip-icon-section-field-tooltip"

@@ -2,11 +2,11 @@ import 'react-simple-tree-menu/dist/main.css';
 
 import { Form as FormikForm, Formik, getIn, useFormikContext } from 'formik';
 import noop from 'lodash/noop';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { MdArrowDropDown, MdArrowRight } from 'react-icons/md';
-import TreeMenu, { TreeMenuItem, TreeNode } from 'react-simple-tree-menu';
+import TreeMenu, { TreeMenuItem, TreeNode, TreeNodeInArray } from 'react-simple-tree-menu';
 import styled from 'styled-components';
 
 import variables from '@/assets/scss/_variables.module.scss';
@@ -35,7 +35,9 @@ const ParentNode = styled(ListGroup.Item)`
 
 const LayerNode = styled(ListGroup.Item)`
   display: flex;
-  padding-left: 2.5rem;
+  font-size: 1.4rem;
+  text-align: left;
+  padding-left: 5rem;
   border: none;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -72,6 +74,7 @@ const LayerColor = styled.div<{ color: string }>`
   height: 1.4rem;
   background-color: ${({ color }) => color};
   margin-right: 0.5rem;
+  padding-right: 1.4rem;
 `;
 
 /**
@@ -80,21 +83,54 @@ const LayerColor = styled.div<{ color: string }>`
 const ParentCheckbox: React.FC<
   React.PropsWithChildren<{ name: string; label: string; index: number }>
 > = ({ name, label, index }) => {
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext<LayersFormModel>();
 
   const onChange = () => {
     const nextValue = !getIn(values, name);
-    setFieldValue(name, nextValue);
-    // Toggle children nodes
+    // Toggle children nodes if parent is selected/deselected
     const nodes = getIn(values, `layers[${index}].nodes`) || [];
-    nodes.forEach((node: any, i: number) =>
-      setFieldValue(`layers[${index}].nodes[${i}].on`, nextValue),
+    nodes.forEach((_: TreeNodeInArray, childIndex: number) =>
+      setFieldValue(`layers[${index}].nodes[${childIndex}].on`, nextValue),
     );
   };
 
+  // Calculate the state of the parent check based on all the children.
+  useEffect(() => {
+    const parentLayer = values.layers[index];
+    const activeChildren = parentLayer?.nodes?.filter(x => x?.on === true);
+    let isActive = false;
+    let isPartialActive = false;
+
+    if (activeChildren?.length > 0) {
+      isActive = true;
+      if (parentLayer?.nodes?.length !== activeChildren?.length) {
+        isPartialActive = true;
+      } else {
+        isPartialActive = false;
+      }
+    } else {
+      isActive = false;
+      isPartialActive = false;
+    }
+
+    setFieldValue(`layers[${index}].on`, isActive);
+
+    if (parentChekRef.current) {
+      parentChekRef.current.indeterminate = isPartialActive;
+    }
+  }, [index, setFieldValue, values]);
+
+  const parentChekRef = useRef<HTMLInputElement>();
+
   return (
     <FormGroup>
-      <Form.Check type="checkbox" checked={getIn(values, name)} onChange={onChange} label={label} />
+      <Form.Check
+        ref={parentChekRef}
+        type="checkbox"
+        checked={getIn(values, name)}
+        onChange={onChange}
+        label={label}
+      />
     </FormGroup>
   );
 };
@@ -119,7 +155,6 @@ const LayerNodeCheckbox: React.FC<
         onChange={onChange}
         label={
           <>
-            {' '}
             {!!color && <LayerColor color={color} />} {label}
           </>
         }
@@ -217,6 +252,10 @@ const LayersTree: React.FC<React.PropsWithChildren<{ items: TreeMenuItem[] }>> =
   );
 };
 
+interface LayersFormModel {
+  layers: ILayerItem[];
+}
+
 /**
  * This component displays the layers group menu
  */
@@ -224,14 +263,14 @@ export const LayersMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { activeLayers: layers } = useMapStateMachine();
 
   return (
-    <Formik initialValues={{ layers }} onSubmit={noop} enableReinitialize>
+    <Formik<LayersFormModel> initialValues={{ layers }} onSubmit={noop} enableReinitialize>
       {() => (
         <FormikForm>
           <MapLayerSynchronizer />
           <TreeMenu hasSearch={false} data={layers}>
             {({ items }) => {
               return (
-                <FormSection className="bg-white">
+                <FormSection className="bg-white p-3">
                   <LayersTree items={items} />
                 </FormSection>
               );

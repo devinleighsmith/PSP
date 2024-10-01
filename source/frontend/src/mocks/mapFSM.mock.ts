@@ -1,3 +1,4 @@
+import { SideBarType } from '@/components/common/mapFSM/machineDefinition/types';
 import { IMapStateMachineContext } from '@/components/common/mapFSM/MapStateMachineContext';
 import {
   emptyPimsBoundaryFeatureCollection,
@@ -14,8 +15,12 @@ export const mapMachineBaseMock: IMapStateMachineContext = {
     pimsBoundaryFeatures: emptyPimsBoundaryFeatureCollection,
     fullyAttributedFeatures: emptyPmbcFeatureCollection,
   },
-
-  isSidebarOpen: false,
+  mapSideBarViewState: {
+    isCollapsed: false,
+    type: SideBarType.NOT_DEFINED,
+    isOpen: false,
+    isFullWidth: false,
+  },
   isShowingSearchBar: false,
   pendingFlyTo: false,
   pendingFitBounds: false,
@@ -27,6 +32,8 @@ export const mapMachineBaseMock: IMapStateMachineContext = {
   mapFeatureSelected: null,
   mapLocationSelected: null,
   mapLocationFeatureDataset: null,
+  repositioningFeatureDataset: null,
+  repositioningPropertyIndex: null,
   selectingComponentId: null,
   selectedFeatureDataset: null,
   showPopup: false,
@@ -37,7 +44,9 @@ export const mapMachineBaseMock: IMapStateMachineContext = {
   activePimsPropertyIds: [],
   activeLayers: layersTree,
   isSelecting: false,
+  isRepositioning: false,
   isFiltering: false,
+  isShowingMapFilter: false,
   isShowingMapLayers: false,
   showDisposed: false,
   showRetired: false,
@@ -56,14 +65,18 @@ export const mapMachineBaseMock: IMapStateMachineContext = {
   prepareForCreation: vi.fn(),
   startSelection: vi.fn(),
   finishSelection: vi.fn(),
+  startReposition: vi.fn(),
+  finishReposition: vi.fn(),
   setFilePropertyLocations: vi.fn(),
   setVisiblePimsProperties: vi.fn(),
-  toggleMapFilter: vi.fn(),
+  toggleMapFilterDisplay: vi.fn(),
 
-  toggleMapLayer: vi.fn(),
+  toggleMapLayerControl: vi.fn(),
   setShowDisposed: vi.fn(),
   setShowRetired: vi.fn(),
-  changeSidebar: vi.fn(),
   setMapLayers: vi.fn(),
   setDefaultMapLayers: vi.fn(),
+  toggleSidebarDisplay: vi.fn(),
+  setFullWidthSideBar: vi.fn(),
+  resetMapFilter: vi.fn(),
 };

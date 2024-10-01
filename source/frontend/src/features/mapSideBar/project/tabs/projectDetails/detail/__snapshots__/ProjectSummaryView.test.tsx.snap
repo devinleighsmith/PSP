@@ -9,9 +9,11 @@ exports[`ProjectSummaryView component > matches snapshot 1`] = `
   .c4 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c0 {
+  background-color: #f2f2f2;
   padding-top: 1rem;
 }
 
@@ -21,7 +23,8 @@ exports[`ProjectSummaryView component > matches snapshot 1`] = `
 
 .c3 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -73,7 +76,7 @@ exports[`ProjectSummaryView component > matches snapshot 1`] = `
             Project Details
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c4"
@@ -137,7 +140,7 @@ exports[`ProjectSummaryView component > matches snapshot 1`] = `
             Associated Codes
           </div>
           <div
-            class="pl-8 col-auto"
+            class="pl-8 d-flex align-items-end col-auto"
           >
             <svg
               class="c4"
@@ -234,7 +237,7 @@ exports[`ProjectSummaryView component > matches snapshot 1`] = `
               Associated Products
             </div>
             <div
-              class="pl-8 col-auto"
+              class="pl-8 d-flex align-items-end col-auto"
             >
               <svg
                 class="c4"

@@ -1,14 +1,17 @@
 import { FieldArray, useFormikContext } from 'formik';
+import { LatLngLiteral } from 'leaflet';
+import isNumber from 'lodash/isNumber';
 import { Col, Row } from 'react-bootstrap';
 
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
+import { LocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { Section } from '@/components/common/Section/Section';
 import MapSelectorContainer from '@/components/propertySelector/MapSelectorContainer';
-import { IMapProperty } from '@/components/propertySelector/models';
 import SelectedPropertyHeaderRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyHeaderRow';
 import SelectedPropertyRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyRow';
 import { useBcaAddress } from '@/features/properties/map/hooks/useBcaAddress';
 import { useModalContext } from '@/hooks/useModalContext';
+import { isLatLngInFeatureSetBoundary } from '@/utils';
 
 import { AddressForm, PropertyForm } from '../../shared/models';
 import { ResearchForm } from './models';
@@ -30,18 +33,18 @@ const ResearchProperties: React.FC<IResearchPropertiesProps> = ({ confirmBeforeA
       </div>
 
       <FieldArray name="properties">
-        {({ push, remove }) => (
+        {({ push, remove, replace }) => (
           <>
             <LoadingBackdrop show={bcaLoading} />
             <Row className="py-3 no-gutters">
               <Col>
                 <MapSelectorContainer
-                  addSelectedProperties={(newProperties: IMapProperty[]) => {
+                  addSelectedProperties={(newProperties: LocationFeatureDataset[]) => {
                     newProperties.reduce(async (promise, property) => {
                       return promise.then(async () => {
-                        const formProperty = PropertyForm.fromMapProperty(property);
-                        if (property.pid) {
-                          const bcaSummary = await getPrimaryAddressByPid(property.pid, 30000);
+                        const formProperty = PropertyForm.fromFeatureDataset(property);
+                        if (formProperty.pid) {
+                          const bcaSummary = await getPrimaryAddressByPid(formProperty.pid, 30000);
                           formProperty.address = bcaSummary?.address
                             ? AddressForm.fromBcaAddress(bcaSummary?.address)
                             : undefined;
@@ -77,7 +80,26 @@ const ResearchProperties: React.FC<IResearchPropertiesProps> = ({ confirmBeforeA
                       });
                     }, Promise.resolve());
                   }}
-                  modifiedProperties={values.properties}
+                  repositionSelectedProperty={(
+                    featureset: LocationFeatureDataset,
+                    latLng: LatLngLiteral,
+                    index: number | null,
+                  ) => {
+                    // As long as the marker is repositioned within the boundary of the originally selected property simply reposition the marker without further notification.
+                    if (
+                      isNumber(index) &&
+                      index >= 0 &&
+                      isLatLngInFeatureSetBoundary(latLng, featureset)
+                    ) {
+                      const formProperty = values.properties[index];
+                      const updatedFormProperty = new PropertyForm(formProperty);
+                      updatedFormProperty.fileLocation = latLng;
+
+                      // Find property within formik values and reposition it based on incoming file marker position
+                      replace(index, updatedFormProperty);
+                    }
+                  }}
+                  modifiedProperties={values.properties.map(p => p.toFeatureDataset())}
                 />
               </Col>
             </Row>
@@ -89,7 +111,7 @@ const ResearchProperties: React.FC<IResearchPropertiesProps> = ({ confirmBeforeA
                   onRemove={() => remove(index)}
                   nameSpace={`properties.${index}`}
                   index={index}
-                  property={property.toMapProperty()}
+                  property={property.toFeatureDataset()}
                 />
               ))}
               {values.properties.length === 0 && <span>No Properties selected</span>}

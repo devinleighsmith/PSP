@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import { ILayerItem } from '@/components/maps/leaflet/Control/LayersControl/types';
 import { IGeoSearchParams } from '@/constants/API';
+import { IMapSideBarViewState } from '@/features/mapSideBar/MapSideBar';
 import {
   defaultPropertyFilter,
   IPropertyFilter,
@@ -18,7 +19,7 @@ import useLocationFeatureLoader, { LocationFeatureDataset } from './useLocationF
 import { useMapSearch } from './useMapSearch';
 
 export interface IMapStateMachineContext {
-  isSidebarOpen: boolean;
+  mapSideBarViewState: IMapSideBarViewState;
   isShowingSearchBar: boolean;
   pendingFlyTo: boolean;
   requestedFlyTo: RequestedFlyTo;
@@ -26,6 +27,8 @@ export interface IMapStateMachineContext {
   mapLocationSelected: LatLngLiteral | null;
   mapLocationFeatureDataset: LocationFeatureDataset | null;
   selectedFeatureDataset: LocationFeatureDataset | null;
+  repositioningFeatureDataset: LocationFeatureDataset | null;
+  repositioningPropertyIndex: number | null;
   showPopup: boolean;
   isLoading: boolean;
   mapSearchCriteria: IPropertyFilter | null;
@@ -34,8 +37,10 @@ export interface IMapStateMachineContext {
   pendingFitBounds: boolean;
   requestedFitBounds: LatLngBounds;
   isSelecting: boolean;
+  isRepositioning: boolean;
   selectingComponentId: string | null;
   isFiltering: boolean;
+  isShowingMapFilter: boolean;
   isShowingMapLayers: boolean;
   activePimsPropertyIds: number[];
   showDisposed: boolean;
@@ -48,6 +53,7 @@ export interface IMapStateMachineContext {
   processFitBounds: () => void;
   openSidebar: (sidebarType: SideBarType) => void;
   closeSidebar: () => void;
+  toggleSidebarDisplay: () => void;
   closePopup: () => void;
 
   mapClick: (latlng: LatLngLiteral) => void;
@@ -58,8 +64,14 @@ export interface IMapStateMachineContext {
   prepareForCreation: () => void;
   startSelection: (selectingComponentId?: string) => void;
   finishSelection: () => void;
-  toggleMapFilter: () => void;
-  toggleMapLayer: () => void;
+  startReposition: (
+    repositioningFeatureDataset: LocationFeatureDataset,
+    index: number,
+    selectingComponentId?: string,
+  ) => void;
+  finishReposition: () => void;
+  toggleMapFilterDisplay: () => void;
+  toggleMapLayerControl: () => void;
   setFilePropertyLocations: (locations: LatLngLiteral[]) => void;
   setMapLayers: (layers: ILayerItem[]) => void;
   setDefaultMapLayers: (layers: ILayerItem[]) => void;
@@ -67,7 +79,8 @@ export interface IMapStateMachineContext {
   setVisiblePimsProperties: (propertyIds: number[]) => void;
   setShowDisposed: (show: boolean) => void;
   setShowRetired: (show: boolean) => void;
-  changeSidebar: () => void;
+  setFullWidthSideBar: (fullWidth: boolean) => void;
+  resetMapFilter: () => void;
 }
 
 const MapStateMachineContext = React.createContext<IMapStateMachineContext>(
@@ -125,7 +138,7 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
 
         return result;
       },
-      loadFeatures: (context: MachineContext, event: any) => {
+      loadFeatures: (context: MachineContext, event: any): Promise<MapFeatureData> => {
         // If there is data in the event, use that criteria.
         // Otherwise, use the stored one in the context.
         let searchCriteria = context.searchCriteria || defaultPropertyFilter;
@@ -146,7 +159,7 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
           geoFilter.forceExactMatch = false;
           return mapSearch.searchByHistorical(geoFilter);
         } else {
-          return mapSearch.searchMany(geoFilter);
+          return mapSearch.loadMapProperties();
         }
       },
     },
@@ -253,8 +266,24 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
     serviceSend({ type: 'FINISH_SELECTION' });
   }, [serviceSend]);
 
-  const changeSidebar = useCallback(() => {
-    serviceSend({ type: 'CHANGE_SIDEBAR' });
+  const startReposition = useCallback(
+    (
+      repositioningFeatureDataset: LocationFeatureDataset,
+      index: number,
+      selectingComponentId?: string,
+    ) => {
+      serviceSend({
+        type: 'START_REPOSITION',
+        repositioningFeatureDataset,
+        repositioningPropertyIndex: index,
+        selectingComponentId,
+      });
+    },
+    [serviceSend],
+  );
+
+  const finishReposition = useCallback(() => {
+    serviceSend({ type: 'FINISH_REPOSITION' });
   }, [serviceSend]);
 
   const setFilePropertyLocations = useCallback(
@@ -299,44 +328,59 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
     [serviceSend],
   );
 
-  const toggleMapFilter = useCallback(() => {
+  const setFullWidthSideBar = useCallback(
+    (show: boolean) => {
+      serviceSend({ type: 'SET_FULL_WIDTH_SIDEBAR', show });
+    },
+    [serviceSend],
+  );
+
+  const toggleSidebarDisplay = useCallback(() => {
+    serviceSend({ type: 'TOGGLE_SIDEBAR_SIZE' });
+  }, [serviceSend]);
+
+  const toggleMapFilterDisplay = useCallback(() => {
     serviceSend({ type: 'TOGGLE_FILTER' });
   }, [serviceSend]);
 
-  const toggleMapLayer = useCallback(() => {
+  const resetMapFilter = useCallback(() => {
+    serviceSend({ type: 'RESET_FILTER' });
+  }, [serviceSend]);
+
+  const toggleMapLayerControl = useCallback(() => {
     serviceSend({ type: 'TOGGLE_LAYERS' });
   }, [serviceSend]);
 
+  const isRepositioning = useMemo(() => {
+    return state.matches({ mapVisible: { featureView: 'repositioning' } });
+  }, [state]);
+
+  // disable map popup when repositioning file markers
   const showPopup = useMemo(() => {
-    return state.context.mapLocationFeatureDataset !== null;
-  }, [state.context.mapLocationFeatureDataset]);
+    return state.context.mapLocationFeatureDataset !== null && !isRepositioning;
+  }, [isRepositioning, state.context.mapLocationFeatureDataset]);
 
-  const isSidebarOpen = useMemo(() => {
-    return [
-      { mapVisible: { sideBar: 'sidebarOpen' } },
-      { mapVisible: { sideBar: 'selecting' } },
-    ].some(state.matches);
-  }, [state.matches]);
-
-  const isFiltering = useMemo(() => {
-    return state.matches({ mapVisible: { featureView: 'filtering' } });
+  const isShowingMapFilter = useMemo(() => {
+    return state.matches({ mapVisible: { advancedFilterSideBar: 'mapFilterOpened' } });
   }, [state]);
 
   const isShowingMapLayers = useMemo(() => {
-    return state.matches({ mapVisible: { featureView: 'layerControl' } });
+    return state.matches({ mapVisible: { advancedFilterSideBar: 'layerControl' } });
   }, [state]);
 
   return (
     <MapStateMachineContext.Provider
       value={{
-        isSidebarOpen: isSidebarOpen,
-        isShowingSearchBar: !isSidebarOpen && !isFiltering,
+        mapSideBarViewState: state.context.mapSideBarState,
+        isShowingSearchBar: !state.context.mapSideBarState.isOpen && !state.context.isFiltering,
         pendingFlyTo: state.matches({ mapVisible: { mapRequest: 'pendingFlyTo' } }),
         requestedFlyTo: state.context.requestedFlyTo,
         mapFeatureSelected: state.context.mapFeatureSelected,
         mapLocationSelected: state.context.mapLocationSelected,
         mapLocationFeatureDataset: state.context.mapLocationFeatureDataset,
         selectedFeatureDataset: state.context.selectedFeatureDataset,
+        repositioningFeatureDataset: state.context.repositioningFeatureDataset,
+        repositioningPropertyIndex: state.context.repositioningPropertyIndex,
         showPopup: showPopup,
         isLoading: state.context.isLoading,
         mapSearchCriteria: state.context.searchCriteria,
@@ -345,8 +389,10 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
         pendingFitBounds: state.matches({ mapVisible: { mapRequest: 'pendingFitBounds' } }),
         requestedFitBounds: state.context.requestedFitBounds,
         isSelecting: state.matches({ mapVisible: { featureView: 'selecting' } }),
+        isRepositioning: isRepositioning,
         selectingComponentId: state.context.selectingComponentId,
-        isFiltering: isFiltering,
+        isFiltering: state.context.isFiltering,
+        isShowingMapFilter: isShowingMapFilter,
         isShowingMapLayers: isShowingMapLayers,
         activeLayers: state.context.activeLayers,
         activePimsPropertyIds: state.context.activePimsPropertyIds,
@@ -367,15 +413,19 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
         prepareForCreation,
         startSelection,
         finishSelection,
-        toggleMapFilter,
-        toggleMapLayer,
+        startReposition,
+        finishReposition,
+        toggleMapFilterDisplay,
+        toggleMapLayerControl,
+        toggleSidebarDisplay,
         setFilePropertyLocations,
         setVisiblePimsProperties,
         setShowDisposed,
         setShowRetired,
         setMapLayers,
         setDefaultMapLayers,
-        changeSidebar,
+        setFullWidthSideBar,
+        resetMapFilter,
       }}
     >
       {children}
@@ -385,7 +435,7 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
 
 const getQueryParams = (filter: IPropertyFilter): IGeoSearchParams => {
   // The map will search for either identifier.
-  const pinOrPidValue = filter.pinOrPid ? filter.pinOrPid?.replace(/-/g, '') : undefined;
+  const pinOrPidValue = filter.pinOrPid ? filter.pinOrPid?.replaceAll(/-/g, '') : undefined;
   return {
     PID_PADDED: pinOrPidValue,
     PID: pinOrPidValue,

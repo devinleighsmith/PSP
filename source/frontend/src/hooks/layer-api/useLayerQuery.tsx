@@ -55,6 +55,7 @@ export interface IUserLayerQuery {
       latlng: LatLngLiteral,
       geometryName?: string,
       spatialReferenceId?: number,
+      sortBy?: string,
     ) => Promise<AxiosResponse<FeatureCollection<Geometry, GeoJsonProperties>>>
   >;
   findOneWhereExactWrapped: IResponseWrapper<
@@ -62,6 +63,7 @@ export interface IUserLayerQuery {
       latlng: LatLngLiteral,
       geometryName?: string,
       spatialReferenceId?: number,
+      sortBy?: string,
     ) => Promise<AxiosResponse<FeatureCollection<Geometry, GeoJsonProperties>>>
   >;
 }
@@ -70,9 +72,14 @@ export interface IUserLayerQuery {
  * // TODO: PSP-4393 This should be deprecated
  * Custom hook to fetch layer feature collection from wfs url
  * @param url wfs request url
- * @param geometry the name of the geometry in the feature collection
+ * @param authenticated if this request should use pims bearer auth.
+ * @param withCredentials if this request should use withCredentials (smsession).
  */
-export const useLayerQuery = (url: string, authenticated?: boolean): IUserLayerQuery => {
+export const useLayerQuery = (
+  url: string,
+  authenticated?: boolean,
+  withCredentials?: boolean,
+): IUserLayerQuery => {
   const baseAllUrl = `${url}&srsName=EPSG:4326`;
   const baseUrl = `${url}&srsName=EPSG:4326&count=1`;
 
@@ -83,13 +90,13 @@ export const useLayerQuery = (url: string, authenticated?: boolean): IUserLayerQ
       spatialReferenceId = 4326,
     ): Promise<FeatureCollection> => {
       const data: FeatureCollection = (
-        await wfsAxios2({ authenticated }).get<FeatureCollection>(
+        await wfsAxios2({ authenticated, withCredentials }).get<FeatureCollection>(
           `${baseUrl}&cql_filter=CONTAINS(${geometryName},SRID=${spatialReferenceId};POINT ( ${latlng.lng} ${latlng.lat}))`,
         )
       )?.data;
       return data;
     },
-    [baseUrl, authenticated],
+    [baseUrl, authenticated, withCredentials],
   );
 
   const executeWfs = useCallback(
@@ -109,17 +116,23 @@ export const useLayerQuery = (url: string, authenticated?: boolean): IUserLayerQ
     [baseAllUrl, baseUrl, authenticated],
   );
 
+  // NOTE: sortby is used here to ensure that if there are multiple features at a given location the non-retired feature will be returned first.
   const findOneWhereContainsWrapped = useApiRequestWrapper({
     requestFunction: useCallback(
       async (
         latlng: LatLngLiteral,
         geometryName = 'SHAPE',
         spatialReferenceId = 4326,
+        sortBy = '',
       ): Promise<AxiosResponse<FeatureCollection<Geometry, GeoJsonProperties>>> => {
         const data = await wfsAxios2({ authenticated }).get<
           FeatureCollection<Geometry, GeoJsonProperties>
         >(
-          `${baseUrl}&cql_filter=CONTAINS(${geometryName},SRID=${spatialReferenceId};POINT ( ${latlng.lng} ${latlng.lat}))`,
+          `${baseUrl}${
+            sortBy ? '&' + sortBy : ''
+          }&cql_filter=CONTAINS(${geometryName},SRID=${spatialReferenceId};POINT ( ${latlng.lng} ${
+            latlng.lat
+          }))`,
         );
         return data;
       },
@@ -134,11 +147,16 @@ export const useLayerQuery = (url: string, authenticated?: boolean): IUserLayerQ
         latlng: LatLngLiteral,
         geometryName = 'POINT',
         spatialReferenceId = 4326,
+        sortBy = '',
       ): Promise<AxiosResponse<FeatureCollection<Geometry, GeoJsonProperties>>> => {
         const data = await wfsAxios2({ authenticated }).get<
           FeatureCollection<Geometry, GeoJsonProperties>
         >(
-          `${baseUrl}&cql_filter=DWITHIN(${geometryName},SRID=${spatialReferenceId};POINT(${latlng.lng} ${latlng.lat}), .001, meters)`,
+          `${baseUrl}${
+            sortBy ? '&' + sortBy : ''
+          }&cql_filter=DWITHIN(${geometryName},SRID=${spatialReferenceId};POINT(${latlng.lng} ${
+            latlng.lat
+          }), .001, meters)`,
         );
         return data;
       },

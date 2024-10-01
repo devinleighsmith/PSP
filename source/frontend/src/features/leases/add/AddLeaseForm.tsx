@@ -7,9 +7,7 @@ import { FormLeaseProperty, getDefaultFormLease, LeaseFormModel } from '../model
 import LeasePropertySelector from '../shared/propertyPicker/LeasePropertySelector';
 import { AddLeaseYupSchema } from './AddLeaseYupSchema';
 import AdministrationSubForm from './AdministrationSubForm';
-import ConsultationSubForm from './ConsultationSubForm';
 import LeaseDetailSubForm from './LeaseDetailSubForm';
-import DocumentationSubForm from './ReferenceSubForm';
 
 interface IAddLeaseFormProps {
   onSubmit: (
@@ -26,11 +24,16 @@ const AddLeaseForm: React.FunctionComponent<React.PropsWithChildren<IAddLeaseFor
   propertyInfo,
 }) => {
   const defaultFormLease = getDefaultFormLease();
+
+  // support creating a new disposition file from the map popup
   if (propertyInfo) {
     defaultFormLease.properties = [];
     defaultFormLease.properties.push(FormLeaseProperty.fromMapProperty(propertyInfo));
+    // auto-select file region based upon the location of the property
     defaultFormLease.regionId = propertyInfo.region ? propertyInfo.region.toString() : '';
   }
+
+  const apiFormLease = LeaseFormModel.toApi(defaultFormLease);
 
   const handleSubmit = async (
     values: LeaseFormModel,
@@ -44,19 +47,15 @@ const AddLeaseForm: React.FunctionComponent<React.PropsWithChildren<IAddLeaseFor
       <Formik<LeaseFormModel>
         enableReinitialize
         innerRef={formikRef}
-        initialValues={defaultFormLease}
+        initialValues={LeaseFormModel.fromApi(apiFormLease)}
         validationSchema={AddLeaseYupSchema}
         onSubmit={handleSubmit}
       >
         {formikProps => (
           <>
-            <>
-              <LeaseDetailSubForm formikProps={formikProps}></LeaseDetailSubForm>
-              <LeasePropertySelector formikProps={formikProps} />
-              <AdministrationSubForm formikProps={formikProps}></AdministrationSubForm>
-              <ConsultationSubForm formikProps={formikProps}></ConsultationSubForm>
-              <DocumentationSubForm />
-            </>
+            <LeaseDetailSubForm formikProps={formikProps}></LeaseDetailSubForm>
+            <LeasePropertySelector formikProps={formikProps} />
+            <AdministrationSubForm formikProps={formikProps}></AdministrationSubForm>
           </>
         )}
       </Formik>

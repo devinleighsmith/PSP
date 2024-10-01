@@ -1,10 +1,8 @@
-import { IAddress } from '@/interfaces';
 import { ApiGen_Concepts_Address } from '@/models/api/generated/ApiGen_Concepts_Address';
 import { ApiGen_Concepts_PropertyManagement } from '@/models/api/generated/ApiGen_Concepts_PropertyManagement';
 import { IBcAssessmentSummary } from '@/models/layers/bcAssesment';
 
-import { prettyFormatDate } from './dateUtils';
-import { isValidIsoDateTime, isValidString } from './utils';
+import { isValidString } from './utils';
 
 /**
  * The pidFormatter is used to format the specified PID value
@@ -77,22 +75,6 @@ export const formatSplitAddress = (
 
 /**
  * Provides a formatted street address as a string.
- * Combines streetAddress1, streetAddress2 and streetAddress3 into a single string.
- *
- * @param address Address object from property.
- * @returns Civic address string value.
- */
-export const formatStreetAddress = (address?: IAddress) => {
-  const values = [
-    address?.streetAddress1 ?? '',
-    address?.streetAddress2 ?? '',
-    address?.streetAddress3 ?? '',
-  ];
-  return values.filter(text => text !== '').join(' ');
-};
-
-/**
- * Provides a formatted street address as a string.
  * Combines data from a BC assessment address into a formatted address string.
  *
  * @param address Address object from bc assessment.
@@ -113,19 +95,11 @@ export const formatBcaAddress = (address?: IBcAssessmentSummary['ADDRESSES'][0])
 export function formatApiPropertyManagementLease(
   base: ApiGen_Concepts_PropertyManagement | undefined | null,
 ): string {
-  const count = base?.relatedLeases || 0;
-  switch (count) {
-    case 0:
-      return 'No';
-
-    case 1: {
-      const expiryDate = isValidIsoDateTime(base?.leaseExpiryDate)
-        ? `(${prettyFormatDate(base!.leaseExpiryDate)})`
-        : '';
-      return `Yes ${expiryDate}`.trim();
-    }
-    default: {
-      return 'Multiple';
-    }
+  if (base?.hasActiveLease && base.activeLeaseHasExpiryDate) {
+    return 'Yes';
+  } else if (base?.hasActiveLease && !base.activeLeaseHasExpiryDate) {
+    return 'Yes (No Expiry Date)';
+  } else {
+    return 'No';
   }
 }

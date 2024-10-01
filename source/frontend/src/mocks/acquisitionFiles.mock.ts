@@ -73,7 +73,7 @@ export const mockAcquisitionFileResponse = (
   fileProperties: [
     {
       id: 1,
-      propertyId: 442,
+      propertyId: 292,
       property: {
         ...getMockApiProperty(),
         id: 442,
@@ -95,7 +95,6 @@ export const mockAcquisitionFileResponse = (
         dataSourceEffectiveDateOnly: '2022-08-30T00:00:00',
         latitude: 392268.0638614455,
         longitude: 1193862.2178506008,
-        isSensitive: false,
         isRwyBeltDomPatent: false,
         pid: 23214937,
         landArea: 0,
@@ -112,6 +111,7 @@ export const mockAcquisitionFileResponse = (
       fileId: 1,
       file: null,
       propertyName: null,
+      location: null,
       rowVersion: 1,
     },
     {
@@ -138,7 +138,6 @@ export const mockAcquisitionFileResponse = (
         dataSourceEffectiveDateOnly: '2022-08-30T00:00:00',
         latitude: 392208.44089083467,
         longitude: 1193818.724719974,
-        isSensitive: false,
         isRwyBeltDomPatent: false,
         pid: 24996777,
         landArea: 0,
@@ -156,6 +155,7 @@ export const mockAcquisitionFileResponse = (
       fileId: 1,
       file: null,
       propertyName: null,
+      location: null,
     },
   ],
   acquisitionTeam: [

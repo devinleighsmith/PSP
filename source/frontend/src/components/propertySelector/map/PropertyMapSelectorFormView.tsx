@@ -1,21 +1,32 @@
+import { LatLngLiteral } from 'leaflet';
+
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
+import { LocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { Section } from '@/components/common/Section/Section';
 import * as Styled from '@/components/common/styles';
 
 import MapClickMonitor from '../MapClickMonitor';
-import { IMapProperty } from '../models';
 import PropertyMapSelectorSubForm from './PropertyMapSelectorSubForm';
 
 export interface IPropertyMapSelectorFormViewProps {
-  onSelectedProperty: (property: IMapProperty) => void;
-  lastSelectedProperty?: IMapProperty;
-  selectedProperties: IMapProperty[];
+  onSelectedProperty: (property: LocationFeatureDataset) => void;
+  onRepositionedProperty: (
+    property: LocationFeatureDataset,
+    latLng: LatLngLiteral,
+    propertyIndex: number | null,
+  ) => void;
+  lastSelectedProperty?: LocationFeatureDataset;
+  selectedProperties: LocationFeatureDataset[];
   selectedComponentId?: string | null;
 }
 
-const PropertyMapSelectorFormView: React.FunctionComponent<
-  React.PropsWithChildren<IPropertyMapSelectorFormViewProps>
-> = ({ onSelectedProperty, lastSelectedProperty, selectedProperties, selectedComponentId }) => {
+const PropertyMapSelectorFormView: React.FunctionComponent<IPropertyMapSelectorFormViewProps> = ({
+  onSelectedProperty,
+  onRepositionedProperty,
+  lastSelectedProperty,
+  selectedProperties,
+  selectedComponentId,
+}) => {
   const mapMachine = useMapStateMachine();
 
   const onClickDraftMarker = () => {
@@ -32,6 +43,7 @@ const PropertyMapSelectorFormView: React.FunctionComponent<
 
       <MapClickMonitor
         addProperty={onSelectedProperty}
+        repositionProperty={onRepositionedProperty}
         modifiedProperties={selectedProperties}
         selectedComponentId={selectedComponentId ?? null}
       />

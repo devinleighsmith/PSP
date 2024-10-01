@@ -6,6 +6,9 @@ import { Api_LastUpdatedBy } from '@/models/api/File';
 import { ApiGen_Concepts_FileChecklistItem } from '@/models/api/generated/ApiGen_Concepts_FileChecklistItem';
 import { ApiGen_Concepts_FileWithChecklist } from '@/models/api/generated/ApiGen_Concepts_FileWithChecklist';
 import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
+import { ApiGen_Concepts_LeaseRenewal } from '@/models/api/generated/ApiGen_Concepts_LeaseRenewal';
+import { ApiGen_Concepts_LeaseStakeholderType } from '@/models/api/generated/ApiGen_Concepts_LeaseStakeholderType';
+import { UserOverrideCode } from '@/models/api/UserOverrideCode';
 import { useAxiosErrorHandler, useAxiosSuccessHandler } from '@/utils';
 
 import { useApiLeases } from '../pims-api/useApiLeases';
@@ -14,7 +17,15 @@ import { useApiLeases } from '../pims-api/useApiLeases';
  * hook that interacts with the Lease API.
  */
 export const useLeaseRepository = () => {
-  const { getLastUpdatedByApi, getApiLease, putLeaseChecklist, getLeaseChecklist } = useApiLeases();
+  const {
+    getLastUpdatedByApi,
+    getApiLease,
+    putApiLease,
+    putLeaseChecklist,
+    getLeaseChecklist,
+    getLeaseRenewals,
+    getLeaseStakeholderTypes,
+  } = useApiLeases();
 
   const getLastUpdatedBy = useApiRequestWrapper<
     (leaseId: number) => Promise<AxiosResponse<Api_LastUpdatedBy, any>>
@@ -28,6 +39,21 @@ export const useLeaseRepository = () => {
     onError: useAxiosErrorHandler('Failed to retreive last-updated-by information for a lease.'),
   });
 
+  const updateApiLease = useApiRequestWrapper<
+    (
+      lease: ApiGen_Concepts_Lease,
+      userOverrideCodes: UserOverrideCode[],
+    ) => Promise<AxiosResponse<ApiGen_Concepts_Lease, any>>
+  >({
+    requestFunction: useCallback(
+      async (lease: ApiGen_Concepts_Lease, userOverrideCodes: UserOverrideCode[] = []) =>
+        await putApiLease(lease, userOverrideCodes),
+      [putApiLease],
+    ),
+    requestName: 'updateLease',
+    throwError: true,
+  });
+
   const getLease = useApiRequestWrapper<
     (leaseId: number) => Promise<AxiosResponse<ApiGen_Concepts_Lease, any>>
   >({
@@ -37,7 +63,19 @@ export const useLeaseRepository = () => {
     ),
     requestName: 'getApiLease',
     onSuccess: useAxiosSuccessHandler(),
-    onError: useAxiosErrorHandler('Failed to retreive lease.'),
+    onError: useAxiosErrorHandler('Failed to retrieve lease.'),
+  });
+
+  const getLeaseRenewalsApi = useApiRequestWrapper<
+    (leaseId: number) => Promise<AxiosResponse<ApiGen_Concepts_LeaseRenewal[], any>>
+  >({
+    requestFunction: useCallback(
+      async (leaseId: number) => await getLeaseRenewals(leaseId),
+      [getLeaseRenewals],
+    ),
+    requestName: 'getLeaseRenewalsApi',
+    onSuccess: useAxiosSuccessHandler(),
+    onError: useAxiosErrorHandler('Failed to retrieve lease renewals.'),
   });
 
   const getLeaseChecklistApi = useApiRequestWrapper<
@@ -64,13 +102,36 @@ export const useLeaseRepository = () => {
     throwError: true,
   });
 
+  const getLeaseStakeholderTypesApi = useApiRequestWrapper<
+    () => Promise<AxiosResponse<ApiGen_Concepts_LeaseStakeholderType[], any>>
+  >({
+    requestFunction: useCallback(
+      async () => await getLeaseStakeholderTypes(),
+      [getLeaseStakeholderTypes],
+    ),
+    requestName: 'getLeaseStakeholderTypes',
+    onSuccess: useAxiosSuccessHandler(),
+    onError: useAxiosErrorHandler('Failed to retrieve Lease Stakeholder Types.'),
+  });
+
   return useMemo(
     () => ({
       getLastUpdatedBy: getLastUpdatedBy,
+      updateLease: updateApiLease,
       getLease: getLease,
+      getLeaseRenewals: getLeaseRenewalsApi,
       getLeaseChecklist: getLeaseChecklistApi,
       putLeaseChecklist: updateLeaseChecklistApi,
+      getLeaseStakeholderTypes: getLeaseStakeholderTypesApi,
     }),
-    [getLastUpdatedBy, getLease, getLeaseChecklistApi, updateLeaseChecklistApi],
+    [
+      getLastUpdatedBy,
+      updateApiLease,
+      getLease,
+      getLeaseRenewalsApi,
+      getLeaseChecklistApi,
+      updateLeaseChecklistApi,
+      getLeaseStakeholderTypesApi,
+    ],
   );
 };

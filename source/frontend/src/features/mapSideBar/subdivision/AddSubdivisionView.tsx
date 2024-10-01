@@ -1,11 +1,15 @@
 import { FieldArray, Formik, FormikHelpers, FormikProps } from 'formik';
+import noop from 'lodash/noop';
+import { useCallback } from 'react';
 import { Tab } from 'react-bootstrap';
 import { FaInfoCircle } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-import ConsolidateSubdivideIcon from '@/assets/images/subdivisionconsolidation.svg?react';
+import SubdivisionIcon from '@/assets/images/subdivision-icon.svg?react';
+import ConfirmNavigation from '@/components/common/ConfirmNavigation';
 import { Form } from '@/components/common/form';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { Section } from '@/components/common/Section/Section';
@@ -70,10 +74,17 @@ const AddSubdivisionView: React.FunctionComponent<
   MapSelectorComponent,
   PropertySelectorPidSearchComponent,
 }) => {
+  const history = useHistory();
+
   const getAreaValue = (area: number, unit: string): number => {
     const sqm = convertArea(area, unit, AreaUnitTypes.SquareMeters);
     return Number(sqm.toFixed(4));
   };
+
+  const checkState = useCallback(() => {
+    return formikRef?.current?.dirty && !formikRef?.current?.isSubmitting;
+  }, [formikRef]);
+
   return (
     <MapSideBarLayout
       showCloseButton
@@ -147,14 +158,14 @@ const AddSubdivisionView: React.FunctionComponent<
                     const allProperties = [...values.destinationProperties];
                     await properties.reduce(async (promise, property) => {
                       return promise.then(async () => {
-                        const formProperty = PropertyForm.fromMapProperty(property);
+                        const formProperty = PropertyForm.fromFeatureDataset(property);
                         formProperty.landArea =
-                          property.landArea && property.areaUnit
-                            ? getAreaValue(property.landArea, property.areaUnit)
+                          formProperty.landArea && formProperty.areaUnit
+                            ? getAreaValue(formProperty.landArea, formProperty.areaUnit)
                             : 0;
                         formProperty.areaUnit = AreaUnitTypes.SquareMeters;
-                        if (property.pid) {
-                          formProperty.address = await getPrimaryAddressByPid(property.pid);
+                        if (formProperty.pid) {
+                          formProperty.address = await getPrimaryAddressByPid(formProperty.pid);
                           allProperties.push(formProperty.toApi());
                         } else {
                           toast.error('Selected property must have a PID');
@@ -165,8 +176,9 @@ const AddSubdivisionView: React.FunctionComponent<
                   }}
                   selectedComponentId="destination-property-selector"
                   modifiedProperties={values.destinationProperties.map(dp =>
-                    PropertyForm.fromPropertyApi(dp),
+                    PropertyForm.fromPropertyApi(dp).toFeatureDataset(),
                   )}
+                  repositionSelectedProperty={noop}
                 />
                 <FieldArray name="destinationProperties">
                   {({ remove }) => (
@@ -195,6 +207,7 @@ const AddSubdivisionView: React.FunctionComponent<
           )}
         </Formik>
       </StyledFormWrapper>
+      <ConfirmNavigation navigate={history.push} shouldBlockNavigation={checkState} />
     </MapSideBarLayout>
   );
 };
@@ -229,7 +242,7 @@ const StyledFormWrapper = styled.div`
   background-color: ${props => props.theme.css.highlightBackgroundColor};
 `;
 
-const StyledSubdivideConsolidateIcon = styled(ConsolidateSubdivideIcon)`
+const StyledSubdivideConsolidateIcon = styled(SubdivisionIcon)`
   width: 3rem;
   height: 3rem;
   margin-right: 1rem;

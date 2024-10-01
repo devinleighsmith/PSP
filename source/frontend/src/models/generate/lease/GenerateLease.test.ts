@@ -1,38 +1,42 @@
 import { ContactMethodTypes } from '@/constants/contactMethodType';
+import { ApiGen_CodeTypes_LeaseInsuranceTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseInsuranceTypes';
+import { ApiGen_CodeTypes_LeaseSecurityDepositTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseSecurityDepositTypes';
 import { ApiGen_Concepts_Insurance } from '@/models/api/generated/ApiGen_Concepts_Insurance';
 import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
-import { ApiGen_Concepts_LeaseTenant } from '@/models/api/generated/ApiGen_Concepts_LeaseTenant';
-import { ApiGen_Concepts_LeaseTerm } from '@/models/api/generated/ApiGen_Concepts_LeaseTerm';
+import { ApiGen_Concepts_LeasePeriod } from '@/models/api/generated/ApiGen_Concepts_LeasePeriod';
+import { ApiGen_Concepts_LeaseStakeholder } from '@/models/api/generated/ApiGen_Concepts_LeaseStakeholder';
 import { ApiGen_Concepts_Property } from '@/models/api/generated/ApiGen_Concepts_Property';
 import { ApiGen_Concepts_PropertyLease } from '@/models/api/generated/ApiGen_Concepts_PropertyLease';
+import { ApiGen_Concepts_SecurityDeposit } from '@/models/api/generated/ApiGen_Concepts_SecurityDeposit';
 
 import { Api_GenerateLease } from './GenerateLease';
-import { ApiGen_Concepts_SecurityDeposit } from '@/models/api/generated/ApiGen_Concepts_SecurityDeposit';
 
 describe('GenerateLease tests', () => {
   it('generates an empty lease without throwing an error', () => {
-    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], []);
+    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], [], []);
     expect(lease.file_number).toBe('');
   });
 
   it('generates a lease with a commencement_date', () => {
     const lease = new Api_GenerateLease(
-      {} as ApiGen_Concepts_Lease,
+      { startDate: '2010-01-01' } as ApiGen_Concepts_Lease,
+      [],
       [],
       [],
       [],
       [],
       [
-        { startDate: '2020-01-01' } as ApiGen_Concepts_LeaseTerm,
-        { startDate: '2022-02-02' } as ApiGen_Concepts_LeaseTerm,
+        { startDate: '2020-01-01' } as ApiGen_Concepts_LeasePeriod,
+        { startDate: '2022-02-02' } as ApiGen_Concepts_LeasePeriod,
       ],
     );
-    expect(lease.commencement_date).toBe(`January 01, 2020`);
+    expect(lease.commencement_date).toBe(`January 01, 2010`);
   });
 
   it('generates a lease with a full land_string', () => {
     const lease = new Api_GenerateLease(
       {} as ApiGen_Concepts_Lease,
+      [],
       [],
       [],
       [],
@@ -54,6 +58,7 @@ describe('GenerateLease tests', () => {
       [],
       [],
       [],
+      [],
       [
         {
           property: { pid: 1, landLegalDescription: 'test' } as ApiGen_Concepts_Property,
@@ -69,6 +74,7 @@ describe('GenerateLease tests', () => {
   it('generates a lease with no pid', () => {
     const lease = new Api_GenerateLease(
       {} as ApiGen_Concepts_Lease,
+      [],
       [],
       [],
       [],
@@ -90,6 +96,7 @@ describe('GenerateLease tests', () => {
       [],
       [],
       [],
+      [],
       [
         {
           property: { pid: 1, landLegalDescription: null } as ApiGen_Concepts_Property,
@@ -108,6 +115,7 @@ describe('GenerateLease tests', () => {
       [],
       [],
       [],
+      [],
       [
         {
           property: { pid: null, landLegalDescription: 'test' } as ApiGen_Concepts_Property,
@@ -119,76 +127,54 @@ describe('GenerateLease tests', () => {
     expect(lease.land_string).toBe(`Parcel Identifier: \ntest\n0 square feet`);
   });
 
+  it('generates a lease with primary arbitration city', () => {
+    const lease = new Api_GenerateLease(
+      { primaryArbitrationCity: 'VICTORIA' } as ApiGen_Concepts_Lease,
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    );
+    expect(lease.primary_arbitration_city).toBe(`VICTORIA`);
+  });
   it('generates a lease with no insurance information', () => {
-    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], []);
+    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], [], []);
     expect(lease.cgl_limit).toBe(`$0.00`);
     expect(lease.marine_liability_limit).toBe(`$0.00`);
     expect(lease.vehicle_liability_limit).toBe(`$0.00`);
     expect(lease.aircraft_liability_limit).toBe(`$0.00`);
+    expect(lease.uav_liability_limit).toBe(`$0.00`);
   });
 
-  it('generates a lease with cgl information', () => {
-    const lease = new Api_GenerateLease(
-      {} as ApiGen_Concepts_Lease,
-      [{ insuranceType: { id: 'GENERAL' }, coverageLimit: 1 }] as ApiGen_Concepts_Insurance[],
-      [],
-      [],
-      [],
-      [],
-    );
-    expect(lease.cgl_limit).toBe(`$1.00`);
-    expect(lease.marine_liability_limit).toBe(`$0.00`);
-    expect(lease.vehicle_liability_limit).toBe(`$0.00`);
-    expect(lease.aircraft_liability_limit).toBe(`$0.00`);
-  });
+  it.each([
+    ['CGL', ApiGen_CodeTypes_LeaseInsuranceTypes.GENERAL, 'cgl_limit'],
+    ['MARINE', ApiGen_CodeTypes_LeaseInsuranceTypes.MARINE, 'marine_liability_limit'],
+    ['AIRCRAFT', ApiGen_CodeTypes_LeaseInsuranceTypes.AIRCRAFT, 'aircraft_liability_limit'],
+    ['VEHICLE', ApiGen_CodeTypes_LeaseInsuranceTypes.VEHICLE, 'vehicle_liability_limit'],
+    ['UAV DRONE', ApiGen_CodeTypes_LeaseInsuranceTypes.UAVDRONE, 'uav_liability_limit'],
+  ])(
+    'generates a lease with %s insurance information',
+    (_, leaseInsuranceType: string, fieldName: string) => {
+      const lease = new Api_GenerateLease(
+        {} as ApiGen_Concepts_Lease,
+        [
+          { insuranceType: { id: leaseInsuranceType }, coverageLimit: 10000 },
+        ] as ApiGen_Concepts_Insurance[],
+        [],
+        [],
+        [],
+        [],
+        [],
+      );
 
-  it('generates a lease with marine information', () => {
-    const lease = new Api_GenerateLease(
-      {} as ApiGen_Concepts_Lease,
-      [{ insuranceType: { id: 'MARINE' }, coverageLimit: 1 }] as ApiGen_Concepts_Insurance[],
-      [],
-      [],
-      [],
-      [],
-    );
-    expect(lease.cgl_limit).toBe(`$0.00`);
-    expect(lease.marine_liability_limit).toBe(`$1.00`);
-    expect(lease.vehicle_liability_limit).toBe(`$0.00`);
-    expect(lease.aircraft_liability_limit).toBe(`$0.00`);
-  });
-
-  it('generates a lease with aircraft information', () => {
-    const lease = new Api_GenerateLease(
-      {} as ApiGen_Concepts_Lease,
-      [{ insuranceType: { id: 'AIRCRAFT' }, coverageLimit: 1 }] as ApiGen_Concepts_Insurance[],
-      [],
-      [],
-      [],
-      [],
-    );
-    expect(lease.cgl_limit).toBe(`$0.00`);
-    expect(lease.marine_liability_limit).toBe(`$0.00`);
-    expect(lease.vehicle_liability_limit).toBe(`$0.00`);
-    expect(lease.aircraft_liability_limit).toBe(`$1.00`);
-  });
-
-  it('generates a lease with vehicle information', () => {
-    const lease = new Api_GenerateLease(
-      {} as ApiGen_Concepts_Lease,
-      [{ insuranceType: { id: 'VEHICLE' }, coverageLimit: 1 }] as ApiGen_Concepts_Insurance[],
-      [],
-      [],
-      [],
-      [],
-    );
-    expect(lease.cgl_limit).toBe(`$0.00`);
-    expect(lease.marine_liability_limit).toBe(`$0.00`);
-    expect(lease.vehicle_liability_limit).toBe(`$1.00`);
-    expect(lease.aircraft_liability_limit).toBe(`$0.00`);
-  });
+      expect(lease[fieldName]).toBe(`$10,000.00`);
+    },
+  );
 
   it('generates a lease with no security deposit information', () => {
-    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], []);
+    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], [], []);
 
     expect(lease.security_amount).toBe(`$0.00`);
   });
@@ -196,6 +182,7 @@ describe('GenerateLease tests', () => {
   it('generates a lease with single security deposit information', () => {
     const lease = new Api_GenerateLease(
       {} as ApiGen_Concepts_Lease,
+      [],
       [],
       [],
       [
@@ -206,7 +193,7 @@ describe('GenerateLease tests', () => {
           amountPaid: 5000.0,
           depositDateOnly: '2024-04-10',
           depositType: {
-            id: 'SECURITY',
+            id: ApiGen_CodeTypes_LeaseSecurityDepositTypes.SECURITY,
             description: 'Security deposit',
             isDisabled: false,
             displayOrder: null,
@@ -250,6 +237,7 @@ describe('GenerateLease tests', () => {
       {} as ApiGen_Concepts_Lease,
       [],
       [],
+      [],
       [
         {
           id: 6,
@@ -258,7 +246,7 @@ describe('GenerateLease tests', () => {
           amountPaid: 5000.0,
           depositDateOnly: '2024-04-10',
           depositType: {
-            id: 'SECURITY',
+            id: ApiGen_CodeTypes_LeaseSecurityDepositTypes.SECURITY,
             description: 'Security deposit',
             isDisabled: false,
             displayOrder: null,
@@ -296,7 +284,7 @@ describe('GenerateLease tests', () => {
           amountPaid: 5000.0,
           depositDateOnly: '2024-04-15',
           depositType: {
-            id: 'SECURITY',
+            id: ApiGen_CodeTypes_LeaseSecurityDepositTypes.SECURITY,
             description: 'Security deposit',
             isDisabled: false,
             displayOrder: null,
@@ -336,7 +324,7 @@ describe('GenerateLease tests', () => {
   });
 
   it('generates a lease with no tenant information', () => {
-    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], []);
+    const lease = new Api_GenerateLease({} as ApiGen_Concepts_Lease, [], [], [], [], [], []);
     expect(lease.tenants).toHaveLength(0);
   });
 
@@ -346,7 +334,8 @@ describe('GenerateLease tests', () => {
       [],
       [
         { person: { firstName: 'first', middleNames: 'middle', surname: 'last' } },
-      ] as ApiGen_Concepts_LeaseTenant[],
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],
@@ -361,9 +350,10 @@ describe('GenerateLease tests', () => {
       [
         {
           person: { firstName: 'first', middleNames: 'middle', surname: 'last' },
-          tenantTypeCode: { id: 'TEN' },
+          stakeholderTypeCode: { id: 'TEN' },
         },
-      ] as ApiGen_Concepts_LeaseTenant[],
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],
@@ -377,8 +367,9 @@ describe('GenerateLease tests', () => {
       {} as ApiGen_Concepts_Lease,
       [],
       [
-        { organization: { name: 'test org' }, tenantTypeCode: { id: 'TEN' } },
-      ] as ApiGen_Concepts_LeaseTenant[],
+        { organization: { name: 'test org' }, stakeholderTypeCode: { id: 'TEN' } },
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],
@@ -394,9 +385,10 @@ describe('GenerateLease tests', () => {
       [
         {
           organization: { name: 'test org', incorporationNumber: '1234' },
-          tenantTypeCode: { id: 'TEN' },
+          stakeholderTypeCode: { id: 'TEN' },
         },
-      ] as ApiGen_Concepts_LeaseTenant[],
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],
@@ -413,9 +405,10 @@ describe('GenerateLease tests', () => {
         {
           organization: { name: 'test org' },
           primaryContact: { firstName: 'first', middleNames: 'middle', surname: 'last' },
-          tenantTypeCode: { id: 'TEN' },
+          stakeholderTypeCode: { id: 'TEN' },
         },
-      ] as ApiGen_Concepts_LeaseTenant[],
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],
@@ -443,9 +436,10 @@ describe('GenerateLease tests', () => {
               },
             ],
           },
-          tenantTypeCode: { id: 'TEN' },
+          stakeholderTypeCode: { id: 'TEN' },
         },
-      ] as ApiGen_Concepts_LeaseTenant[],
+      ] as ApiGen_Concepts_LeaseStakeholder[],
+      [],
       [],
       [],
       [],

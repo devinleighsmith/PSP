@@ -1,11 +1,9 @@
 import { AxiosError } from 'axios';
 import { FormikHelpers, FormikProps } from 'formik';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { useDispositionProvider } from '@/hooks/repositories/useDispositionProvider';
-import { usePimsPropertyRepository } from '@/hooks/repositories/usePimsPropertyRepository';
 import { usePropertyAssociations } from '@/hooks/repositories/usePropertyAssociations';
 import useApiUserOverride from '@/hooks/useApiUserOverride';
 import { useInitialMapSelectorProperties } from '@/hooks/useInitialMapSelectorProperties';
@@ -13,30 +11,30 @@ import { useModalContext } from '@/hooks/useModalContext';
 import { IApiError } from '@/interfaces/IApiError';
 import { ApiGen_Concepts_DispositionFile } from '@/models/api/generated/ApiGen_Concepts_DispositionFile';
 import { UserOverrideCode } from '@/models/api/UserOverrideCode';
-import { exists, featuresetToMapProperty, isValidId, isValidString } from '@/utils';
+import { exists, featuresetToMapProperty, isValidId } from '@/utils';
 
 import { PropertyForm } from '../../shared/models';
 import { DispositionFormModel } from '../models/DispositionFormModel';
 import { IAddDispositionContainerViewProps } from './AddDispositionContainerView';
 
 export interface IAddDispositionContainerProps {
-  onClose?: () => void;
+  onClose: () => void;
+  onSuccess: (newDispositionId: number) => void;
   View: React.FunctionComponent<React.PropsWithChildren<IAddDispositionContainerViewProps>>;
 }
 
-const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({ onClose, View }) => {
+const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({
+  onClose,
+  onSuccess,
+  View,
+}) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(true);
   const formikRef = useRef<FormikProps<DispositionFormModel>>(null);
-  const history = useHistory();
   const mapMachine = useMapStateMachine();
   const selectedFeatureDataset = mapMachine.selectedFeatureDataset;
 
   const { setModalContent, setDisplayModal } = useModalContext();
   const { execute: getPropertyAssociations } = usePropertyAssociations();
-  const {
-    getPropertyByPidWrapper: { execute: getPropertyByPid },
-    getPropertyByPinWrapper: { execute: getPropertyByPin },
-  } = usePimsPropertyRepository();
   const [needsUserConfirmation, setNeedsUserConfirmation] = useState<boolean>(true);
 
   const {
@@ -46,23 +44,8 @@ const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({ onCl
   // Warn user that property is part of an existing disposition file
   const confirmBeforeAdd = useCallback(
     async (propertyForm: PropertyForm): Promise<boolean> => {
-      let apiId;
-      try {
-        if (isValidId(propertyForm.apiId)) {
-          apiId = propertyForm.apiId;
-        } else if (isValidString(propertyForm.pid)) {
-          const result = await getPropertyByPid(propertyForm.pid);
-          apiId = result?.id;
-        } else if (isValidString(propertyForm.pin)) {
-          const result = await getPropertyByPin(Number(propertyForm.pin));
-          apiId = result?.id;
-        }
-      } catch (e) {
-        apiId = 0;
-      }
-
-      if (isValidId(apiId)) {
-        const response = await getPropertyAssociations(apiId);
+      if (isValidId(propertyForm.apiId)) {
+        const response = await getPropertyAssociations(propertyForm.apiId);
         const fileAssociations = response?.dispositionAssociations ?? [];
         const otherFiles = fileAssociations.filter(a => exists(a.id));
         return otherFiles.length > 0;
@@ -71,7 +54,7 @@ const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({ onCl
         return false;
       }
     },
-    [getPropertyAssociations, getPropertyByPid, getPropertyByPin],
+    [getPropertyAssociations],
   );
 
   const initialForm = useMemo(() => {
@@ -147,7 +130,7 @@ const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({ onCl
     bcaLoading,
   ]);
 
-  const handleCancel = useCallback(() => onClose && onClose(), [onClose]);
+  const handleCancel = useCallback(() => onClose(), [onClose]);
 
   const handleSave = async () => {
     await formikRef?.current?.validateForm();
@@ -167,7 +150,7 @@ const AddDispositionContainer: React.FC<IAddDispositionContainerProps> = ({ onCl
 
   const handleSuccess = async (disposition: ApiGen_Concepts_DispositionFile) => {
     mapMachine.refreshMapProperties();
-    history.replace(`/mapview/sidebar/disposition/${disposition.id}`);
+    onSuccess(disposition.id);
   };
 
   const handleSubmit = async (

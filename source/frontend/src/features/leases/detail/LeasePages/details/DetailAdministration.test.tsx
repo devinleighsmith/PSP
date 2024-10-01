@@ -35,6 +35,7 @@ describe('DetailAdministration component', () => {
       component,
     };
   };
+
   it('renders minimally as expected', () => {
     const { component } = setup({
       lease: {
@@ -76,6 +77,7 @@ describe('DetailAdministration component', () => {
         psFileNo: '444',
         motiName: 'test moti name',
         note: 'a test note',
+        primaryArbitrationCity: 'VICTORIA',
         expiryDate: '2022-01-01',
         hasDigitalLicense: true,
         hasPhysicalLicense: false,
@@ -90,18 +92,34 @@ describe('DetailAdministration component', () => {
       component: { getByDisplayValue },
     } = setup({
       lease: {
-        categoryType: { id: 'OTHER' },
-        otherCategoryType: 'other category text',
-        purposeType: { id: 'OTHER' },
-        otherPurposeType: 'other purpose type',
         programType: { id: 'OTHER' },
         otherProgramType: 'other program type',
         type: { id: 'OTHER' },
         otherType: 'other type',
+        leasePurposes: [
+          {
+            id: 36,
+            leaseId: 31,
+            leasePurposeTypeCode: {
+              id: 'OTHER',
+              description: 'Other*',
+              isDisabled: false,
+              displayOrder: 99,
+            },
+            purposeOtherDescription: 'PLAY POKER',
+            appCreateTimestamp: '2024-07-25T21:18:52.71',
+            appLastUpdateTimestamp: '2024-07-25T21:18:52.71',
+            appLastUpdateUserid: 'EHERRERA',
+            appCreateUserid: 'EHERRERA',
+            appLastUpdateUserGuid: '939a27d0-76cd-49b0-b474-53166adb73da',
+            appCreateUserGuid: '939a27d0-76cd-49b0-b474-53166adb73da',
+            rowVersion: 1,
+          },
+        ],
       } as any,
     });
-    expect(getByDisplayValue('other category text')).toBeVisible();
-    expect(getByDisplayValue('other purpose type')).toBeVisible();
+
+    expect(getByDisplayValue('PLAY POKER')).toBeVisible();
     expect(getByDisplayValue('other program type')).toBeVisible();
     expect(getByDisplayValue('other type')).toBeVisible();
   });
@@ -111,14 +129,13 @@ describe('DetailAdministration component', () => {
       component: { queryByDisplayValue },
     } = setup({
       lease: {
-        otherCategoryType: 'other category text',
-        otherPurposeType: 'other purpose type',
         otherProgramType: 'other program type',
         otherType: 'other type',
+        leasePurposes: [],
       } as any,
     });
-    expect(queryByDisplayValue('other category text')).toBeNull();
-    expect(queryByDisplayValue('other purpose type')).toBeNull();
+
+    expect(queryByDisplayValue('PLAY POKER')).toBeNull();
     expect(queryByDisplayValue('other program type')).toBeNull();
     expect(queryByDisplayValue('other type')).toBeNull();
   });
@@ -133,5 +150,18 @@ describe('DetailAdministration component', () => {
       },
     });
     expect(getByDisplayValue('A program')).toBeVisible();
+  });
+
+  it('renders the primary arbitration city', async () => {
+    const {
+      component: { getByDisplayValue },
+    } = setup({
+      lease: {
+        ...getEmptyLease(),
+        primaryArbitrationCity: 'Vancouver',
+      },
+    });
+
+    expect(getByDisplayValue('Vancouver')).toBeVisible();
   });
 });

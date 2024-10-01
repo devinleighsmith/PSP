@@ -8,7 +8,8 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
   <div />
   .c1 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -39,6 +40,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
 }
 
 .c2 label {
+  color: #013366;
   font-family: 'BCSans-Bold';
   font-size: 2rem;
   width: 100%;
@@ -83,11 +85,13 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
   .c3 {
   float: right;
   cursor: pointer;
+  font-size: 3.2rem;
 }
 
 .c1 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -141,7 +145,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
           </div>
         </div>
         <div
-          class="pl-8 col-auto"
+          class="pl-8 d-flex align-items-end col-auto"
         >
           <svg
             class="c3"
@@ -177,7 +181,8 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
   </div>
   .c1 {
   font-weight: bold;
-  border-bottom: 0.2rem solid;
+  color: var(--theme-blue-100);
+  border-bottom: 0.2rem var(--theme-blue-90) solid;
   margin-bottom: 2rem;
 }
 
@@ -216,7 +221,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
 }
 
 .c6 {
-  border-bottom: 0.1rem solid;
+  border-bottom: 0.1rem solid #606060;
 }
 
 .c2 {
@@ -238,6 +243,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
 }
 
 .c2 label {
+  color: #013366;
   font-family: 'BCSans-Bold';
   font-size: 2rem;
   width: 100%;
@@ -493,9 +499,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             Last condition removal date:
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
@@ -631,9 +635,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             GST collected ($):
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
@@ -693,9 +695,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             Total cost of sales ($):
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
@@ -736,9 +736,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             Net proceeds before SPP cost ($):
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
@@ -779,9 +777,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             SPP Amount ($):
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
@@ -822,9 +818,7 @@ exports[`Disposition Offer Detail View component > renders as expected 1`] = `
             class="c3"
           >
             Net proceeds after SPP cost ($):
-            <span
-              class="ml-2"
-            >
+            <span>
               <span
                 class="tooltip-icon"
                 data-testid="tooltip-icon-section-field-tooltip"
