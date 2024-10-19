@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using FluentAssertions;
-using Pims.Api.Helpers.Exceptions;
+using Pims.Core.Api.Exceptions;
 using Xunit;
 
 namespace Pims.Api.Test.Exceptions

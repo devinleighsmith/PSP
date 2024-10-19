@@ -1,7 +1,7 @@
 ARG BUILD_CONFIGURATION=Release
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 443 8080
+EXPOSE 5001 5000
 
 # Copy csproj and restore as distinct layers
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -20,6 +20,7 @@ COPY dal.keycloak/*.csproj dal.keycloak/
 COPY keycloak/*.csproj keycloak/
 COPY geocoder/*.csproj geocoder/
 COPY core/*.csproj core/
+COPY core.api/*.csproj core.api/
 COPY ltsa/*.csproj ltsa/
 COPY clamav/*.csproj clamav/
 
