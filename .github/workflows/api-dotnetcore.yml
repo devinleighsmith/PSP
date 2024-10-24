@@ -26,8 +26,11 @@ jobs:
     needs: check-changes
     if: ${{ needs.check-changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        TAG: [./source/backend/api, ./source/backend/proxy]
     env:
-      working-directory: ./source/backend
+      working-directory: 
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GIT_BRANCH: "${{github.ref}}"
 

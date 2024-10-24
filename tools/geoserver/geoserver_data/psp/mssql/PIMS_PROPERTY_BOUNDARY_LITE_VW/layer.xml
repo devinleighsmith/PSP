@@ -1,0 +1,16 @@
+<layer>
+  <name>PIMS_PROPERTY_BOUNDARY_LITE_VW</name>
+  <id>LayerInfoImpl-448ccde4:192c0a11856:-7c71</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-448ccde4:192c0a11856:-7ffc</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-448ccde4:192c0a11856:-7c72</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2024-10-24 22:35:44.414 UTC</dateCreated>
+</layer>

@@ -10,7 +10,7 @@
     <string>features</string>
     <string>PIMS_PROPERTY_LOCATION_LITE_VW</string>
   </keywords>
-  <srs>EPSG:404000</srs>
+  <srs>EPSG:3005</srs>
   <nativeBoundingBox>
     <minx>593898.7153878355</minx>
     <maxx>1677969.564075983</maxx>

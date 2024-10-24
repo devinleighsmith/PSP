@@ -47,7 +47,7 @@ namespace Pims.Api.Test.Exceptions
             var exception = new ApiHttpRequestException((string)null);
 
             // Assert
-            exception.Message.Should().Be("Exception of type 'Pims.Api.Helpers.Exceptions.ApiHttpRequestException' was thrown.");
+            exception.Message.Should().Be("Exception of type 'Pims.Core.Api.Exceptions.ApiHttpRequestException' was thrown.");
             exception.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
         #endregion
@@ -93,7 +93,7 @@ namespace Pims.Api.Test.Exceptions
             var exception = new ApiHttpRequestException((string)null, inner);
 
             // Assert
-            exception.Message.Should().Be("Exception of type 'Pims.Api.Helpers.Exceptions.ApiHttpRequestException' was thrown.");
+            exception.Message.Should().Be("Exception of type 'Pims.Core.Api.Exceptions.ApiHttpRequestException' was thrown.");
             exception.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             exception.InnerException.Should().Be(inner);
         }

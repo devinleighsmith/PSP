@@ -23,7 +23,7 @@ namespace Pims.Dal.Test.Entities
             var exception = new NotAuthorizedException();
 
             // Assert
-            exception.Message.Should().Be("Exception of type 'Pims.Dal.Exceptions.NotAuthorizedException' was thrown.");
+            exception.Message.Should().Be("Exception of type 'Pims.Core.Exceptions.NotAuthorizedException' was thrown.");
         }
 
         [Fact]
