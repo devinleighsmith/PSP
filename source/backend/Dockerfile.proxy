@@ -27,6 +27,6 @@ RUN dotnet publish "Pims.Proxy.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY proxy/entrypoint.sh .
-RUN chmod +x /app/entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]
+COPY entrypoint.sh .
+RUN chmod +x /app/entrypoint.proxy.sh
+ENTRYPOINT ["/app/entrypoint.proxy.sh"]

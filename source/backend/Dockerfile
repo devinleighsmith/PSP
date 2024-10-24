@@ -6,7 +6,7 @@ EXPOSE 5001 5000
 # Copy csproj and restore as distinct layers
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY *.sln .
+COPY api/*.sln api/
 COPY Directory.Build.props .
 COPY api/*.csproj api/
 COPY apimodels/*.csproj apimodels/
@@ -39,6 +39,6 @@ RUN dotnet publish "Pims.Api.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY entrypoint.sh .
+COPY api/entrypoint.sh .
 RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]

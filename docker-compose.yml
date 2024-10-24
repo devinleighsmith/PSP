@@ -56,11 +56,11 @@ services:
     restart: on-failure:1
     container_name: psp-proxy
     build:
-      context: source
+      context: source/backend
       dockerfile: Dockerfile.proxy
       args:
         BUILD_CONFIGURATION: Debug
-    env_file: source/proxy/proxy-api/.env
+    env_file: source/backend/proxy/.env
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
     ports:

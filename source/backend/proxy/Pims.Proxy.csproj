@@ -48,13 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Pims.Core">
-      <HintPath>..\..\backend\core\bin\Debug\net8.0\Pims.Core.dll</HintPath>
+      <HintPath>..\core\bin\Debug\net8.0\Pims.Core.dll</HintPath>
     </Reference>
     <Reference Include="Pims.Core.Api">
-      <HintPath>..\..\backend\core.api\bin\Debug\net8.0\Pims.Core.Api.dll</HintPath>
+      <HintPath>..\core.api\bin\Debug\net8.0\Pims.Core.Api.dll</HintPath>
     </Reference>
     <Reference Include="Pims.Keycloak">
-      <HintPath>..\..\backend\keycloak\bin\Debug\net8.0\Pims.Keycloak.dll</HintPath>
+      <HintPath>..\keycloak\bin\Debug\net8.0\Pims.Keycloak.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

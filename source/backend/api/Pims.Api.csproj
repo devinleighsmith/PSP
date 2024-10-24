@@ -6,7 +6,7 @@
     <Version>5.6.0-90.17</Version>
     <AssemblyVersion>5.6.0.90</AssemblyVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ProjectGuid>{300B0539-FE30-42C6-BCA3-277801DBA0A6}</ProjectGuid>
+    <ProjectGuid>{16BC0468-78F6-4C91-87DA-7403C919E646}</ProjectGuid>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
