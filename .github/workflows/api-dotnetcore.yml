@@ -28,9 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        TAG: [./source/backend/api, ./source/backend/proxy]
+        DIR: [./source/backend/api, ./source/backend/proxy]
     env:
-      working-directory: 
+      working-directory: ${{ matrix.DIR }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GIT_BRANCH: "${{github.ref}}"
 
