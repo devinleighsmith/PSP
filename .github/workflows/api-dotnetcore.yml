@@ -24,7 +24,7 @@ jobs:
 
   build-backend:
     needs: check-changes
-    if: ${{ needs.check-changes.outputs.backend == 'true' }}
+    if: ${{ needs.check-changes.outputs.backend == 'false' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
