@@ -28,9 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        DIR: [./source/backend/api, ./source/backend/proxy]
+        services: [{directory: ./source/backend/api, solution: Pims.sln}, {directory: ./source/backend/proxy, solution: Proxy.sln}]
     env:
-      working-directory: ${{ matrix.DIR }}
+      working-directory: ${{ matrix.services.directory }}
+      solution-name: ${{ matrix.services.solution }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GIT_BRANCH: "${{github.ref}}"
 
@@ -48,7 +49,7 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore ${{env.solution-name}}
         working-directory: ${{env.working-directory}}
 
       - name: Install coverlet for code coverage
@@ -56,7 +57,7 @@ jobs:
         working-directory: ${{env.working-directory}}
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ${{env.solution-name}} --configuration Release --no-restore
         working-directory: ${{env.working-directory}}
 
       - name: Test
