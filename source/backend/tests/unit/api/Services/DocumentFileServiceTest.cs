@@ -313,6 +313,11 @@ namespace Pims.Api.Test.Services
         //                Id = 1,
         //            },
         //        });
+                    {
+                        Message = "Mayan test error",
+                        Status = ExternalResponseStatus.Success,
+                        Payload = new Models.Mayan.Document.DocumentDetailModel() { Id = 1 },
+                    }
 
         //    // Act
         //    DocumentUploadRequest uploadRequest = new()
@@ -434,6 +439,7 @@ namespace Pims.Api.Test.Services
                 DocumentTypeId = 4,
                 File = this._helper.GetFormFile("Lorem Ipsum"),
                 DocumentStatusCode = "DocumentStatus",
+                DocumentId = 1,
             };
 
             await service.UploadAcquisitionDocument(1, uploadRequest);
@@ -495,6 +501,11 @@ namespace Pims.Api.Test.Services
                 ResearchFileDocumentId = 101,
                 ResearchFileId = 1,
                 DocumentId = 100,
+                    {
+                        Message = "Mayan test error",
+                        Status = ExternalResponseStatus.Success,
+                        Payload = new Models.Mayan.Document.DocumentDetailModel() { Id = 1 },
+                    }
             });
 
             // Act
@@ -504,6 +515,7 @@ namespace Pims.Api.Test.Services
                 DocumentTypeId = 4,
                 File = this._helper.GetFormFile("Lorem Ipsum"),
                 DocumentStatusCode = "DocumentStatus",
+                DocumentId = 1,
             };
 
             await service.UploadResearchDocument(1, uploadRequest);
@@ -565,6 +577,12 @@ namespace Pims.Api.Test.Services
                 LeaseDocumentId = 101,
                 LeaseId = 1,
                 DocumentId = 100,
+                    {
+                        Message = "Mayan test error",
+                        Status = ExternalResponseStatus.Success,
+                        Payload = new Models.Mayan.Document.DocumentDetailModel() { Id = 1 },
+                        
+                    }
             });
 
             // Act
@@ -574,6 +592,7 @@ namespace Pims.Api.Test.Services
                 DocumentTypeId = 4,
                 File = this._helper.GetFormFile("Lorem Ipsum"),
                 DocumentStatusCode = "DocumentStatus",
+                DocumentId = 1,
             };
 
             await service.UploadLeaseDocument(1, uploadRequest);
@@ -635,6 +654,11 @@ namespace Pims.Api.Test.Services
                 PropertyActivityDocumentId = 101,
                 PimsPropertyActivityId = 1,
                 DocumentId = 100,
+                    {
+                        Message = "Mayan test error",
+                        Status = ExternalResponseStatus.Success,
+                        Payload = new Models.Mayan.Document.DocumentDetailModel() { Id = 1 },
+                    }
             });
 
             // Act
@@ -644,6 +668,7 @@ namespace Pims.Api.Test.Services
                 DocumentTypeId = 4,
                 File = this._helper.GetFormFile("Lorem Ipsum"),
                 DocumentStatusCode = "DocumentStatus",
+                DocumentId = 1,
             };
 
             await service.UploadPropertyActivityDocument(1, uploadRequest);
@@ -705,6 +730,11 @@ namespace Pims.Api.Test.Services
                 DispositionFileDocumentId = 101,
                 DispositionFileId = 1,
                 DocumentId = 100,
+                    {
+                        Message = "Mayan test error",
+                        Status = ExternalResponseStatus.Success,
+                        Payload = new Models.Mayan.Document.DocumentDetailModel() { Id = 1 },
+                    }
             });
 
             dispositionFileDocumentRepository.Setup(x => x.AddDispositionDocument(It.IsAny<PimsDispositionFileDocument>()))
@@ -717,6 +747,7 @@ namespace Pims.Api.Test.Services
                 DocumentTypeId = 4,
                 File = this._helper.GetFormFile("Lorem Ipsum"),
                 DocumentStatusCode = "DocumentStatus",
+                DocumentId = 1,
             };
 
             await service.UploadDispositionDocument(100, uploadRequest);

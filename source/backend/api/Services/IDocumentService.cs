@@ -40,6 +40,8 @@ namespace Pims.Api.Services
 
         Task<DocumentUploadResponse> UploadDocumentAsync(DocumentUploadRequest uploadRequest);
 
+        Task<DocumentUploadResponse> UploadDocumentSync(DocumentUploadRequest uploadRequest);
+
         Task<DocumentUpdateResponse> UpdateDocumentAsync(DocumentUpdateRequest updateRequest);
 
         Task<ExternalResponse<string>> DeleteMayanStorageDocumentAsync(long mayanDocumentId);
@@ -51,5 +53,7 @@ namespace Pims.Api.Services
         Task<ExternalResponse<QueryResponse<FilePageModel>>> GetDocumentFilePageListAsync(long documentId, long documentFileId);
 
         Task<HttpResponseMessage> DownloadFilePageImageAsync(long mayanDocumentId, long mayanFileId, long mayanFilePageId);
+
+        PimsDocument AddDocument(PimsDocument newPimsDocument);
     }
 }

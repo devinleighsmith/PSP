@@ -13,9 +13,11 @@ namespace Pims.Dal.Repositories
 
         PimsDocumentQueue GetByDocumentId(long documentId);
 
+        PimsDocumentQueue TryGetById(long documentQueueId);
+
         IEnumerable<PimsDocumentQueue> GetAllByFilter(DocumentQueueFilter filter);
 
-        PimsDocumentQueue Update(PimsDocumentQueue queuedDocument);
+        PimsDocumentQueue Update(PimsDocumentQueue queuedDocument, bool removeDocument = false);
 
         bool Delete(PimsDocumentQueue queuedDocument);
 
