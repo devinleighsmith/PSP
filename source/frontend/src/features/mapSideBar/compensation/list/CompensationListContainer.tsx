@@ -199,7 +199,7 @@ export const CompensationListContainer: React.FC<ICompensationListContainerProps
       legacyPayee: null,
       isPaymentInTrust: null,
       gstNumber: null,
-      compReqLeaseStakeholder: null,
+      compReqLeaseStakeholders: null,
       compReqAcquisitionProperties: null,
       compReqLeaseProperties: null,
       ...getEmptyBaseAudit(),

@@ -26,7 +26,7 @@ export const emptyCompensationRequisition: ApiGen_Concepts_CompensationRequisiti
   expropriationVestingDate: null,
   generationDate: null,
   financials: [],
-  compReqLeaseStakeholder: [],
+  compReqLeaseStakeholders: [],
   compReqAcquisitionProperties: [],
   compReqLeaseProperties: [],
   acquisitionOwnerId: null,
@@ -136,7 +136,7 @@ export const getMockApiCompensationWithFinancials =
         h120CategoryId: null,
       },
     ],
-    compReqLeaseStakeholder: [],
+    compReqLeaseStakeholders: [],
     compReqAcquisitionProperties: [],
     compReqLeaseProperties: [],
     isPaymentInTrust: true,
@@ -153,7 +153,7 @@ export const getMockApiCompensationWithProperty = (): ApiGen_Concepts_Compensati
   fiscalYear: '2023/2024',
   specialInstruction: 'SPECIAL INSTRUCTION',
   detailedRemarks: 'DETAILED REMARKS',
-  compReqLeaseStakeholder: [],
+  compReqLeaseStakeholders: [],
   compReqAcquisitionProperties: [
     {
       compensationRequisitionPropertyId: 10000,

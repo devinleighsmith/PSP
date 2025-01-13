@@ -15,7 +15,7 @@ import { formatMoney } from '@/utils';
 import { Api_GenerateCompensationPayee } from './GenerateCompensationPayee';
 import { getOrganizationLeaseStakeholder, getPersonLeaseStakeholder } from '@/mocks/lease.mock';
 import { ApiGen_Concepts_LeaseStakeholder } from '@/models/api/generated/ApiGen_Concepts_LeaseStakeholder';
-import { ApiGen_Concepts_CompReqLeaseStakeholder } from '@/models/api/generated/ApiGen_Concepts_CompReqLeaseStakeholder';
+import { ApiGen_Concepts_compReqLeaseStakeholders } from '@/models/api/generated/ApiGen_Concepts_compReqLeaseStakeholders';
 
 describe('GenerateCompensationPayee tests', () => {
   it('can generate an empty payee without throwing an error', () => {
@@ -106,13 +106,13 @@ describe('GenerateCompensationPayee tests', () => {
     (expectedName: string, teamMember: ApiGen_Concepts_LeaseStakeholder) => {
       const compensation: ApiGen_Concepts_CompensationRequisition = {
         ...getMockApiDefaultCompensation(),
-        compReqLeaseStakeholder: [
+        compReqLeaseStakeholders: [
           {
-            compReqLeaseStakeholderId: 1000,
+            compReqLeaseStakeholdersId: 1000,
             compensationRequisitionId: 1,
             leaseStakeholderId: 100,
             leaseStakeholder: teamMember,
-          } as ApiGen_Concepts_CompReqLeaseStakeholder,
+          } as ApiGen_Concepts_compReqLeaseStakeholders,
         ],
       };
       const payee = new Api_GenerateCompensationPayee(compensation, []);
