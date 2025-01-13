@@ -224,23 +224,6 @@ describe('Compensation Detail View Component', () => {
     expect(compensationFinalizedDate).toHaveTextContent('Jun 12, 2024');
   });
 
-  it('Displays the Advanced Payment Served Date', async () => {
-    const mockCompensation = getMockApiDefaultCompensation();
-    const { queryByTestId } = await setup({
-      claims: [Claims.COMPENSATION_REQUISITION_VIEW],
-      props: {
-        compensation: {
-          ...mockCompensation,
-          isDraft: true,
-          advancedPaymentServedDate: '2023-09-18T00:00:00',
-        },
-      },
-    });
-
-    const advancedPaymntServedDate = queryByTestId('advanced-payment-served-date');
-    expect(advancedPaymntServedDate).toHaveTextContent('Sep 18, 2023');
-  });
-
   it('Displays the Product information', async () => {
     const mockCompensation = getMockApiDefaultCompensation();
     const { queryByTestId } = await setup({

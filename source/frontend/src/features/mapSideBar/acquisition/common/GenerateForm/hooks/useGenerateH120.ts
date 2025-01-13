@@ -145,14 +145,14 @@ export const useGenerateH120 = () => {
 
           file.fileProperties = fileProperties;
 
-          if (compensation.compReqLeaseStakeholder?.length > 0) {
-            const leaseStakeHolder = compensation.compReqLeaseStakeholder[0].leaseStakeholder;
+          if (compensation.compReqLeaseStakeholders?.length > 0) {
+            const leaseStakeHolder = compensation.compReqLeaseStakeholders[0].leaseStakeholder;
             if (leaseStakeHolder.lessorType.id === ApiGen_CodeTypes_LessorTypes.PER) {
               const { data } = await getPersonConcept(leaseStakeHolder.personId);
-              compensation.compReqLeaseStakeholder[0].leaseStakeholder.person = data;
+              compensation.compReqLeaseStakeholders[0].leaseStakeholder.person = data;
             } else if (leaseStakeHolder.lessorType.id === ApiGen_CodeTypes_LessorTypes.ORG) {
               const { data } = await getOrganizationConcept(leaseStakeHolder.organizationId);
-              compensation.compReqLeaseStakeholder[0].leaseStakeholder.organization = data;
+              compensation.compReqLeaseStakeholders[0].leaseStakeholder.organization = data;
             }
           }
 

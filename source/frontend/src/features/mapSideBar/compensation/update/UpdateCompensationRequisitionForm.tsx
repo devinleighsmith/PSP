@@ -9,6 +9,7 @@ import {
   FastCurrencyInput,
   FastDatePicker,
   Input,
+  Multiselect,
   ProjectSelector,
   Select,
   SelectOption,
@@ -216,13 +217,6 @@ const UpdateCompensationRequisitionForm: React.FC<CompensationRequisitionFormPro
                         formikProps={formikProps}
                       />
                     </SectionField>
-                    <SectionField
-                      label="Advanced payment served date"
-                      labelWidth="5"
-                      contentWidth="4"
-                    >
-                      <FastDatePicker field="advancedPaymentServedDate" formikProps={formikProps} />
-                    </SectionField>
                   </>
                 )}
 
@@ -287,15 +281,16 @@ const UpdateCompensationRequisitionForm: React.FC<CompensationRequisitionFormPro
 
               <Section header="Payment" isCollapsable initiallyExpanded>
                 <SectionField label="Payee" labelWidth="4" required>
-                  <Select
-                    field={withNameSpace('payee', 'payeeKey')}
-                    title={
-                      payeeOptions.find(p => p.value === formikProps.values.payee.payeeKey)
-                        ?.fullText
+                  <Multiselect<PayeeOption, PayeeOption>
+                    field="payees"
+                    selectFunction={(optionPayees, selectedPayees) =>
+                      optionPayees.filter(payee =>
+                        selectedPayees?.find(
+                          selectedPayee => selectedPayee.api_id === payee.api_id,
+                        ),
+                      )
                     }
-                    options={payeeOptions.map<SelectOption>(x => {
-                      return { label: x.text, value: x.value, title: x.fullText };
-                    })}
+                    options={payeeOptions}
                     placeholder="Select..."
                   />
                 </SectionField>

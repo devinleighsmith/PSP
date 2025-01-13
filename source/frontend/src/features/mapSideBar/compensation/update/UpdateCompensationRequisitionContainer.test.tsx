@@ -318,9 +318,9 @@ describe('UpdateCompensationRequisition Container component', () => {
       ApiGen_CodeTypes_FileTypes.Lease,
       {
         ...concept,
-        compReqLeaseStakeholder: [
+        compReqLeaseStakeholders: [
           {
-            compReqLeaseStakeholderId: null,
+            compReqLeaseStakeholdersId: null,
             compensationRequisitionId: 1,
             leaseStakeholder: null,
             leaseStakeholderId: 2,

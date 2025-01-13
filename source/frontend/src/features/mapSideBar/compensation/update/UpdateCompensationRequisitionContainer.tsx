@@ -80,7 +80,7 @@ const UpdateCompensationRequisitionContainer: React.FC<
   } = useLeaseStakeholderRepository();
 
   const updateCompensation = async (compensation: CompensationRequisitionFormModel) => {
-    const compensationApiModel = compensation.toApi(payeeOptions);
+    const compensationApiModel = compensation.toApi();
 
     const result = await updateCompensationRequisition(fileType, compensationApiModel);
     if (result !== undefined) {
@@ -99,24 +99,18 @@ const UpdateCompensationRequisitionContainer: React.FC<
 
             await Promise.all([acquisitionOwnersCall, interestHoldersCall]).then(
               ([acquisitionOwners, interestHolders]) => {
-                const matchedInterestHolder =
-                  interestHolders?.find(
-                    ih => ih.interestHolderId === compensation.interestHolderId,
-                  ) ?? null;
-                compensation.interestHolder = matchedInterestHolder;
-
                 const options = payeeOptions ?? [];
 
                 if (acquisitionOwners !== undefined) {
                   const ownersOptions: PayeeOption[] = acquisitionOwners.map(x =>
-                    PayeeOption.createOwner(x),
+                    PayeeOption.createOwner(x, null),
                   );
                   options.push(...ownersOptions);
                 }
 
                 if (interestHolders !== undefined) {
                   const interestHolderOptions: PayeeOption[] = interestHolders.map(x =>
-                    PayeeOption.createInterestHolder(x),
+                    PayeeOption.createInterestHolder(x, null),
                   );
                   options.push(...interestHolderOptions);
                 }
@@ -127,11 +121,11 @@ const UpdateCompensationRequisitionContainer: React.FC<
                       (x): x is ApiGen_Concepts_AcquisitionFileTeam =>
                         exists(x) && x.teamProfileTypeCode === 'MOTILAWYER',
                     )
-                    .map(x => PayeeOption.createTeamMember(x)) || [];
+                    .map(x => PayeeOption.createTeamMember(x, null)) || [];
                 options.push(...teamMemberOptions);
 
                 if (compensation.legacyPayee) {
-                  options.push(PayeeOption.createLegacyPayee(compensation));
+                  options.push(PayeeOption.createLegacyPayee(compensation, null));
                 }
 
                 setPayeeOptions(options);
@@ -142,8 +136,10 @@ const UpdateCompensationRequisitionContainer: React.FC<
         case ApiGen_CodeTypes_FileTypes.Lease:
           {
             const leaseStakeHolders = await getLeaseStakeholders(file.id);
-            const stakeHoldersOptions = leaseStakeHolders.map(x =>
-              PayeeOption.createLeaseStakeholder(x),
+            const stakeHoldersOptions = leaseStakeHolders.map(
+              x => null,
+              //PayeeOption.createLeaseStakeholder(x, null),
+              //TODO
             );
 
             setPayeeOptions(stakeHoldersOptions);

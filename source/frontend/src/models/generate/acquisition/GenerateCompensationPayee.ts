@@ -44,9 +44,9 @@ export class Api_GenerateCompensationPayee {
       }
     } else if (compensation?.legacyPayee) {
       this.name = compensation?.legacyPayee ?? '';
-    } else if (compensation?.compReqLeaseStakeholder?.length > 0) {
+    } else if (compensation?.compReqLeaseStakeholders?.length > 0) {
       const stakeHolder: ApiGen_Concepts_LeaseStakeholder =
-        compensation?.compReqLeaseStakeholder[0].leaseStakeholder;
+        compensation?.compReqLeaseStakeholders[0].leaseStakeholder;
       if (stakeHolder.lessorType.id === ApiGen_CodeTypes_LessorTypes.ORG) {
         this.name = stakeHolder.organization?.name ?? '';
       } else if (stakeHolder.lessorType.id === ApiGen_CodeTypes_LessorTypes.PER) {
