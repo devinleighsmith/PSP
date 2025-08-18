@@ -1950,6 +1950,7 @@ exports[`AddAcquisitionContainer component > Sub-interest file > renders as expe
                         >
                           <div
                             class="c13 form-section"
+                            data-testid="property-search-selector-section"
                           >
                             <h2
                               class="c14"
@@ -2255,7 +2256,7 @@ exports[`AddAcquisitionContainer component > Sub-interest file > renders as expe
                       <div
                         class="align-content-end col"
                       >
-                        Selected properties
+                        Selected Properties
                       </div>
                     </div>
                   </h2>
@@ -5305,6 +5306,7 @@ exports[`AddAcquisitionContainer component > renders as expected 1`] = `
                         >
                           <div
                             class="c13 form-section"
+                            data-testid="property-search-selector-section"
                           >
                             <h2
                               class="c14"
@@ -5610,7 +5612,7 @@ exports[`AddAcquisitionContainer component > renders as expected 1`] = `
                       <div
                         class="align-content-end col"
                       >
-                        Selected properties
+                        Selected Properties
                       </div>
                     </div>
                   </h2>

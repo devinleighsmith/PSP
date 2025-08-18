@@ -418,6 +418,7 @@ exports[`Activities list view > renders as expected 1`] = `
           >
             <div
               class="align-items-end primary-column col-auto"
+              data-testid="ad-hoc activities"
             >
               Activities List
             </div>
@@ -455,7 +456,7 @@ exports[`Activities list view > renders as expected 1`] = `
     >
       <div
         class="table"
-        data-testid="PropertyManagementActivitiesTable"
+        data-testid="adhoc-activity-list"
         role="table"
       >
         <div

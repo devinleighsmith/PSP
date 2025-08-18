@@ -227,7 +227,7 @@ describe('UpdateProperties component', () => {
     const canRemove = vi.fn().mockResolvedValue(true);
     const { getByTestId, getByText } = await setup({ canRemove });
 
-    const removeButton = getByTestId('remove-button');
+    const removeButton = getByTestId('delete-property-0');
     await act(async () => userEvent.click(removeButton));
 
     await waitFor(() => {
@@ -241,7 +241,7 @@ describe('UpdateProperties component', () => {
     const canRemove = vi.fn().mockResolvedValue(false);
     const { getByTestId } = await setup({ canRemove });
 
-    const removeButton = getByTestId('remove-button');
+    const removeButton = getByTestId('delete-property-0');
     await act(async () => userEvent.click(removeButton));
 
     await waitFor(() => {

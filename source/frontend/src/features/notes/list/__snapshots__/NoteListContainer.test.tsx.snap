@@ -337,6 +337,7 @@ exports[`Note List Container > renders as expected 1`] = `
           >
             <div
               class="align-items-end primary-column col-auto"
+              data-testid="notes-header"
             >
               Notes
             </div>

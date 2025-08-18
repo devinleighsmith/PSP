@@ -1197,6 +1197,7 @@ exports[`Add Disposition Container View > matches snapshot 1`] = `
                         >
                           <div
                             class="c13 form-section"
+                            data-testid="property-search-selector-section"
                           >
                             <h2
                               class="c14"
@@ -1508,7 +1509,7 @@ exports[`Add Disposition Container View > matches snapshot 1`] = `
                           <div
                             class="col-11"
                           >
-                            Selected properties
+                            Selected Properties
                           </div>
                           <div
                             class="col"
