@@ -13,18 +13,14 @@ import { Scrollable } from '@/components/common/Scrollable/Scrollable';
 import { Section } from '@/components/common/Section/Section';
 import { Claims } from '@/constants';
 import useKeycloakWrapper from '@/hooks/useKeycloakWrapper';
-import { exists } from '@/utils';
 
-import { ParcelDataset } from './models';
-import ParcelItem from './ParcelItem';
+import { ParcelDataset } from '../parcelList/models';
+import ParcelItem from '../parcelList/ParcelItem';
 
 export interface IWorklistViewProps {
   parcels: ParcelDataset[];
-  selectedId: string | null;
   canAddToOpenFile?: boolean;
-  onSelect: (id: string) => void;
   onRemove: (id: string) => void;
-  onZoomToParcel: (parcel: ParcelDataset) => void;
   onClearAll: () => void;
   onCreateResearchFile: () => void;
   onCreateAcquisitionFile: () => void;
@@ -36,11 +32,8 @@ export interface IWorklistViewProps {
 
 export const WorklistView: React.FC<IWorklistViewProps> = ({
   parcels,
-  selectedId,
   canAddToOpenFile = false,
-  onSelect,
   onRemove,
-  onZoomToParcel,
   onClearAll,
   onCreateResearchFile,
   onCreateAcquisitionFile,
@@ -131,18 +124,11 @@ export const WorklistView: React.FC<IWorklistViewProps> = ({
           {parcels.length}
           {parcels.length > 1 ? ' properties' : ' property'}
         </StyledSpan>
-        <MoreOptionsMenu options={menuOptions} />
+        <MoreOptionsMenu options={menuOptions} ariaLabel="worklist More Options" />
       </StyledHeader>
       <ScrollArea>
         {parcels.map(p => (
-          <ParcelItem
-            key={p.id}
-            parcel={p}
-            isSelected={exists(p.id) && p.id === selectedId}
-            onSelect={onSelect}
-            onRemove={onRemove}
-            onZoomToParcel={onZoomToParcel}
-          ></ParcelItem>
+          <ParcelItem key={p.id} parcel={p} onRemove={onRemove} />
         ))}
       </ScrollArea>
     </StyledContainer>

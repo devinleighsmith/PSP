@@ -4,9 +4,9 @@ import { getMockWorklistParcel } from '@/mocks/worklistParcel.mock';
 import { act, render, RenderOptions, screen } from '@/utils/test-utils';
 
 import { useWorklistContext } from './context/WorklistContext';
-import { ParcelDataset } from './models';
 import { WorklistContainer } from './WorklistContainer';
 import { IWorklistViewProps } from './WorklistView';
+import { ParcelDataset } from '../parcelList/models';
 
 vi.mock('./context/WorklistContext');
 
@@ -73,58 +73,10 @@ describe('WorklistContainer', () => {
     expect(ViewMock).toHaveBeenCalledWith(
       expect.objectContaining({
         parcels: mockParcels,
-        onSelect: select,
         onRemove: remove,
         onClearAll: clearAll,
-        onZoomToParcel: expect.any(Function),
       }),
       {},
     );
-  });
-
-  it('calls requestFlyToBounds when parcel has valid geometry', async () => {
-    const testMockMachine: IMapStateMachineContext = {
-      ...mapMachineBaseMock,
-      requestFlyToBounds,
-      requestFlyToLocation,
-    };
-
-    setup({ mockMapMachine: testMockMachine });
-    await act(async () => viewProps.onZoomToParcel(mockParcels[0]));
-
-    expect(requestFlyToBounds).toHaveBeenCalledWith(mockBounds);
-    expect(requestFlyToLocation).not.toHaveBeenCalled();
-  });
-
-  it('falls back to requestFlyToLocation if bounds are invalid', async () => {
-    mockBounds.isValid = vi.fn(() => false); // simulate invalid geometry
-
-    const testMockMachine: IMapStateMachineContext = {
-      ...mapMachineBaseMock,
-      requestFlyToBounds,
-      requestFlyToLocation,
-    };
-
-    setup({ mockMapMachine: testMockMachine });
-    await act(async () => viewProps.onZoomToParcel(mockParcels[0]));
-
-    expect(requestFlyToBounds).not.toHaveBeenCalled();
-    expect(requestFlyToLocation).toHaveBeenCalledWith(mockParcels[0].location);
-  });
-
-  it('calls requestFlyToLocation when parcel has no feature', async () => {
-    mockParcels[0].pmbcFeature = null;
-
-    const testMockMachine: IMapStateMachineContext = {
-      ...mapMachineBaseMock,
-      requestFlyToBounds,
-      requestFlyToLocation,
-    };
-
-    setup({ mockMapMachine: testMockMachine });
-    await act(async () => viewProps.onZoomToParcel(mockParcels[0]));
-
-    expect(requestFlyToLocation).toHaveBeenCalledWith(mockParcels[0].location);
-    expect(requestFlyToBounds).not.toHaveBeenCalled();
   });
 });

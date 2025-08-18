@@ -1,14 +1,9 @@
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import {
-  exists,
-  pidFromFullyAttributedFeature,
-  pinFromFullyAttributedFeature,
-  planFromFullyAttributedFeature,
-} from '@/utils';
+import { exists, pidFromFeatureSet, pinFromFeatureSet, planFromFeatureSet } from '@/utils';
 
-import { ParcelDataset } from '../models';
+import { ParcelDataset } from '../../parcelList/models';
 
 export interface IWorklistNotifier {
   error: (msg: string) => void;
@@ -111,23 +106,30 @@ function areParcelsEqual(p1: ParcelDataset, p2: ParcelDataset): boolean {
   if (p1.id === p2.id) {
     return true;
   }
+  const fs1 = p1.toSelectedFeatureDataset();
+  const fs2 = p2.toSelectedFeatureDataset();
 
-  const pid1 = pidFromFullyAttributedFeature(p1.pmbcFeature) ?? null;
-  const pid2 = pidFromFullyAttributedFeature(p2.pmbcFeature) ?? null;
+  const pid1 = pidFromFeatureSet(fs1) ?? null;
+  const pid2 = pidFromFeatureSet(fs2) ?? null;
   if (exists(pid1) && pid1 === pid2) {
     return true;
   }
 
-  const pin1 = pinFromFullyAttributedFeature(p1.pmbcFeature) ?? null;
-  const pin2 = pinFromFullyAttributedFeature(p2.pmbcFeature) ?? null;
+  if (exists(pid1) && pid1 === pid2) {
+    return true;
+  }
+
+  const pin1 = pinFromFeatureSet(fs1) ?? null;
+  const pin2 = pinFromFeatureSet(fs2) ?? null;
+
   if (exists(pin1) && pin1 === pin2) {
     return true;
   }
 
   // Some parcels are only identified by their plan-number (e.g. common strata, parks)
   // Only consider plan-number as an identifier when there are no PID/PIN
-  const planNumber1 = planFromFullyAttributedFeature(p1.pmbcFeature) ?? null;
-  const planNumber2 = planFromFullyAttributedFeature(p2.pmbcFeature) ?? null;
+  const planNumber1 = planFromFeatureSet(fs1) ?? null;
+  const planNumber2 = planFromFeatureSet(fs2) ?? null;
   if (
     exists(planNumber1) &&
     !exists(pid1) &&

@@ -3,8 +3,8 @@ import { renderHook } from '@testing-library/react-hooks';
 import { act } from '@/utils/test-utils';
 
 import { getMockWorklistParcel } from '@/mocks/worklistParcel.mock';
-import { ParcelDataset } from '../models';
 import { IWorklistNotifier, useWorklistContext, WorklistContextProvider } from './WorklistContext';
+import { ParcelDataset } from '../../parcelList/models';
 
 //  Mock notification service
 const mockNotifier: IWorklistNotifier = {

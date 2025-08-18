@@ -214,15 +214,6 @@ exports[`MapSearch component > renders as expected 1`] = `
   margin-right: 0;
 }
 
-.c5 {
-  width: 100%;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
 .c4 {
   float: right;
   cursor: pointer;
@@ -244,13 +235,26 @@ exports[`MapSearch component > renders as expected 1`] = `
   border-radius: 0.5rem;
 }
 
-.c0 {
-  height: 60%;
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.c6 {
-  overflow: auto;
-  font-size: 1.4rem;
+.c0 {
+  height: 60%;
 }
 
 <div
@@ -496,8 +500,14 @@ exports[`MapSearch component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c5 c6 pb-4"
-        />
+          class="c1 form-section c5"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -545,8 +555,14 @@ exports[`MapSearch component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c5 c6 pb-4"
-        />
+          class="c1 form-section c5"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
   </div>

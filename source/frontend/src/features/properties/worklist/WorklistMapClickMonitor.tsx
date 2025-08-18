@@ -3,8 +3,8 @@ import { usePrevious } from '@/hooks/usePrevious';
 import useDeepCompareEffect from '@/hooks/util/useDeepCompareEffect';
 import { exists } from '@/utils';
 
+import { ParcelDataset } from '../parcelList/models';
 import { useWorklistContext } from './context/WorklistContext';
-import { ParcelDataset } from './models';
 
 export const WorklistMapClickMonitor: React.FunctionComponent<unknown> = () => {
   const { add, addRange } = useWorklistContext();
@@ -18,14 +18,33 @@ export const WorklistMapClickMonitor: React.FunctionComponent<unknown> = () => {
       previous !== undefined
     ) {
       // Loop over the location featurecollection, adding it to the worklist if the parcelFeature is not there already
-      const worklistParcels: ParcelDataset[] =
-        worklistLocationFeatureDataset.fullyAttributedFeatures?.features?.map(pmbcFeature => {
-          const newParcel = ParcelDataset.fromFullyAttributedFeature(pmbcFeature);
-          newParcel.location = worklistLocationFeatureDataset.location;
-          newParcel.regionFeature = worklistLocationFeatureDataset.regionFeature;
-          newParcel.districtFeature = worklistLocationFeatureDataset.districtFeature;
-          return newParcel;
-        }) ?? [];
+      const worklistParcels: ParcelDataset[] = [];
+
+      if (exists(worklistLocationFeatureDataset.fullyAttributedFeatures)) {
+        const pmbcParcels =
+          worklistLocationFeatureDataset.fullyAttributedFeatures?.features
+            ?.map(pmbcFeature => {
+              const newParcel = ParcelDataset.fromFullyAttributedFeature(pmbcFeature);
+              newParcel.location = worklistLocationFeatureDataset.location;
+              newParcel.regionFeature = worklistLocationFeatureDataset.regionFeature;
+              newParcel.districtFeature = worklistLocationFeatureDataset.districtFeature;
+              return newParcel;
+            })
+            .filter(exists) ?? [];
+
+        worklistParcels.push(...pmbcParcels);
+      }
+
+      if (exists(worklistLocationFeatureDataset.pimsFeature)) {
+        const pimsParcel = ParcelDataset.fromPimsFeature(
+          worklistLocationFeatureDataset.pimsFeature,
+        );
+        pimsParcel.location = worklistLocationFeatureDataset.location;
+        pimsParcel.regionFeature = worklistLocationFeatureDataset.regionFeature;
+        pimsParcel.districtFeature = worklistLocationFeatureDataset.districtFeature;
+
+        worklistParcels.push(pimsParcel);
+      }
 
       if (worklistParcels.length > 0) {
         addRange(worklistParcels);

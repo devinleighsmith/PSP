@@ -10,8 +10,8 @@ import { vi } from 'vitest';
 import css from '@/assets/scss/_variables.module.scss';
 import ModalContainer from '@/components/common/ModalContainer';
 import { ModalContextProvider } from '@/contexts/modalContext';
+import { ParcelDataset } from '@/features/properties/parcelList/models';
 import { WorklistContextProvider } from '@/features/properties/worklist/context/WorklistContext';
-import { ParcelDataset } from '@/features/properties/worklist/models';
 import { ApiGen_Concepts_Organization } from '@/models/api/generated/ApiGen_Concepts_Organization';
 import { TenantConsumer, TenantProvider } from '@/tenants';
 

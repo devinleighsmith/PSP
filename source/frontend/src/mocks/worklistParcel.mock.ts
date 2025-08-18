@@ -1,7 +1,7 @@
 import * as turf from '@turf/turf';
 import { LatLngLiteral } from 'leaflet';
 
-import { ParcelDataset } from '@/features/properties/worklist/models';
+import { ParcelDataset } from '@/features/properties/parcelList/models';
 import {
   emptyPmbcParcel,
   PMBC_FullyAttributed_Feature_Properties,

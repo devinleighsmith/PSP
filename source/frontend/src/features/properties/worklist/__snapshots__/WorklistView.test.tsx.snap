@@ -470,7 +470,7 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
         <button
           aria-expanded="false"
           aria-haspopup="true"
-          aria-label="More options"
+          aria-label="worklist More Options"
           class="c3 dropdown-toggle btn btn-link"
           id="dropdown-ellipsis"
           type="button"
@@ -514,7 +514,7 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
           >
             <button
               class="c14 Button btn btn-link"
-              title="Zoom to worklist parcel"
+              title="Zoom to parcel"
               type="button"
             >
               <div
@@ -537,8 +537,8 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
             </button>
             <button
               class="c14 Button c15 c16 btn btn-primary"
-              data-testid="delete-worklist-parcel-parcel-1"
-              title="Delete worklist parcel"
+              data-testid="delete-list-parcel-parcel-1"
+              title="Delete parcel from list"
               type="button"
             >
               <div
@@ -559,6 +559,32 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
                 </svg>
               </div>
             </button>
+            <div
+              class="dropdown"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="More options"
+                class="c3 dropdown-toggle btn btn-link"
+                id="dropdown-ellipsis"
+                type="button"
+              >
+                <svg
+                  fill="currentColor"
+                  height="18"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 512 512"
+                  width="18"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -582,7 +608,7 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
           >
             <button
               class="c14 Button btn btn-link"
-              title="Zoom to worklist parcel"
+              title="Zoom to parcel"
               type="button"
             >
               <div
@@ -605,8 +631,8 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
             </button>
             <button
               class="c14 Button c15 c16 btn btn-primary"
-              data-testid="delete-worklist-parcel-parcel-2"
-              title="Delete worklist parcel"
+              data-testid="delete-list-parcel-parcel-2"
+              title="Delete parcel from list"
               type="button"
             >
               <div
@@ -627,6 +653,32 @@ exports[`WorklistView > matches snapshot with multiple parcels 1`] = `
                 </svg>
               </div>
             </button>
+            <div
+              class="dropdown"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="More options"
+                class="c3 dropdown-toggle btn btn-link"
+                id="dropdown-ellipsis"
+                type="button"
+              >
+                <svg
+                  fill="currentColor"
+                  height="18"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 512 512"
+                  width="18"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

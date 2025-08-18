@@ -1,23 +1,24 @@
 import { Feature, Geometry } from 'geojson';
 import { chain } from 'lodash';
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '@/components/common/buttons';
 import { MapFeatureData } from '@/components/common/mapFSM/models';
-import { Scrollable } from '@/components/common/Scrollable/Scrollable';
 import { Section } from '@/components/common/Section/Section';
 import { PropertyFilter } from '@/features/properties/filter';
 import {
   defaultPropertyFilter,
   IPropertyFilter,
 } from '@/features/properties/filter/IPropertyFilter';
+import { ParcelDataset } from '@/features/properties/parcelList/models';
+import { ParcelListContainer } from '@/features/properties/parcelList/ParcelListContainer';
+import { ParcelListView } from '@/features/properties/parcelList/ParcelListView';
 import { PMBC_FullyAttributed_Feature_Properties } from '@/models/layers/parcelMapBC';
 import { PIMS_Property_Location_View } from '@/models/layers/pimsPropertyLocationView';
 import { exists } from '@/utils';
-import { isStrataCommonProperty, pidFormatter } from '@/utils/propertyUtils';
+import { isStrataCommonProperty } from '@/utils/propertyUtils';
 
 export interface ISearchViewProps {
   onFilterChange: (filter: IPropertyFilter) => void;
@@ -56,7 +57,11 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
           }) ?? [],
     );
 
-  const propertyProjections = groupedFeatures.value().flatMap(x => x) ?? [];
+  const propertyProjections =
+    groupedFeatures
+      .value()
+      .flatMap(x => x)
+      .map(x => ParcelDataset.fromFullyAttributedFeature(x.feature)) ?? [];
 
   const pimsGroupedFeatures = chain(props.searchResult?.pimsLocationFeatures.features)
     .groupBy(feature => feature?.properties?.SURVEY_PLAN_NUMBER)
@@ -78,7 +83,11 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
           }) ?? [],
     );
 
-  const pimsPropertyProjections = pimsGroupedFeatures.value().flatMap(x => x) ?? [];
+  const pimsPropertyProjections =
+    pimsGroupedFeatures
+      .value()
+      .flatMap(x => x)
+      .map(x => ParcelDataset.fromPimsFeature(x.feature)) ?? [];
 
   const onOpenPropertyList = () => {
     history.push('/properties/list');
@@ -99,26 +108,10 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
           />
         </Section>
         <Section header="Results (PMBC)" isCollapsable initiallyExpanded>
-          <StyledScrollable className="pb-4">
-            {propertyProjections.map((property, index) => (
-              <StyledRow key={`feature-${property.pid}-${index}`} index={index}>
-                {property.isStrataLot && <Col>Common Property ({property.plan})</Col>}
-                {property.pid && <Col>PID: {property.pid} </Col>}
-                {property.pin && <Col>PIN: {property.pin} </Col>}
-              </StyledRow>
-            ))}
-          </StyledScrollable>
+          <ParcelListContainer View={ParcelListView} parcels={propertyProjections} />
         </Section>
         <Section header="Results (PIMS)" isCollapsable initiallyExpanded>
-          <StyledScrollable className="pb-4">
-            {pimsPropertyProjections.map((property, index) => (
-              <StyledRow key={`feature-${property.pid}-${index}`} index={index}>
-                {property.isStrataLot && <Col>Common Property ({property.plan})</Col>}
-                {property.pid && <Col>PID: {pidFormatter(property.pid)} </Col>}
-                {property.pin && <Col>PIN: {property.pin} </Col>}
-              </StyledRow>
-            ))}
-          </StyledScrollable>
+          <ParcelListContainer View={ParcelListView} parcels={pimsPropertyProjections} />
         </Section>
       </StyledWrapper>
     </>
@@ -127,24 +120,4 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
 
 const StyledWrapper = styled.div`
   height: 60%;
-`;
-
-const StyledRow = styled(Row)<{ index: number }>`
-  color: rgb(1, 51, 102);
-  font-weight: bold;
-  padding-top: 0.8rem;
-  cursor: pointer;
-  background-color: ${p => (p.index % 2 === 0 ? '#f5f6f8' : 'none')};
-
-  padding: 0.8rem;
-
-  &:hover {
-    color: var(--surface-color-primary-button-hover);
-    text-decoration: underline;
-  }
-`;
-
-const StyledScrollable = styled(Scrollable)`
-  overflow: auto;
-  font-size: 1.4rem;
 `;
