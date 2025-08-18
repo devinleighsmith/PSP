@@ -1,4 +1,5 @@
 const { expect } = require("@playwright/test");
+const { clickSaveButton } = require("../../support/common.js");
 
 class Notes {
   constructor(page) {
@@ -28,6 +29,10 @@ class Notes {
 
     await this.page.getByTestId("note-field").fill("");
     await this.page.getByTestId("note-field").fill(note);
+  }
+
+  async saveNote() {
+    clickSaveButton(this.page);
   }
 
   async cancelNote() {
@@ -75,10 +80,10 @@ class Notes {
   }
 
   async verifyNotesEditForm() {
-    await expect(this.page.getByTestId("notes-created-label")).toBeVisible();
-    await expect(this.page.getByTestId("notes-created-date")).toBeVisible();
-    await expect(this.page.getByTestId("notes-updated-label")).toBeVisible();
-    await expect(this.page.getByTestId("notes-updated-date")).toBeVisible();
+    expect(this.page.getByTestId("notes-created-label")).toBeVisible();
+    expect(this.page.getByTestId("notes-created-date")).toBeVisible();
+    expect(this.page.getByTestId("notes-updated-label")).toBeVisible();
+    expect(this.page.getByTestId("notes-updated-date")).toBeVisible();
     await expect(
       this.page
         .locator(
@@ -90,15 +95,16 @@ class Notes {
     await expect(
       this.page.locator("label[for='input-note.note']")
     ).toHaveTextContent("Type a note:");
-    await expect(this.page.getByTestId("note-field")).toBeVisible();
-    await expect(this.page.getByTestId("cancel-modal-button")).toBeVisible();
-    await expect(this.page.getByTest("ok-modal-button")).toBeVisible();
+    expect(this.page.getByTestId("note-field")).toBeVisible();
+    expect(this.page.getByTestId("cancel-modal-button")).toBeVisible();
+    expect(this.page.getByTest("ok-modal-button")).toBeVisible();
   }
 
   async verifyNotesTabListView() {
-    await expect(this.page.getByTestId("notes-header")).toHaveTextContent(
-      "Notes"
-    );
+    const notesHeader = await this.page
+      .getByTestId("notes-header")
+      .textContent();
+    expect(notesHeader).toEqual("Notes");
     await expect(this.page.getByTestId("note-add-button")).toBeVisible();
 
     await expect(

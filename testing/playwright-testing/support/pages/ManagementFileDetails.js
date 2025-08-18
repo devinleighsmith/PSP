@@ -186,7 +186,9 @@ class ManagementFileDetails {
   }
 
   async getManagementFileCode() {
-    return await this.page.getByTestId("mgmt-fileId").textContent();
+    const locator = await this.page.getByTestId("mgmt-fileId");
+    await expect(locator).toBeVisible({ timeout: 10000 });
+    return await locator.textContent();
   }
 
   async validateInitManagementFileDetailsPage() {

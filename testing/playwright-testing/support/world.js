@@ -9,6 +9,7 @@ import Notes from "./pages/Notes.js";
 import SearchManagementFiles from "./pages/SearchManagementFiles.js";
 import SharedActivities from "./pages/SharedActivities.js";
 import SharedFileProperties from "./pages/SharedFileProperties.js";
+import SharedPagination from "./pages/SharedPagination.js";
 
 // Load environment variables from .env
 dotenv.config();
@@ -27,6 +28,7 @@ class CustomWorld {
     this.searchManagementFiles = null;
     this.sharedActivities = null;
     this.sharedFileProperties = null;
+    this.sharedPagination = null;
   }
 
   async openBrowser() {
@@ -42,13 +44,14 @@ class CustomWorld {
     this.searchManagementFiles = new SearchManagementFiles(this.page);
     this.sharedActivities = new SharedActivities(this.page);
     this.sharedFileProperties = new SharedFileProperties(this.page);
+    this.sharedPagination = new SharedPagination(this.page);
 
     this.page.setDefaultTimeout(20_000);
     this.page.setDefaultNavigationTimeout(45_000);
   }
 
   async closeBrowser() {
-    await this.browser?.close();
+    //await this.browser?.close();
   }
 }
 

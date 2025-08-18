@@ -122,14 +122,12 @@ When(
 );
 
 When("I add Properties to the Management File", async function () {
-  this.sharedFileProperties = new SharedFileProperties(this.page);
-
   //Navigate to Properties for Management File
   this.sharedFileProperties.navigateToAddPropertiesToFile();
 
   //Navigate to Add Properties by search and verify Add Properties UI/UX
   this.sharedFileProperties.navigateToSearchTab();
-  this.sharedFileProperties.verifySearchPropertiesFeature();
+  this.sharedFileProperties.verifySearchTabPropertiesFeature();
 
   //Search for a property by PID
   if (managementFile.ManagementSearchProperties.PID != null) {
@@ -194,7 +192,7 @@ When("I add Properties to the Management File", async function () {
       managementFile.ManagementSearchProperties.MultiplePIDS
     );
     givenPIDs.forEach((pid) => {
-      this.sharedFileProperties.selectPropertyByPID(prop);
+      this.sharedFileProperties.selectPropertyByPID(pid);
       this.sharedFileProperties.selectFirstOptionFromSearch();
       this.sharedFileProperties.resetSearch();
     });
@@ -209,8 +207,7 @@ When("I add Properties to the Management File", async function () {
     this.sharedFileProperties.resetSearch();
   }
 
-  //Save Research File
-  clickSaveButton();
+  //Save Management File
   this.sharedFileProperties.saveFileProperties();
 });
 
@@ -235,7 +232,6 @@ When(
     this.sharedFileProperties.selectFirstOptionFromSearch();
 
     //Save changes
-    clickSaveButton(this.page);
     this.sharedFileProperties.saveFileProperties();
 
     //Delete Property
@@ -243,7 +239,6 @@ When(
     this.sharedFileProperties.deleteLastPropertyFromFile();
 
     //Save Acquisition File changes
-    clickSaveButton(this.page);
     this.sharedFileProperties.saveFileProperties();
 
     //Select 1st Property

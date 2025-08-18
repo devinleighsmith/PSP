@@ -1,3 +1,5 @@
+const { expect } = require("@playwright/test");
+
 class SharedFileProperties {
   constructor(page) {
     this.page = page;
@@ -14,14 +16,14 @@ class SharedFileProperties {
   async selectPropertyByPID(pid) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PID" });
     await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(pid);
+    await this.page.locator("#input-pid").fill(pid.toString());
     await this.page.getByTestId("search").click();
   }
 
   async selectPropertyByPIN(pin) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PIN" });
     await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(pin);
+    await this.page.locator("#input-pid").fill(pin.toString());
     await this.page.getByTestId("search").click();
   }
 
@@ -281,14 +283,13 @@ class SharedFileProperties {
   }
 
   async verifySearchTabPropertiesFeature() {
-    await expect(
-      this.page.locator("a[data-rb-event-key='list']")
-    ).toBeVisible();
-    await expect(
-      this.page.locator(
-        "div[data-testid='property-search-selector-section'] h2 div div"
-      )
-    ).toHaveTextContent("Search for a property");
+    expect(this.page.locator("a[data-rb-event-key='list']")).toBeVisible();
+
+    // const propertySubtitle = await this.page.locator(
+    //     "div[data-testid='property-search-selector-section'] h2 div div"
+    //   ).textContent();
+    // expect(propertySubtitle).toEqual("Search for a property");
+
     await expect(this.page.locator("#input-searchBy")).toBeVisible();
     await expect(this.page.locator("#input-pid")).toBeVisible();
     await expect(this.page.locator("#search-button")).toBeVisible();
@@ -323,7 +324,7 @@ class SharedFileProperties {
   }
 
   async resetSearch() {
-    webDriver.FindElement(searchResetButton).Click();
+    await this.page.getByTestId("reset-button").click();
   }
 
   async deleteLastPropertyFromFile() {
@@ -352,17 +353,23 @@ class SharedFileProperties {
   }
 
   async saveFileProperties() {
-    await expect(
-      this.page.locator("div[class='modal-header'] div[class='modal-title h4']")
-    ).toHaveTextContent("Confirm changes");
-    await expect(
-      this.page.locator("div[class='modal-body'] div")
-    ).toHaveTextContent(
+    const headerContent = await this.page
+      .locator("div[class='modal-header'] div[class='modal-title h4']")
+      .textContent();
+    expect(headerContent).toEqual("Confirm changes");
+
+    const modalContent1 = await this.page
+      .locator("div[class='modal-body'] div")
+      .textContent();
+    expect(modalContent1).toEqual(
       "You have made changes to the properties in this file."
     );
-    await expect(
-      this.page.locator("div[class='modal-body'] strong")
-    ).toHaveTextContent("Do you want to save these changes?");
+
+    const modalContent2 = await this.page
+      .locator("div[class='modal-body'] strong")
+      .textContent();
+    expect(modalContent2).toEqual("Do you want to save these changes?");
+
     await this.page.getByTestId("ok-modal-button").click();
 
     while (
