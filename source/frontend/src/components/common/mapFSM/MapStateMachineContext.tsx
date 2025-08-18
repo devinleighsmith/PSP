@@ -90,9 +90,11 @@ export interface IMapStateMachineContext {
   mapMarkerClick: (featureSelected: MarkerSelected) => void;
   mapMarkLocation: (laLng: LatLngLiteral) => void;
   mapClearLocationMark: () => void;
+  setSelectedLocation: (locationDataset: LocationFeatureDataset) => void;
 
   // worklist
   worklistMapClick: (latlng: LatLngLiteral) => void;
+  worklistAdd: (dataset: WorklistLocationFeatureDataset) => void;
 
   setMapSearchCriteria: (searchCriteria: IPropertyFilter) => void;
   refreshMapProperties: () => void;
@@ -283,6 +285,16 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
     });
   }, [serviceSend]);
 
+  const setSelectedLocation = useCallback(
+    (locationDataset: LocationFeatureDataset) => {
+      serviceSend({
+        type: 'SET_LOCATION_DATASET',
+        locationDataset,
+      });
+    },
+    [serviceSend],
+  );
+
   const mapClick = useCallback(
     (latlng: LatLngLiteral) => {
       serviceSend({
@@ -308,6 +320,16 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
       serviceSend({
         type: 'WORKLIST_MAP_CLICK',
         latlng,
+      });
+    },
+    [serviceSend],
+  );
+
+  const worklistAdd = useCallback(
+    (dataset: WorklistLocationFeatureDataset) => {
+      serviceSend({
+        type: 'WORKLIST_ADD',
+        dataset,
       });
     },
     [serviceSend],
@@ -631,6 +653,7 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
         openSidebar,
         closeSidebar,
         mapMarkLocation,
+        setSelectedLocation,
         mapClearLocationMark,
         requestFlyToLocation,
         requestCenterToLocation,
@@ -638,6 +661,7 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
         mapClick,
         mapMarkerClick,
         worklistMapClick,
+        worklistAdd,
         closePopup,
         prepareForCreation,
         processCreation,

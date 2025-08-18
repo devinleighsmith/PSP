@@ -21,7 +21,6 @@ import { AreaUnitTypes } from '@/constants';
 import { DistrictCodes } from '@/constants/districtCodes';
 import { RegionCodes } from '@/constants/regionCodes';
 import { AddressForm, PropertyForm } from '@/features/mapSideBar/shared/models';
-import { ParcelDataset } from '@/features/properties/worklist/models';
 import { ApiGen_CodeTypes_GeoJsonTypes } from '@/models/api/generated/ApiGen_CodeTypes_GeoJsonTypes';
 import { ApiGen_Concepts_FileProperty } from '@/models/api/generated/ApiGen_Concepts_FileProperty';
 import { ApiGen_Concepts_Geometry } from '@/models/api/generated/ApiGen_Concepts_Geometry';
@@ -67,16 +66,18 @@ export const getPropertyName = (property: IMapProperty): PropertyName => {
   return { label: NameSourceType.NONE, value: '' };
 };
 
-export const getWorklistPropertyName = (parcelFeature: ParcelDataset | null): PropertyName => {
-  if (!exists(parcelFeature)) {
+export const getPropertyNameFromSelectedFeatureSet = (
+  selectedFeature: SelectedFeatureDataset | null,
+): PropertyName => {
+  if (!exists(selectedFeature)) {
     return { label: NameSourceType.NONE, value: '' };
   }
 
-  const pid = pidFromFullyAttributedFeature(parcelFeature.pmbcFeature);
-  const pin = pinFromFullyAttributedFeature(parcelFeature.pmbcFeature);
-  const planNumber = planFromFullyAttributedFeature(parcelFeature.pmbcFeature);
-  const location = parcelFeature.location;
+  const pid = pidFromFeatureSet(selectedFeature);
+  const pin = pinFromFeatureSet(selectedFeature);
+  const planNumber = planFromFeatureSet(selectedFeature);
 
+  const location = selectedFeature.location;
   if (exists(pid) && pid?.toString()?.length > 0 && pid !== '0') {
     return { label: NameSourceType.PID, value: pidFormatter(pid.toString()) };
   } else if (exists(pin) && pin?.toString()?.length > 0 && pin !== '0') {
@@ -334,8 +335,8 @@ export function planFromFullyAttributedFeature(
 
 export function pidFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
   if (exists(featureset.pimsFeature?.properties)) {
-    return exists(featureset.pimsFeature?.properties?.PID)
-      ? featureset.pimsFeature?.properties?.PID?.toString()
+    return exists(featureset.pimsFeature?.properties?.PID_PADDED)
+      ? featureset.pimsFeature?.properties?.PID_PADDED?.toString()
       : null;
   }
 
@@ -350,6 +351,16 @@ export function pinFromFeatureSet(featureset: SelectedFeatureDataset): string | 
   }
 
   return pinFromFullyAttributedFeature(featureset.parcelFeature);
+}
+
+export function planFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
+  if (exists(featureset.pimsFeature?.properties)) {
+    return exists(featureset.pimsFeature?.properties?.SURVEY_PLAN_NUMBER)
+      ? featureset.pimsFeature?.properties?.SURVEY_PLAN_NUMBER?.toString()
+      : null;
+  }
+
+  return planFromFullyAttributedFeature(featureset.parcelFeature);
 }
 
 export function locationFromFileProperty(

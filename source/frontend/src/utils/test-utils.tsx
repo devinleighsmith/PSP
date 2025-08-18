@@ -18,7 +18,7 @@ import { vi } from 'vitest';
 
 import { IMapStateMachineContext } from '@/components/common/mapFSM/MapStateMachineContext';
 import { FilterProvider } from '@/components/maps/providers/FilterProvider';
-import { ParcelDataset } from '@/features/properties/worklist/models';
+import { ParcelDataset } from '@/features/properties/parcelList/models';
 import { IApiError } from '@/interfaces/IApiError';
 import { mapMachineBaseMock } from '@/mocks/mapFSM.mock';
 

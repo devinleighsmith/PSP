@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ParcelDataset } from '@/features/properties/parcelList/models';
 import { useWorklistContext } from '@/features/properties/worklist/context/WorklistContext';
-import { ParcelDataset } from '@/features/properties/worklist/models';
 import { exists } from '@/utils';
 
 export const WorklistParcelsLayer: React.FunctionComponent = () => {

@@ -1,12 +1,9 @@
-import { geoJSON } from 'leaflet';
 import { useCallback } from 'react';
 
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import usePathGenerator from '@/features/mapSideBar/shared/sidebarPathGenerator';
-import { exists } from '@/utils';
 
 import { useWorklistContext } from './context/WorklistContext';
-import { ParcelDataset } from './models';
 import { IWorklistViewProps } from './WorklistView';
 
 export interface IWorklistContainerProps {
@@ -14,27 +11,9 @@ export interface IWorklistContainerProps {
 }
 
 export const WorklistContainer: React.FC<IWorklistContainerProps> = ({ View }) => {
-  const { parcels, selectedId, select, remove, clearAll } = useWorklistContext();
-  const { requestFlyToBounds, requestFlyToLocation, prepareForCreation, isEditPropertiesMode } =
-    useMapStateMachine();
+  const { parcels, remove, clearAll } = useWorklistContext();
+  const { prepareForCreation, isEditPropertiesMode } = useMapStateMachine();
   const pathGenerator = usePathGenerator();
-
-  // A worklist parcel points to either a parcel-map boundary/shape or a lat/long (if no parcels were found at that location)
-  const onZoomToBounds = useCallback(
-    (parcel: ParcelDataset) => {
-      if (exists(parcel.pmbcFeature)) {
-        const bounds = geoJSON(parcel.pmbcFeature).getBounds();
-        if (exists(bounds) && bounds.isValid()) {
-          requestFlyToBounds(bounds);
-        } else if (exists(parcel.location)) {
-          requestFlyToLocation(parcel.location);
-        }
-      } else if (exists(parcel.location)) {
-        requestFlyToLocation(parcel.location);
-      }
-    },
-    [requestFlyToBounds, requestFlyToLocation],
-  );
 
   // Handle creating a research file from the worklist
   const handleCreateResearchFile = useCallback(() => {
@@ -97,10 +76,7 @@ export const WorklistContainer: React.FC<IWorklistContainerProps> = ({ View }) =
   return (
     <View
       parcels={parcels ?? []}
-      selectedId={selectedId}
-      onSelect={select}
       onRemove={remove}
-      onZoomToParcel={onZoomToBounds}
       onClearAll={clearAll}
       onCreateResearchFile={handleCreateResearchFile}
       onCreateAcquisitionFile={handleCreateAcquisitionFile}

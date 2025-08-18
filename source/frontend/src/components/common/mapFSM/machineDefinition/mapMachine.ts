@@ -244,6 +244,20 @@ const selectedFeatureLoaderStates = {
   states: {
     idle: {
       on: {
+        SET_LOCATION_DATASET: {
+          actions: [
+            assign({
+              isLoading: () => false,
+              showPopup: () => false,
+              mapLocationFeatureDataset: (context: any, event: any) => {
+                return {
+                  ...event.locationDataset,
+                };
+              },
+            }),
+            raise('FINISHED_LOCATION_DATA_LOAD'),
+          ],
+        },
         MAP_CLICK: {
           actions: [
             assign({
@@ -578,6 +592,15 @@ const selectedWorklistFeatureLoaderStates = {
             }),
           ],
           target: 'loading',
+        },
+        WORKLIST_ADD: {
+          actions: [
+            assign({
+              isLoading: () => false,
+              worklistSelectedMapLocation: () => null,
+              worklistLocationFeatureDataset: (context: any, event: any) => event.dataset,
+            }),
+          ],
         },
       },
     },

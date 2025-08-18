@@ -214,15 +214,6 @@ exports[`SearchContainer component > renders as expected 1`] = `
   margin-right: 0;
 }
 
-.c7 {
-  width: 100%;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
 .c5 {
   border: none;
   padding: 0;
@@ -292,13 +283,26 @@ exports[`SearchContainer component > renders as expected 1`] = `
   margin: 0;
 }
 
-.c0 {
-  height: 60%;
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.c8 {
-  overflow: auto;
-  font-size: 1.4rem;
+.c0 {
+  height: 60%;
 }
 
 <div
@@ -528,7 +532,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
                   <button
                     aria-expanded="false"
                     aria-haspopup="true"
-                    aria-label="More options"
+                    aria-label="search pmbc results more options"
                     class="c5 dropdown-toggle btn btn-link"
                     id="dropdown-ellipsis"
                     type="button"
@@ -582,8 +586,14 @@ exports[`SearchContainer component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c7 c8 pb-4"
-        />
+          class="c1 form-section c7"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -598,7 +608,45 @@ exports[`SearchContainer component > renders as expected 1`] = `
           <div
             class="align-content-end col"
           >
-            Results (PIMS)
+            <div
+              class="c4 no-gutters row"
+            >
+              <div
+                class="d-flex justify-content-start align-items-end col-auto"
+              >
+                Results (PIMS)
+              </div>
+              <div
+                class="d-flex justify-content-end my-1 col-auto"
+              >
+                <div
+                  class="dropdown"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="search pims results more options"
+                    class="c5 dropdown-toggle btn btn-link"
+                    id="dropdown-ellipsis"
+                    type="button"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 512 512"
+                      width="18"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div
             class="pl-2 d-flex align-items-end col-auto"
@@ -631,8 +679,14 @@ exports[`SearchContainer component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c7 c8 pb-4"
-        />
+          class="c1 form-section c7"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
   </div>

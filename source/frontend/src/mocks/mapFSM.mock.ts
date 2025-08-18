@@ -114,4 +114,6 @@ export const mapMachineBaseMock: IMapStateMachineContext = {
   isEditPropertiesMode: false,
   processCreation: vi.fn(),
   setEditPropertiesMode: vi.fn(),
+  worklistAdd: vi.fn(),
+  setSelectedLocation: vi.fn(),
 };
