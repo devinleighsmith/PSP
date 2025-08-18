@@ -11,6 +11,8 @@ import ManagementIcon from '@/assets/images/management-icon.svg?react';
 import ResearchIcon from '@/assets/images/research-icon.svg?react';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
+import { WorklistLocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
+import { SelectedFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import MoreOptionsMenu, { MenuOption } from '@/components/common/MoreOptionsMenu';
 import { SectionField } from '@/components/common/Section/SectionField';
 import TooltipWrapper from '@/components/common/TooltipWrapper';
@@ -30,6 +32,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     requestFlyToLocation,
     mapLocationFeatureDataset,
     prepareForCreation,
+    worklistAdd,
     isEditPropertiesMode,
   } = useMapStateMachine();
 
@@ -112,7 +115,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
   }, [mapMachine]);
 
   // Convert to an object that can be consumed by the file creation process
-  const selectedFeatureDataset = useMemo(() => {
+  const selectedFeatureDataset = useMemo<SelectedFeatureDataset>(() => {
     return {
       selectingComponentId: mapLocationFeatureDataset?.selectingComponentId ?? null,
       location: mapLocationFeatureDataset?.location,
@@ -135,6 +138,17 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     mapLocationFeatureDataset?.districtFeature,
     mapLocationFeatureDataset?.municipalityFeatures,
   ]);
+
+  const onAddToWorklist = useCallback(() => {
+    const worklistDataSet: WorklistLocationFeatureDataset = {
+      ...selectedFeatureDataset,
+      fullyAttributedFeatures: {
+        type: 'FeatureCollection',
+        features: [selectedFeatureDataset.parcelFeature],
+      },
+    };
+    worklistAdd(worklistDataSet);
+  }, [selectedFeatureDataset, worklistAdd]);
 
   const onCreateResearchFile = useCallback(() => {
     prepareForCreation([selectedFeatureDataset]);
@@ -170,6 +184,12 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
 
   const menuOptions: MenuOption[] = useMemo(() => {
     const options: MenuOption[] = [];
+
+    options.push({
+      label: 'Add to Worklist',
+      onClick: onAddToWorklist,
+      icon: <ResearchIcon width="1.5rem" height="1.5rem" fill="currentColor" />,
+    });
 
     if (keycloak.hasClaim(Claims.RESEARCH_ADD)) {
       options.push({
@@ -221,6 +241,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     isEditPropertiesMode,
     keycloak,
     onAddToOpenFile,
+    onAddToWorklist,
     onCreateAcquisitionFile,
     onCreateDispositionFile,
     onCreateLeaseFile,

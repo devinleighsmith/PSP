@@ -662,6 +662,10 @@ exports[`MapContainer > Renders the map 1`] = `
               style="z-index: 500;"
             />
             <div
+              class="leaflet-pane leaflet-searchlistParcels-pane"
+              style="z-index: 500;"
+            />
+            <div
               class="leaflet-pane leaflet-fileProperties-pane"
               style="z-index: 600;"
             />

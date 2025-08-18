@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`MapSearch component > renders as expected 1`] = `
+exports[`SearchContainer component > renders as expected 1`] = `
 <DocumentFragment>
   <div
     class="Toastify"
@@ -215,15 +215,38 @@ exports[`MapSearch component > renders as expected 1`] = `
 }
 
 .c5 {
-  width: 100%;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  overflow-y: auto;
+  border: none;
+  padding: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
-.c4 {
+.c5::after {
+  display: none !important;
+}
+
+.c5 svg {
+  color: #1a5a96;
+}
+
+.c5:focus,
+.c5:active,
+.c5:focus:active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.c6 {
   float: right;
   cursor: pointer;
   font-size: 3.2rem;
@@ -244,13 +267,42 @@ exports[`MapSearch component > renders as expected 1`] = `
   border-radius: 0.5rem;
 }
 
-.c0 {
-  height: 60%;
+.c4 {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: end;
+  min-height: 4.5rem;
 }
 
-.c6 {
-  overflow: auto;
-  font-size: 1.4rem;
+.c4 .btn {
+  margin: 0;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.c0 {
+  height: 60%;
 }
 
 <div
@@ -463,13 +515,51 @@ exports[`MapSearch component > renders as expected 1`] = `
           <div
             class="align-content-end col"
           >
-            Results (PMBC)
+            <div
+              class="c4 no-gutters row"
+            >
+              <div
+                class="d-flex justify-content-start align-items-end col-auto"
+              >
+                Results (PMBC)
+              </div>
+              <div
+                class="d-flex justify-content-end my-1 col-auto"
+              >
+                <div
+                  class="dropdown"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="search pmbc results more options"
+                    class="c5 dropdown-toggle btn btn-link"
+                    id="dropdown-ellipsis"
+                    type="button"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 512 512"
+                      width="18"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div
             class="pl-2 d-flex align-items-end col-auto"
           >
             <svg
-              class="c4"
+              class="c6"
               fill="currentColor"
               height="1em"
               stroke="currentColor"
@@ -496,8 +586,14 @@ exports[`MapSearch component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c5 c6 pb-4"
-        />
+          class="c1 form-section c7"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -512,13 +608,51 @@ exports[`MapSearch component > renders as expected 1`] = `
           <div
             class="align-content-end col"
           >
-            Results (PIMS)
+            <div
+              class="c4 no-gutters row"
+            >
+              <div
+                class="d-flex justify-content-start align-items-end col-auto"
+              >
+                Results (PIMS)
+              </div>
+              <div
+                class="d-flex justify-content-end my-1 col-auto"
+              >
+                <div
+                  class="dropdown"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="search pims results more options"
+                    class="c5 dropdown-toggle btn btn-link"
+                    id="dropdown-ellipsis"
+                    type="button"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="18"
+                      stroke="currentColor"
+                      stroke-width="0"
+                      viewBox="0 0 512 512"
+                      width="18"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <div
             class="pl-2 d-flex align-items-end col-auto"
           >
             <svg
-              class="c4"
+              class="c6"
               fill="currentColor"
               height="1em"
               stroke="currentColor"
@@ -545,8 +679,14 @@ exports[`MapSearch component > renders as expected 1`] = `
         class="collapse show"
       >
         <div
-          class="c5 c6 pb-4"
-        />
+          class="c1 form-section c7"
+        >
+          <div
+            class="collapse show"
+          >
+            No properties to show
+          </div>
+        </div>
       </div>
     </div>
   </div>

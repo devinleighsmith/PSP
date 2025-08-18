@@ -51,6 +51,7 @@ describe('WorklistMapClickMonitor', () => {
         districtFeature: null,
         regionFeature: null,
         fullyAttributedFeatures: null,
+        pimsFeature: null,
       },
     };
 
@@ -65,6 +66,7 @@ describe('WorklistMapClickMonitor', () => {
       districtFeature: null,
       regionFeature: null,
       fullyAttributedFeatures: null,
+      pimsFeature: null,
     };
 
     const testMockMachine: IMapStateMachineContext = {
@@ -77,6 +79,7 @@ describe('WorklistMapClickMonitor', () => {
           turf.point([-123.1, 49.2], { ...emptyPmbcParcel }),
           turf.point([-75.3, 39.9], { ...emptyPmbcParcel }),
         ]),
+        pimsFeature: null,
       },
     };
 
@@ -91,6 +94,7 @@ describe('WorklistMapClickMonitor', () => {
       districtFeature: null,
       regionFeature: null,
       fullyAttributedFeatures: null,
+      pimsFeature: null,
     };
 
     const testMockMachine: IMapStateMachineContext = {
@@ -100,6 +104,7 @@ describe('WorklistMapClickMonitor', () => {
         districtFeature: null,
         regionFeature: null,
         fullyAttributedFeatures: turf.featureCollection([]),
+        pimsFeature: null,
       },
     };
 
@@ -120,6 +125,7 @@ describe('WorklistMapClickMonitor', () => {
       fullyAttributedFeatures: turf.featureCollection([
         turf.point([-123, 49], { ...emptyPmbcParcel }),
       ]),
+      pimsFeature: null,
     };
 
     mockPrevious = dataset;

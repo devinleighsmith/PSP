@@ -68,6 +68,7 @@ export interface WorklistLocationFeatureDataset
     Geometry,
     PMBC_FullyAttributed_Feature_Properties
   > | null;
+  pimsFeature: Feature<Geometry, PIMS_Property_Location_View> | null;
   regionFeature: Feature<Geometry, MOT_RegionalBoundary_Feature_Properties> | null;
   districtFeature: Feature<Geometry, MOT_DistrictBoundary_Feature_Properties> | null;
 }
@@ -197,6 +198,7 @@ const useLocationFeatureLoader = () => {
       const result: WorklistLocationFeatureDataset = {
         location: latLng,
         fullyAttributedFeatures: null,
+        pimsFeature: null,
         regionFeature: null,
         districtFeature: null,
       };
