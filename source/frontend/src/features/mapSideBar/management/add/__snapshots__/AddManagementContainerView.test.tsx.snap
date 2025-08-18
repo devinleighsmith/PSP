@@ -1115,6 +1115,7 @@ exports[`Add Management Container View > matches snapshot 1`] = `
                         >
                           <div
                             class="c13 form-section"
+                            data-testid="property-search-selector-section"
                           >
                             <h2
                               class="c14"
