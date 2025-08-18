@@ -22,8 +22,8 @@ class SharedFileProperties {
 
   async selectPropertyByPIN(pin) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PIN" });
-    await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(pin.toString());
+    await this.page.locator("#input-pin").fill("");
+    await this.page.locator("#input-pin").fill(pin.toString());
     await this.page.getByTestId("search").click();
   }
 
@@ -31,8 +31,8 @@ class SharedFileProperties {
     await this.page
       .locator("#input-searchBy")
       .selectOption({ label: "Address" });
-    await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(address);
+    await this.page.locator("#input-address").fill("");
+    await this.page.locator("#input-address").fill(address);
     await this.page.getByTestId("search").click();
   }
 
@@ -40,8 +40,8 @@ class SharedFileProperties {
     await this.page
       .locator("#input-searchBy")
       .selectOption({ label: "Plan #" });
-    await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(plan);
+    await this.page.locator("#input-planNumber").fill("");
+    await this.page.locator("#input-planNumber").fill(plan);
     await this.page.getByTestId("search").click();
   }
 
@@ -49,8 +49,8 @@ class SharedFileProperties {
     await this.page
       .locator("#input-searchBy")
       .selectOption({ label: "Legal Description" });
-    await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(legalDescription);
+    await this.page.locator("#input-legalDescription").fill("");
+    await this.page.locator("#input-legalDescription").fill(legalDescription);
     await this.page.getByTestId("search").click();
   }
 
