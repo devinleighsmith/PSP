@@ -124,7 +124,7 @@ export const WorklistView: React.FC<IWorklistViewProps> = ({
           {parcels.length}
           {parcels.length > 1 ? ' properties' : ' property'}
         </StyledSpan>
-        <MoreOptionsMenu options={menuOptions} ariaLabel="worklist More Options" />
+        <MoreOptionsMenu options={menuOptions} ariaLabel="worklist more options" />
       </StyledHeader>
       <ScrollArea>
         {parcels.map(p => (

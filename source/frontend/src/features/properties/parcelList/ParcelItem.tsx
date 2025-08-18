@@ -213,14 +213,14 @@ export function ParcelItem({ parcel, onRemove }: IParcelItemProps) {
   ]);
 
   return (
-    <StyledRow
-      onClick={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        handleSelect();
-      }}
-    >
-      <StyledPidCol>
+    <StyledRow>
+      <StyledPidCol
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleSelect();
+        }}
+      >
         <StyledOverflowTip fullText={propertyIdentifier}></StyledOverflowTip>
       </StyledPidCol>
       <StyledButtonCol>
@@ -279,6 +279,7 @@ const StyledPidCol = styled(Col)`
   justify-content: flex-start;
   padding-left: 3rem;
   padding-right: 0;
+  cursor: pointer;
 `;
 
 const StyledButtonCol = styled(Col)`

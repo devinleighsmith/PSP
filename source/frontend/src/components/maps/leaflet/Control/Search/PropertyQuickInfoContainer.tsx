@@ -12,6 +12,7 @@ import ResearchIcon from '@/assets/images/research-icon.svg?react';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { WorklistLocationFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
+import { SelectedFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import MoreOptionsMenu, { MenuOption } from '@/components/common/MoreOptionsMenu';
 import { SectionField } from '@/components/common/Section/SectionField';
 import TooltipWrapper from '@/components/common/TooltipWrapper';
@@ -114,7 +115,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
   }, [mapMachine]);
 
   // Convert to an object that can be consumed by the file creation process
-  const selectedFeatureDataset = useMemo(() => {
+  const selectedFeatureDataset = useMemo<SelectedFeatureDataset>(() => {
     return {
       selectingComponentId: mapLocationFeatureDataset?.selectingComponentId ?? null,
       location: mapLocationFeatureDataset?.location,
