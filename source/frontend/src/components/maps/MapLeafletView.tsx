@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { geoJSON, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map } from 'leaflet';
+import {
+  geoJSON,
+  LatLngBounds,
+  LeafletEvent,
+  LeafletMouseEvent,
+  Map,
+  Popup as LeafletPopup,
+} from 'leaflet';
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
@@ -35,6 +42,7 @@ import { PropertyQuickInfoContainer } from './leaflet/Control/Search/PropertyQui
 import SearchControl from './leaflet/Control/SearchControl/SearchControl';
 import WorklistControl from './leaflet/Control/WorklistControl/WorklistControl';
 import { ZoomOutButton } from './leaflet/Control/ZoomOut/ZoomOutButton';
+import { LocationPopupContainer } from './leaflet/LayerPopup/LocationPopupContainer';
 import { FilePropertiesLayer } from './leaflet/Layers/FilePropertiesLayer';
 import { LeafletLayerListener } from './leaflet/Layers/LeafletLayerListener';
 import MapsearchParcelsLayer from './leaflet/Layers/MapsearchParcelsLayer';
@@ -66,6 +74,7 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
   const [zoom, setZoom] = useState(defaultZoom);
   const [isMapReady, setIsMapReady] = useState(false);
 
+  const popupRef = useRef<LeafletPopup>(null);
   const mapRef = useRef<Map | null>(null);
 
   const [activeFeatureLayer, setActiveFeatureLayer] = useState<L.GeoJSON>();
@@ -271,6 +280,11 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
         <Pane name="dataLayers" style={{ zIndex: 350 }}>
           <LeafletLayerListener pane="dataLayers" />
         </Pane>
+
+        {mapMachine.showPopup && (
+          // Draws the popup on top of the map
+          <LocationPopupContainer ref={popupRef} />
+        )}
 
         <LegendControl />
         <ZoomOutButton />

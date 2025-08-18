@@ -565,7 +565,11 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
 
   // disable map popup when repositioning file markers
   const showPopup = useMemo(() => {
-    return state.context.mapLocationFeatureDataset !== null && !isRepositioning;
+    const parcelFeatures = state.context?.mapLocationFeatureDataset?.parcelFeatures;
+    if (exists(parcelFeatures)) {
+      return parcelFeatures.length > 1 && !isRepositioning;
+    }
+    return false;
   }, [isRepositioning, state.context.mapLocationFeatureDataset]);
 
   const isShowingMapFilter = useMemo(() => {

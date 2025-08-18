@@ -325,7 +325,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
           </TooltipWrapper>
         </Col>
       </StyledHeaderRow>
-      {!isMinimized && (
+      {!isMinimized && mapMachine.isLoading === false && (
         <>
           {!hasMultipleProperties && (
             <StyledInfoWrapper>
@@ -374,6 +374,10 @@ const StyledContainer = styled.div<{ isMinimized: boolean; isVisible: boolean }>
 const StyledInfoWrapper = styled.div`
   font-size: 1.4rem;
   padding: 1rem;
+  overflow-x: hide;
+  overflow-y: auto;
+  height: 21rem;
+  width: 100%;
 `;
 
 const StyledHeaderRow = styled(Row)`

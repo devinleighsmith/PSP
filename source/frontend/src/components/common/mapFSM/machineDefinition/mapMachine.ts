@@ -311,7 +311,7 @@ const selectedFeatureLoaderStates = {
           actions: [
             assign({
               isLoading: () => false,
-              showPopup: () => true,
+              showPopup: () => false,
               mapLocationFeatureDataset: (context: any, event: any) => {
                 return {
                   ...event.data,
