@@ -64,7 +64,6 @@ When(
     expect(notesCount10).toBe(10);
 
     //Delete Note
-    const notesCount = this.notes.notesTabCount();
     this.notes.deleteLastSecondNote();
   }
 );
