@@ -23,8 +23,8 @@ import { exists, getPropertyNameFromSelectedFeatureSet, NameSourceType } from '@
 import { ParcelDataset } from './models';
 
 export interface IParcelItemProps {
-  parcel: ParcelDataset;
   canAddToWorklist: boolean;
+  parcel: ParcelDataset;
   onRemove: (id: string) => void | null;
 }
 
@@ -205,6 +205,7 @@ export function ParcelItem({ parcel, onRemove, canAddToWorklist }: IParcelItemPr
     return options;
   }, [
     canAddToOpenFile,
+    canAddToWorklist,
     handleAddToOpenFile,
     handleCreateAcquisitionFile,
     handleCreateDispositionFile,
