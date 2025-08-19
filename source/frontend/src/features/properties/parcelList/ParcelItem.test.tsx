@@ -19,6 +19,7 @@ describe('ParcelItem component', () => {
           renderOptions.props?.parcel ?? getMockWorklistParcel('parcel-1', { PID: '123456789' })
         }
         onRemove={onRemove}
+        canAddToWorklist={renderOptions.props?.canAddToWorklist ?? true}
       />,
       { ...renderOptions },
     );

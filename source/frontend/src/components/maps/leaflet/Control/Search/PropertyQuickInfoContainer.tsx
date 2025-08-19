@@ -249,9 +249,13 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     onCreateResearchFile,
   ]);
 
+  const isLoading = useMemo(() => {
+    return mapMachine.isLoading || ltsaRequestWrapper.loading;
+  }, [ltsaRequestWrapper.loading, mapMachine.isLoading]);
+
   return (
     <StyledContainer isMinimized={isMinimized} isVisible={isVisible}>
-      <LoadingBackdrop show={mapMachine.isLoading} parentScreen />
+      <LoadingBackdrop show={isLoading} parentScreen />
       <StyledHeaderRow noGutters>
         <Col xs="1">
           {showViewPropertyInfo && (
@@ -325,7 +329,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
           </TooltipWrapper>
         </Col>
       </StyledHeaderRow>
-      {!isMinimized && (
+      {!isMinimized && isLoading === false && (
         <>
           {!hasMultipleProperties && (
             <StyledInfoWrapper>
@@ -374,6 +378,10 @@ const StyledContainer = styled.div<{ isMinimized: boolean; isVisible: boolean }>
 const StyledInfoWrapper = styled.div`
   font-size: 1.4rem;
   padding: 1rem;
+  overflow-x: hide;
+  overflow-y: auto;
+  height: 21rem;
+  width: 100%;
 `;
 
 const StyledHeaderRow = styled(Row)`

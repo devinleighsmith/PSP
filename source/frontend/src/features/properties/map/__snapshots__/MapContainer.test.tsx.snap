@@ -390,6 +390,10 @@ exports[`MapContainer > Renders the map 1`] = `
 .c18 {
   font-size: 1.4rem;
   padding: 1rem;
+  overflow-x: hide;
+  overflow-y: auto;
+  height: 21rem;
+  width: 100%;
 }
 
 .c14 {
