@@ -209,9 +209,10 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
         >
           <ParcelListContainer View={ParcelListView} parcels={pimsPropertyProjections} />
         </Section>
-        {exists(props.searchResult?.highwayPlanFeatures) && (
-          <HighwayListView searchResult={props.searchResult} />
-        )}
+        {exists(props.searchResult?.highwayPlanFeatures) &&
+          props.searchResult.highwayPlanFeatures.features.length > 0 && (
+            <HighwayListView searchResult={props.searchResult} />
+          )}
       </StyledWrapper>
     </>
   );
