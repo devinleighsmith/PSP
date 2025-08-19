@@ -24,10 +24,11 @@ import { ParcelDataset } from './models';
 
 export interface IParcelItemProps {
   parcel: ParcelDataset;
+  canAddToWorklist: boolean;
   onRemove: (id: string) => void | null;
 }
 
-export function ParcelItem({ parcel, onRemove }: IParcelItemProps) {
+export function ParcelItem({ parcel, onRemove, canAddToWorklist }: IParcelItemProps) {
   const propertyName = getPropertyNameFromSelectedFeatureSet(parcel.toSelectedFeatureDataset());
   let propertyIdentifier = '';
   switch (propertyName.label) {
@@ -148,11 +149,13 @@ export function ParcelItem({ parcel, onRemove }: IParcelItemProps) {
   const menuOptions: MenuOption[] = useMemo(() => {
     const options: MenuOption[] = [];
 
-    options.push({
-      label: 'Add to Worklist',
-      onClick: onAddToWorklist,
-      icon: <ResearchIcon width="1.5rem" height="1.5rem" fill="currentColor" />,
-    });
+    if (canAddToWorklist) {
+      options.push({
+        label: 'Add to Worklist',
+        onClick: onAddToWorklist,
+        icon: <ResearchIcon width="1.5rem" height="1.5rem" fill="currentColor" />,
+      });
+    }
 
     if (keycloak.hasClaim(Claims.RESEARCH_ADD)) {
       options.push({
