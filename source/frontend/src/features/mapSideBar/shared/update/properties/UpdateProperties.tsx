@@ -5,15 +5,14 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import { Col, Row } from 'react-bootstrap';
 import { PiCornersOut } from 'react-icons/pi';
 import { toast } from 'react-toastify';
-import styled from 'styled-components';
 
 import { LinkButton } from '@/components/common/buttons/LinkButton';
 import GenericModal from '@/components/common/GenericModal';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
 import { useMapStateMachine } from '@/components/common/mapFSM/MapStateMachineContext';
 import { Section } from '@/components/common/Section/Section';
-import TooltipIcon from '@/components/common/TooltipIcon';
 import TooltipWrapper from '@/components/common/TooltipWrapper';
+import SelectedPropertyHeaderRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyHeaderRow';
 import SelectedPropertyRow from '@/components/propertySelector/selectedPropertyList/SelectedPropertyRow';
 import { SideBarContext } from '@/features/mapSideBar/context/sidebarContext';
 import MapSideBarLayout from '@/features/mapSideBar/layout/MapSideBarLayout';
@@ -244,16 +243,7 @@ export const UpdateProperties: React.FunctionComponent<IUpdatePropertiesProps> =
                     </Row>
                   }
                 >
-                  <HeaderRow className="no-gutters">
-                    <Col xs={3}>Identifier</Col>
-                    <Col md={6}>
-                      Provide a descriptive name for this land
-                      <TooltipIcon
-                        toolTipId="property-selector-tooltip"
-                        toolTip="Optionally - provide a user friendly description to identify the property, such as Highway 1"
-                      />
-                    </Col>
-                  </HeaderRow>
+                  <SelectedPropertyHeaderRow />
                   {formikProps.values.properties.map((property, index) => (
                     <SelectedPropertyRow
                       key={`property.${property.latitude}-${property.longitude}-${property.pid}-${property.apiId}`}
@@ -318,12 +308,3 @@ export const UpdateProperties: React.FunctionComponent<IUpdatePropertiesProps> =
 };
 
 export default UpdateProperties;
-
-const HeaderRow = styled(Row)`
-  font-size: 1.6rem;
-  color: ${props => props.theme.css.pimsGrey70};
-  border-bottom: 0.2rem solid ${props => props.theme.css.borderOutlineColor};
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.25rem;
-  font-family: 'BcSans-Bold';
-`;
