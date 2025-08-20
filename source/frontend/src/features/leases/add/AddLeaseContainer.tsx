@@ -174,8 +174,9 @@ export const AddLeaseContainer: React.FunctionComponent<
   };
 
   const handleCancel = useCallback(() => {
+    mapMachine.processCreation();
     onClose();
-  }, [onClose]);
+  }, [mapMachine, onClose]);
 
   const checkState = useCallback(() => {
     return formikRef?.current?.dirty && !formikRef?.current?.isSubmitting;
