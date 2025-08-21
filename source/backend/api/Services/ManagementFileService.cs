@@ -29,7 +29,7 @@ namespace Pims.Api.Services
         private readonly INoteRelationshipRepository<PimsManagementFileNote> _entityNoteRepository;
         private readonly IManagementFileStatusSolver _managementStatusSolver;
         private readonly IPropertyOperationService _propertyOperationService;
-        private readonly IPropertyActivityRepository _propertyActivityRepository;
+        private readonly IManagementActivityRepository _managementActivityRepository;
 
         public ManagementFileService(
             ClaimsPrincipal user,
@@ -42,7 +42,7 @@ namespace Pims.Api.Services
             INoteRelationshipRepository<PimsManagementFileNote> entityNoteRepository,
             IManagementFileStatusSolver managementStatusSolver,
             IPropertyOperationService propertyOperationService,
-            IPropertyActivityRepository propertyActivityRepository)
+            IManagementActivityRepository managementActivityRepository)
         {
             _user = user;
             _logger = logger;
@@ -54,7 +54,7 @@ namespace Pims.Api.Services
             _entityNoteRepository = entityNoteRepository;
             _managementStatusSolver = managementStatusSolver;
             _propertyOperationService = propertyOperationService;
-            _propertyActivityRepository = propertyActivityRepository;
+            _managementActivityRepository = managementActivityRepository;
         }
 
         public PimsManagementFile Add(PimsManagementFile managementFile, IEnumerable<UserOverrideCode> userOverrides)
@@ -226,7 +226,8 @@ namespace Pims.Api.Services
                 }
             }
 
-            IEnumerable<PimsPropPropActivity> fileActivityProperties = _propertyActivityRepository.GetActivitiesByManagementFile(managementFile.Internal_Id).SelectMany(pa => pa.PimsPropPropActivities);
+            IEnumerable<PimsManagementActivityProperty> fileActivityProperties = _managementActivityRepository.GetActivitiesByManagementFile(managementFile.Internal_Id).SelectMany(pa => pa.PimsManagementActivityProperties);
+
             // The ones not on the new set should be deleted
             List<PimsManagementFileProperty> differenceSet = currentFileProperties.Where(x => !managementFile.PimsManagementFileProperties.Any(y => y.Internal_Id == x.Internal_Id)).ToList();
             foreach (var deletedProperty in differenceSet)
@@ -262,6 +263,55 @@ namespace Pims.Api.Services
             _user.ThrowIfNotAuthorized(Permissions.ManagementView);
 
             return _managementFileRepository.GetPageDeep(filter);
+        }
+
+        public IEnumerable<PimsManagementFileContact> GetContacts(long id)
+        {
+            _logger.LogInformation("Getting management file contacts");
+            _user.ThrowIfNotAuthorized(Permissions.ManagementView);
+
+            return _managementFileRepository.GetContacts(id);
+        }
+
+        public PimsManagementFileContact GetContact(long managementFileId, long contactId)
+        {
+            _logger.LogInformation("Getting management file contact");
+            _user.ThrowIfNotAuthorized(Permissions.ManagementView);
+
+            return _managementFileRepository.GetContact(managementFileId, contactId);
+        }
+
+        public PimsManagementFileContact AddContact(PimsManagementFileContact contact)
+        {
+            _logger.LogInformation("Creating file contact");
+            _user.ThrowIfNotAuthorized(Permissions.ManagementEdit);
+
+            _managementFileRepository.AddContact(contact);
+            _managementActivityRepository.CommitTransaction();
+
+            return contact;
+        }
+
+        public PimsManagementFileContact UpdateContact(PimsManagementFileContact contact)
+        {
+            _logger.LogInformation("Updating file contact...");
+            _user.ThrowIfNotAuthorized(Permissions.ManagementEdit);
+
+            _managementFileRepository.UpdateContact(contact);
+            _managementActivityRepository.CommitTransaction();
+
+            return contact;
+        }
+
+        public bool DeleteContact(long managementFileId, long contactId)
+        {
+            _logger.LogInformation("Deleting file contact...");
+            _user.ThrowIfNotAuthorized(Permissions.ManagementEdit);
+
+            _managementFileRepository.DeleteContact(managementFileId, contactId);
+            _managementActivityRepository.CommitTransaction();
+
+            return true;
         }
 
         private static void ValidateStaff(PimsManagementFile managementFile)
@@ -399,7 +449,7 @@ namespace Pims.Api.Services
                         }
                         else
                         {
-                            throw new UserOverrideException(UserOverrideCode.ManagingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTI Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
+                            throw new UserOverrideException(UserOverrideCode.ManagingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTT Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
                         }
                     }
                 }
@@ -427,7 +477,7 @@ namespace Pims.Api.Services
                         }
                         else
                         {
-                            throw new UserOverrideException(UserOverrideCode.DisposingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTI Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
+                            throw new UserOverrideException(UserOverrideCode.DisposingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTT Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
                         }
                     }
                 }
@@ -440,7 +490,7 @@ namespace Pims.Api.Services
                     }
                     else
                     {
-                        throw new UserOverrideException(UserOverrideCode.DisposingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTI Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
+                        throw new UserOverrideException(UserOverrideCode.DisposingPropertyNotInventoried, "You have added one or more properties to the management file that are not in the MOTT Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?");
                     }
                 }
             }
@@ -467,5 +517,6 @@ namespace Pims.Api.Services
 
             return currentManagementFileStatus;
         }
+
     }
 }

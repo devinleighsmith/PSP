@@ -36,9 +36,7 @@ exports[`CreateOrganizationForm > renders as expected 1`] = `
 }
 
 .c8.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c8.btn:hover {
@@ -560,13 +558,13 @@ exports[`CreateOrganizationForm > renders as expected 1`] = `
                     >
                       <button
                         class="c8 Button c9 btn btn-link"
+                        data-testid="remove-button"
                         type="button"
                       >
                         <div
                           class="Button__value"
                         >
                           <svg
-                            data-testid="remove-button"
                             fill="currentColor"
                             height="2rem"
                             stroke="currentColor"
@@ -702,13 +700,13 @@ exports[`CreateOrganizationForm > renders as expected 1`] = `
                   >
                     <button
                       class="c8 Button c9 btn btn-link"
+                      data-testid="remove-button"
                       type="button"
                     >
                       <div
                         class="Button__value"
                       >
                         <svg
-                          data-testid="remove-button"
                           fill="currentColor"
                           height="2rem"
                           stroke="currentColor"
@@ -1589,9 +1587,7 @@ exports[`CreateOrganizationForm > renders as expected 1`] = `
 }
 
 .c2.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c2.btn:hover {

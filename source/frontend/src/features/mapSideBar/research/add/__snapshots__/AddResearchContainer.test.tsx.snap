@@ -44,9 +44,7 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
 }
 
 .c4.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c4.btn:hover {
@@ -603,7 +601,11 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
               />
             </svg>
           </div>
-          Create Research File
+          <div
+            data-testid="form-title"
+          >
+            Create Research File
+          </div>
         </h1>
       </div>
       <div
@@ -778,7 +780,7 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
                       Name of the area
                     </li>
                     <li>
-                      Name of the MoTI highway district
+                      Name of the MOTT highway district
                     </li>
                     <li>
                       Name of the enquirer
@@ -1088,6 +1090,7 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
                         >
                           <div
                             class="c13 form-section"
+                            data-testid="property-search-selector-section"
                           >
                             <h2
                               class="c20"
@@ -1458,6 +1461,7 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
           >
             <button
               class="c4 Button btn btn-secondary"
+              data-testid="cancel-button"
               type="button"
             >
               <div
@@ -1472,6 +1476,7 @@ exports[`AddResearchContainer component > renders as expected 1`] = `
           >
             <button
               class="c4 Button mr-9 btn btn-primary"
+              data-testid="save-button"
               type="button"
             >
               <div
