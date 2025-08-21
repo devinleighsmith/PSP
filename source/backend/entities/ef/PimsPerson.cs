@@ -163,11 +163,26 @@ public partial class PimsPerson
     [InverseProperty("PrimaryContact")]
     public virtual ICollection<PimsLeaseStakeholder> PimsLeaseStakeholderPrimaryContacts { get; set; } = new List<PimsLeaseStakeholder>();
 
+    [InverseProperty("ServiceProviderPerson")]
+    public virtual ICollection<PimsManagementActivity> PimsManagementActivities { get; set; } = new List<PimsManagementActivity>();
+
+    [InverseProperty("Person")]
+    public virtual ICollection<PimsManagementFileContact> PimsManagementFileContactPeople { get; set; } = new List<PimsManagementFileContact>();
+
+    [InverseProperty("PrimaryContact")]
+    public virtual ICollection<PimsManagementFileContact> PimsManagementFileContactPrimaryContacts { get; set; } = new List<PimsManagementFileContact>();
+
     [InverseProperty("Person")]
     public virtual ICollection<PimsManagementFileTeam> PimsManagementFileTeamPeople { get; set; } = new List<PimsManagementFileTeam>();
 
     [InverseProperty("PrimaryContact")]
     public virtual ICollection<PimsManagementFileTeam> PimsManagementFileTeamPrimaryContacts { get; set; } = new List<PimsManagementFileTeam>();
+
+    [InverseProperty("Person")]
+    public virtual ICollection<PimsMgmtActInvolvedParty> PimsMgmtActInvolvedParties { get; set; } = new List<PimsMgmtActInvolvedParty>();
+
+    [InverseProperty("Person")]
+    public virtual ICollection<PimsMgmtActMinContact> PimsMgmtActMinContacts { get; set; } = new List<PimsMgmtActMinContact>();
 
     [InverseProperty("Person")]
     public virtual ICollection<PimsPersonAddress> PimsPersonAddresses { get; set; } = new List<PimsPersonAddress>();
@@ -177,15 +192,6 @@ public partial class PimsPerson
 
     [InverseProperty("Person")]
     public virtual ICollection<PimsProjectPerson> PimsProjectPeople { get; set; } = new List<PimsProjectPerson>();
-
-    [InverseProperty("Person")]
-    public virtual ICollection<PimsPropActInvolvedParty> PimsPropActInvolvedParties { get; set; } = new List<PimsPropActInvolvedParty>();
-
-    [InverseProperty("Person")]
-    public virtual ICollection<PimsPropActMinContact> PimsPropActMinContacts { get; set; } = new List<PimsPropActMinContact>();
-
-    [InverseProperty("ServiceProviderPerson")]
-    public virtual ICollection<PimsPropertyActivity> PimsPropertyActivities { get; set; } = new List<PimsPropertyActivity>();
 
     [InverseProperty("Person")]
     public virtual ICollection<PimsPropertyContact> PimsPropertyContactPeople { get; set; } = new List<PimsPropertyContact>();

@@ -44,9 +44,7 @@ exports[`Add Subdivision View > matches snapshot 1`] = `
 }
 
 .c4.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c4.btn:hover {
@@ -497,7 +495,11 @@ exports[`Add Subdivision View > matches snapshot 1`] = `
               />
             </svg>
           </div>
-          Create a Subdivision
+          <div
+            data-testid="form-title"
+          >
+            Create a Subdivision
+          </div>
         </h1>
       </div>
       <div
@@ -803,6 +805,7 @@ exports[`Add Subdivision View > matches snapshot 1`] = `
           >
             <button
               class="c4 Button btn btn-secondary"
+              data-testid="cancel-button"
               type="button"
             >
               <div
@@ -817,6 +820,7 @@ exports[`Add Subdivision View > matches snapshot 1`] = `
           >
             <button
               class="c4 Button mr-9 btn btn-primary"
+              data-testid="save-button"
               type="button"
             >
               <div

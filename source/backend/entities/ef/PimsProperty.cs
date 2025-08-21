@@ -115,10 +115,16 @@ public partial class PimsProperty
     [StringLength(20)]
     public string PphStatusTypeCode { get; set; }
 
+    /// <summary>
+    /// Foreign key to the PIMS_UTILITY_RESPONSIBILITY_TYPE table.
+    /// </summary>
     [Column("UTILITY_RESPONSIBILITY_TYPE_CODE")]
     [StringLength(20)]
     public string UtilityResponsibilityTypeCode { get; set; }
 
+    /// <summary>
+    /// Foreign key to the PIMS_TAX_RESPONSIBILITY_TYPE table.
+    /// </summary>
     [Column("TAX_RESPONSIBILITY_TYPE_CODE")]
     [StringLength(20)]
     public string TaxResponsibilityTypeCode { get; set; }
@@ -205,13 +211,6 @@ public partial class PimsProperty
     /// </summary>
     [Column("SURPLUS_DECLARATION_DATE", TypeName = "datetime")]
     public DateTime? SurplusDeclarationDate { get; set; }
-
-    /// <summary>
-    /// Notes about the property
-    /// </summary>
-    [Column("NOTES")]
-    [StringLength(4000)]
-    public string Notes { get; set; }
 
     /// <summary>
     /// Municipal zoning that applies this property.
@@ -301,6 +300,13 @@ public partial class PimsProperty
     [Column("RESERVE_NAME")]
     [StringLength(100)]
     public string ReserveName { get; set; }
+
+    /// <summary>
+    /// Contains the Glocal UID from ParcelMapBC.
+    /// </summary>
+    [Column("GLOBAL_UID")]
+    [StringLength(254)]
+    public string GlobalUid { get; set; }
 
     /// <summary>
     /// Application code is responsible for retrieving the row and then incrementing the value of the CONCURRENCY_CONTROL_NUMBER column by one prior to issuing an update. If this is done then the update will succeed, provided that the row was not updated by any o
@@ -407,10 +413,10 @@ public partial class PimsProperty
     public virtual ICollection<PimsHistoricalFileNumber> PimsHistoricalFileNumbers { get; set; } = new List<PimsHistoricalFileNumber>();
 
     [InverseProperty("Property")]
-    public virtual ICollection<PimsManagementFileProperty> PimsManagementFileProperties { get; set; } = new List<PimsManagementFileProperty>();
+    public virtual ICollection<PimsManagementActivityProperty> PimsManagementActivityProperties { get; set; } = new List<PimsManagementActivityProperty>();
 
     [InverseProperty("Property")]
-    public virtual ICollection<PimsPropPropActivity> PimsPropPropActivities { get; set; } = new List<PimsPropPropActivity>();
+    public virtual ICollection<PimsManagementFileProperty> PimsManagementFileProperties { get; set; } = new List<PimsManagementFileProperty>();
 
     [InverseProperty("Property")]
     public virtual ICollection<PimsPropPropAnomalyTyp> PimsPropPropAnomalyTyps { get; set; } = new List<PimsPropPropAnomalyTyp>();

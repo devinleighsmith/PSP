@@ -31,9 +31,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
 }
 
 .c4.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c4.btn:hover {
@@ -484,9 +482,20 @@ exports[`UpdateProperties component > renders as expected 1`] = `
 }
 
 .c28 {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  margin: 0.15rem;
+  witdh: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+  line-break: break-all;
 }
 
 .c26 {
@@ -621,7 +630,11 @@ exports[`UpdateProperties component > renders as expected 1`] = `
             <div
               class="mr-2 mb-1"
             />
-            Property selection
+            <div
+              data-testid="form-title"
+            >
+              Property selection
+            </div>
           </h1>
         </div>
         <div
@@ -922,6 +935,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
                   >
                     <div
                       class="c13 form-section"
+                      data-testid="property-search-selector-section"
                     >
                       <h2
                         class="c20"
@@ -1377,6 +1391,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
                 >
                   <button
                     class="c4 Button btn btn-link"
+                    data-testid="zoom-to-property-0"
                     type="button"
                   >
                     <div
@@ -1404,6 +1419,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
                 >
                   <button
                     class="c4 Button c30 btn btn-primary"
+                    data-testid="move-pin-location-0"
                     title="move-pin-location"
                     type="button"
                   >
@@ -1431,13 +1447,13 @@ exports[`UpdateProperties component > renders as expected 1`] = `
                 >
                   <button
                     class="c4 Button c31 btn btn-link"
+                    data-testid="delete-property-0"
                     type="button"
                   >
                     <div
                       class="Button__value"
                     >
                       <svg
-                        data-testid="remove-button"
                         fill="currentColor"
                         height="2rem"
                         stroke="currentColor"
@@ -1484,6 +1500,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
             >
               <button
                 class="c4 Button btn btn-secondary"
+                data-testid="cancel-button"
                 type="button"
               >
                 <div
@@ -1498,6 +1515,7 @@ exports[`UpdateProperties component > renders as expected 1`] = `
             >
               <button
                 class="c4 Button mr-9 btn btn-primary"
+                data-testid="save-button"
                 type="button"
               >
                 <div
