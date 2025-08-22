@@ -61,6 +61,7 @@ export const GeocoderAutoComplete: React.FC<
       async (val: string, abort: boolean) => {
         if (!abort) {
           const addresses = (await searchAddress(val)) || [];
+          console.log(addresses);
           setOptions(addresses);
         }
       },
