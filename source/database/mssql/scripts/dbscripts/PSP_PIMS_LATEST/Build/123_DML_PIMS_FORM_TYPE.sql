@@ -23,6 +23,7 @@ VALUES
   (N'FORM5',      N'Certificate of Approval of Expropriation (Form 5)'),
   (N'FORM8',      N'Notice of Advance Payment (Form 8)'),
   (N'FORM9',      N'Vesting Notice (Form 9)'),
+  (N'H1005' ,     N'Licence of Occupation for Provincial Public Highway (H-1005)'),
   (N'H1005A',     N'Licence of Occupation (BCTFA as licensor) (H1005 A)'),
   (N'H179PTO',    N'Optional Lease to Accompany H-179 (P) and H-179 (T)'),
   (N'H179FSPART', N'Agreement of Purchase and Sale H0179 (FS Part)'),
