@@ -1,11 +1,9 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import { FormDocumentType } from '@/constants/formDocumentTypes';
 import { SideBarContextProvider } from '@/features/mapSideBar/context/sidebarContext';
 import { mockAcquisitionFileResponse } from '@/mocks/acquisitionFiles.mock';
 import { mockLookups } from '@/mocks/lookups.mock';
-import { mapMachineBaseMock } from '@/mocks/mapFSM.mock';
 import { lookupCodesSlice } from '@/store/slices/lookupCodes';
 import { act, render, RenderOptions, waitFor } from '@/utils/test-utils';
 
@@ -14,6 +12,7 @@ import { IGenerateFormViewProps } from './GenerateFormView';
 import { useGenerateH0443 } from './hooks/useGenerateH0443';
 import { useGenerateLetter } from './hooks/useGenerateLetter';
 import { ApiGen_CodeTypes_FileTypes } from '@/models/api/generated/ApiGen_CodeTypes_FileTypes';
+import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 
 const mockAxios = new MockAdapter(axios);
 const generateLetterFn = vi.fn();
@@ -95,7 +94,7 @@ describe('GenerateFormContainer component', () => {
   it('calls document H0443 generation', async () => {
     vi.spyOn(global, 'confirm' as any).mockReturnValueOnce(true);
 
-    await act(async () => viewProps.onGenerateClick(FormDocumentType.H0443));
+    await act(async () => viewProps.onGenerateClick(ApiGen_CodeTypes_FormTypes.H0443));
     await waitFor(async () => {
       expect(generateLetterFn).toHaveBeenCalledTimes(0);
       expect(generateH0443Fn).toHaveBeenCalledTimes(1);
@@ -105,7 +104,7 @@ describe('GenerateFormContainer component', () => {
   it('opens document letter generation modal', async () => {
     vi.spyOn(global, 'confirm' as any).mockReturnValueOnce(true);
 
-    await act(async () => viewProps.onGenerateClick(FormDocumentType.LETTER));
+    await act(async () => viewProps.onGenerateClick(ApiGen_CodeTypes_FormTypes.LETTER));
     await waitFor(async () => {
       expect(generateLetterFn).toHaveBeenCalledTimes(0);
       expect(generateH0443Fn).toHaveBeenCalledTimes(0);

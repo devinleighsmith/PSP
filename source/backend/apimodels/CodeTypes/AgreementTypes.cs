@@ -17,5 +17,11 @@ namespace Pims.Api.Models.CodeTypes
 
         [EnumMember(Value = "H179T")]
         H179T,
+
+        [EnumMember(Value = "H179FSPART")]
+        H179FSPART,
+
+        [EnumMember(Value = "TOTAL")]
+        TOTAL,
     }
 }
