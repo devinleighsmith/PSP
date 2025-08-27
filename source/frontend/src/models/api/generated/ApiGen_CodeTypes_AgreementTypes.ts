@@ -9,4 +9,5 @@ export enum ApiGen_CodeTypes_AgreementTypes {
   H179T = 'H179T',
   H179FSPART = 'H179FSPART',
   TOTAL = 'TOTAL',
+  H179PTO = 'H179PTO',
 }

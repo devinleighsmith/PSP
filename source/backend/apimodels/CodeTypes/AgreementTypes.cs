@@ -23,5 +23,8 @@ namespace Pims.Api.Models.CodeTypes
 
         [EnumMember(Value = "TOTAL")]
         TOTAL,
+
+        [EnumMember(Value = "H179PTO")]
+        H179PTO,
     }
 }
