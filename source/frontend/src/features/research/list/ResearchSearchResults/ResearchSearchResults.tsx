@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 
@@ -25,8 +26,14 @@ const columns: ColumnWithProps<ResearchSearchResultModel>[] = [
       const { hasClaim } = useKeycloakWrapper();
       if (hasClaim(Claims.RESEARCH_VIEW)) {
         return (
-          <Link to={`/mapview/sidebar/research/${props.row.original.id}`}>
+          <Link
+            to={`/mapview/sidebar/research/${props.row.original.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             {props.row.original.rfileNumber}
+            <FaExternalLinkAlt />
           </Link>
         );
       }

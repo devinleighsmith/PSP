@@ -1,3 +1,4 @@
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 
@@ -16,8 +17,14 @@ export const columns: ColumnWithProps<ProjectSearchResultModel>[] = [
     width: 5,
     maxWidth: 20,
     Cell: (props: CellProps<ProjectSearchResultModel>) => (
-      <Link to={`/mapview/sidebar/project/${props.row.original.id}`}>
+      <Link
+        to={`/mapview/sidebar/project/${props.row.original.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+      >
         {props.row.original.code}
+        <FaExternalLinkAlt />
       </Link>
     ),
   },
@@ -30,8 +37,14 @@ export const columns: ColumnWithProps<ProjectSearchResultModel>[] = [
     width: 45,
     maxWidth: 45,
     Cell: (props: CellProps<ProjectSearchResultModel>) => (
-      <Link to={`/mapview/sidebar/project/${props.row.original.id}`}>
+      <Link
+        to={`/mapview/sidebar/project/${props.row.original.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+      >
         {props.row.original.description}
+        <FaExternalLinkAlt />
       </Link>
     ),
   },

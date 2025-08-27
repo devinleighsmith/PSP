@@ -1,4 +1,5 @@
 import { chain } from 'lodash';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 
@@ -37,8 +38,14 @@ export const columns: ColumnWithProps<ManagementSearchResultModel>[] = [
 
       if (hasClaim(Claims.MANAGEMENT_VIEW)) {
         return (
-          <Link to={`/mapview/sidebar/management/${props.row.original.id}`}>
+          <Link
+            to={`/mapview/sidebar/management/${props.row.original.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             {fileNumberString}
+            <FaExternalLinkAlt />
           </Link>
         );
       }

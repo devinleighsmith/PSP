@@ -2,6 +2,7 @@ import moment from 'moment';
 import { useCallback } from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 import styled from 'styled-components';
@@ -30,8 +31,14 @@ const columns: ColumnWithProps<ApiGen_Concepts_Lease>[] = [
     width: 10,
     maxWidth: 20,
     Cell: (props: CellProps<ApiGen_Concepts_Lease>) => (
-      <Link to={`/mapview/sidebar/lease/${props.row.original.id}`}>
+      <Link
+        to={`/mapview/sidebar/lease/${props.row.original.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+      >
         {props.row.original.lFileNo}
+        <FaExternalLinkAlt />
       </Link>
     ),
   },

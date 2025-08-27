@@ -1,3 +1,4 @@
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 import styled from 'styled-components';
@@ -28,16 +29,24 @@ export const columns: ColumnWithProps<ManagementActivitySearchResultModel>[] = [
         return (
           <StyledLink
             to={`/mapview/sidebar/management/${props.row.original.managementFileId}/activities/${props.row.original.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
             {props.row.original.description}
+            <FaExternalLinkAlt />
           </StyledLink>
         );
       } else if (props.row.original.activivityProperty?.propertyId) {
         return (
           <StyledLink
             to={`/mapview/sidebar/property/${props.row.original.activivityProperty.propertyId}/management/activity/${props.row.original.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
             {props.row.original.description}
+            <FaExternalLinkAlt />
           </StyledLink>
         );
       } else {

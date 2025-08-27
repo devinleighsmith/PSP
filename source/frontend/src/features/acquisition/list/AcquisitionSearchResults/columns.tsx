@@ -1,4 +1,5 @@
 import { chain, uniqBy } from 'lodash';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
 
@@ -38,8 +39,14 @@ export const columns: ColumnWithProps<AcquisitionSearchResultModel>[] = [
       const { hasClaim } = useKeycloakWrapper();
       if (hasClaim(Claims.ACQUISITION_VIEW)) {
         return (
-          <Link to={`/mapview/sidebar/acquisition/${props.row.original.id}`}>
+          <Link
+            to={`/mapview/sidebar/acquisition/${props.row.original.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             {props.row.original.fileNumber}
+            <FaExternalLinkAlt />
           </Link>
         );
       }
