@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { LinkButton } from '@/components/common/buttons';
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
-import { FormDocumentType } from '@/constants/formDocumentTypes';
 import { Claims } from '@/constants/index';
 import { useKeycloakWrapper } from '@/hooks/useKeycloakWrapper';
+import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 import { Api_GenerateOwner } from '@/models/generate/GenerateOwner';
 
 import { FormDocumentEntry } from './formDocumentEntry';
@@ -16,7 +16,7 @@ import { LetterRecipientsForm } from './modals/models/LetterRecipientsForm';
 
 export interface IGenerateFormViewProps {
   formEntries: FormDocumentEntry[];
-  onGenerateClick: (formType: FormDocumentType) => void;
+  onGenerateClick: (formType: ApiGen_CodeTypes_FormTypes) => void;
   isLoading: boolean;
   letterRecipientsInitialValues: LetterRecipientModel[];
   openGenerateLetterModal: boolean;

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 
-import { FormDocumentType } from '@/constants/formDocumentTypes';
 import { InterestHolderType } from '@/constants/interestHolderTypes';
 import { useApiContacts } from '@/hooks/pims-api/useApiContacts';
 import { useAcquisitionProvider } from '@/hooks/repositories/useAcquisitionProvider';
 import { useInterestHolderRepository } from '@/hooks/repositories/useInterestHolderRepository';
 import { useModalManagement } from '@/hooks/useModalManagement';
+import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 import { Api_GenerateOwner } from '@/models/generate/GenerateOwner';
 import { exists } from '@/utils/utils';
 
@@ -111,12 +111,12 @@ const GenerateFormContainer: React.FunctionComponent<
 
   const generateLetter = useGenerateLetter();
   const generateH0443 = useGenerateH0443();
-  const onGenerateClick = (formType: FormDocumentType) => {
+  const onGenerateClick = (formType: ApiGen_CodeTypes_FormTypes) => {
     switch (formType) {
-      case FormDocumentType.LETTER:
+      case ApiGen_CodeTypes_FormTypes.LETTER:
         fetchAllRecipients();
         break;
-      case FormDocumentType.H0443:
+      case ApiGen_CodeTypes_FormTypes.H0443:
         generateH0443(acquisitionFileId);
         break;
       default:
@@ -134,8 +134,8 @@ const GenerateFormContainer: React.FunctionComponent<
   };
 
   const generateDocumentEntries: FormDocumentEntry[] = [
-    { formType: FormDocumentType.LETTER, text: 'Generate Letter' },
-    { formType: FormDocumentType.H0443, text: 'Conditions of Entry (H0443)' },
+    { formType: ApiGen_CodeTypes_FormTypes.LETTER, text: 'Generate Letter' },
+    { formType: ApiGen_CodeTypes_FormTypes.H0443, text: 'Conditions of Entry (H0443)' },
   ];
 
   return (

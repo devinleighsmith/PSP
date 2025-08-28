@@ -1,10 +1,10 @@
-import { FormDocumentType } from '@/constants/formDocumentTypes';
+import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 
 export interface FormDocumentEntry {
-  formType: FormDocumentType;
+  formType: ApiGen_CodeTypes_FormTypes;
   text: string;
 }
 export const generateDocumentEntries: FormDocumentEntry[] = [
-  { formType: FormDocumentType.LETTER, text: 'Generate Letter' },
-  { formType: FormDocumentType.H0443, text: 'Conditions of Entry (H0443)' },
+  { formType: ApiGen_CodeTypes_FormTypes.LETTER, text: 'Generate Letter' },
+  { formType: ApiGen_CodeTypes_FormTypes.H0443, text: 'Conditions of Entry (H0443)' },
 ];
