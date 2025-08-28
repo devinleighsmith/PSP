@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { FormDocumentType } from '@/constants/formDocumentTypes';
+import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 import { ApiGen_CodeTypes_LeaseLicenceTypes } from '@/models/api/generated/ApiGen_CodeTypes_LeaseLicenceTypes';
 import { ApiGen_Concepts_Lease } from '@/models/api/generated/ApiGen_Concepts_Lease';
 
@@ -25,12 +25,12 @@ const LeaseGenerateContainer: React.FunctionComponent<
     [generateLicenceOfOccupation],
   );
 
-  const onGenerateClick = (formType: FormDocumentType) => {
+  const onGenerateClick = (formType: ApiGen_CodeTypes_FormTypes) => {
     switch (formType) {
-      case FormDocumentType.H1005A:
+      case ApiGen_CodeTypes_FormTypes.H1005A:
         onGenerate(lease);
         break;
-      case FormDocumentType.H1005:
+      case ApiGen_CodeTypes_FormTypes.H1005:
         onGenerate(lease);
         break;
       default:
@@ -41,10 +41,10 @@ const LeaseGenerateContainer: React.FunctionComponent<
   const formEntries: FormDocumentEntry[] = [];
 
   if (lease?.type.id === ApiGen_CodeTypes_LeaseLicenceTypes.LOOBCTFA) {
-    formEntries.push({ formType: FormDocumentType.H1005A, text: 'Generate H-1005(a)' });
+    formEntries.push({ formType: ApiGen_CodeTypes_FormTypes.H1005A, text: 'Generate H-1005(a)' });
   }
   if (lease?.type.id === ApiGen_CodeTypes_LeaseLicenceTypes.LIPPUBHWY) {
-    formEntries.push({ formType: FormDocumentType.H1005, text: 'Generate H-1005' });
+    formEntries.push({ formType: ApiGen_CodeTypes_FormTypes.H1005, text: 'Generate H-1005' });
   }
 
   return (
