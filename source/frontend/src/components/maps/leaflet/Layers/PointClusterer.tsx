@@ -115,6 +115,7 @@ export const PointClusterer: React.FC<React.PropsWithChildren<PointClustererProp
       mapMachine.mapFeatureData?.pimsLocationLiteFeatures?.features,
       mapMachine.showDisposed,
       mapMachine.showRetired,
+      minZoom,
       zoom,
     ]);
 
@@ -350,7 +351,7 @@ export const PointClusterer: React.FC<React.PropsWithChildren<PointClustererProp
         ))}
       </FeatureGroup>
     );
-  }, [clusters, selectedMarker, spider.lines, spider.markers, zoomOrSpiderfy]);
+  }, [clusters, selectedMarker, spider.lines, spider.markers, zoomOrSpiderfy, searchPoints]);
   return renderedPoints;
 };
 
