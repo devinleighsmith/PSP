@@ -59,7 +59,7 @@ export const defaultTenant: ITenantConfig2 = {
   },
   layers: {},
   propertiesUrl:
-    'ogs-internal/ows?service=wfs&request=GetFeature&typeName=PIMS_PROPERTY_VW&outputformat=json&srsName=EPSG:4326&version=2.0.0&',
+    'ogs-internal/ows?service=wfs&request=GetFeature&typeName=PIMS_PROPERTY_LOCATION_VW&outputformat=json&srsName=EPSG:4326&version=2.0.0&',
   propertiesBoundaryUrl:
     'ogs-internal/ows?service=wfs&request=GetFeature&typeName=PIMS_PROPERTY_BOUNDARY_VW&outputformat=json&srsName=EPSG:4326&version=2.0.0&',
   minimalPropertiesUrl:
