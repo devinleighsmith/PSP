@@ -14,8 +14,6 @@ export interface ILayerTabViewProps {
   layersData?: LayerData[];
   activePage?: number;
   setActivePage?: React.Dispatch<React.SetStateAction<number>>;
-  activeGroupedPages?: Record<string, number>;
-  setActiveGroupedPages?: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }
 
 export interface TabLayerView {

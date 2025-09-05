@@ -13,8 +13,6 @@ import { LayerData } from './LayerTabContainer';
 
 export interface ILayerTabCollapsedViewProps {
   layersData?: LayerData[];
-  activePage?: number;
-  setActivePage?: React.Dispatch<React.SetStateAction<number>>;
   activeGroupedPages?: Record<string, number>;
   setActiveGroupedPages?: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }
